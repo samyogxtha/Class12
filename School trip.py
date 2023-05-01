@@ -10,7 +10,6 @@ def main():
     print('The cost of Ticket per Student: $',cost_ticket)
     print('\n\n')
 
-
     name_list = {}
     while n_students>=0:
         name = input('Enter Name of Student: ')
@@ -35,8 +34,6 @@ def main():
     cost_ticket = (550/n_count)+((n_count*30)/(n_count-n_count//10))
     print('The Final cost of Ticket per Student: $',cost_ticket)
     print('\n\n')
-    
-            
 
 if __name__ == '__main__':
     main()
