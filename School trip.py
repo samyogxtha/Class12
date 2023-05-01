@@ -19,9 +19,11 @@ def main():
             n_students += 1
             continue
         n_students -= 1
+        n_count = 0
         paid = input('Money Paid? (y/n)')
         if paid in 'yY':
             paid = True
+            n_count += 1
         else:
             paid = False
         name_list[name] = paid
@@ -29,11 +31,8 @@ def main():
     print('Name\t\t|\t Paid')
     for i in name_list:
         print(i,'\t\t|\t',name_list[i])
-        n_students = 0
-        if name_list[i] is True:
-            n_students += 1
-    print('\nThe Total Number of Student: ',n_students)
-    cost_ticket = (550/n_students)+((n_students*30)/(n_students-n_students//10))
+    print('\nThe Total Number of Student: ',n_count)
+    cost_ticket = (550/n_count)+((n_count*30)/(n_count-n_count//10))
     print('The Final cost of Ticket per Student: $',cost_ticket)
     print('\n\n')
     
