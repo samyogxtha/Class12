@@ -25,7 +25,7 @@ def login():
 
 def main():
     while True:
-        print('1. Sign In\n2. Log In')
+        print('1. Sign up\n2. Log In')
         qn = int(input('Enter Choice: '))
         if qn == 1:
             signup()
