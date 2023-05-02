@@ -3,6 +3,7 @@ def prime_nos(list):
     for i in list:
         if i == 2:
             primes.append(i)
+            break
         for j in (2,(i//2)+1):
             if i%j == 0:
                 break
