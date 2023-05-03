@@ -18,7 +18,7 @@ def main():
     print('\n\n')
     name_list = {}
     n_count = 0
-    while n_students>=0:
+    while n_students>0:
         name = input('Enter Name of Student: ')
         if name in name_list:
             print('Name already in list.')
@@ -32,10 +32,10 @@ def main():
             paid = False
         name_list[name] = paid
         print('\n')
-    print('Sl  Name\t\t|\t Paid')
+    print('Sl  Name\t\tPaid')
     sl_no = 1
     for i in name_list:
-        print(sl_no,'  ',i,'\t\t|\t',name_list[i])
+        print(sl_no,'  ',i,'\t\t',name_list[i])
         sl_no += 1
     print('\nThe Final Number of Student Going: ',n_count)
     cost_ticket = cost_check(n_count)

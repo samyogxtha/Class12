@@ -1,8 +1,7 @@
 def lsearch(list,chk_no):
-    index = -1
     for i in list:
-        index += 1
         if i == chk_no:
+            index = list.index(i)
             break
     else:
         index = 'Not Found'
