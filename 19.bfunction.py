@@ -1,9 +1,17 @@
 def bfunction(list,chk_no):
-    for i in len(list):
-        if i == chk_no:
-            index = list.index(i)
-    
-    return index
+    list.sort()
+    min = 0
+    max = len(list) - 1
+    mid = (min + max) // 2
+
+    while min <= max:
+        if list[mid] == chk_no:
+            return mid
+        elif list[mid] < chk_no:
+            max = mid + 1
+        else:
+            max = mid - 1
+    return 'Not Found'
 
 def main():
     list = []
