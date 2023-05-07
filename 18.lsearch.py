@@ -1,11 +1,9 @@
 def lsearch(list,chk_no):
     for i in list:
         if i == chk_no:
-            index = list.index(i)
-            break
+            return list.index(i)
     else:
-        index = 'Not Found'
-    return index
+        return -1
 
 def main():
     list = []
@@ -14,7 +12,10 @@ def main():
         list.append(int(input('Enter Number: ')))
     number = int(input('Enter Number to Search: '))
     index_of_number = lsearch(list,number)
-    print('The index of Number in List is: ',index_of_number)
+    if index_of_number == -1:
+        print('The Number is not in List.')
+    else:
+        print('The index of Number in List is: ',index_of_number)
 
 if __name__ == '__main__':
     main()
