@@ -9,7 +9,18 @@ def main():
       3. Insert an Entry\n\
       4. Modify an Entry\n\
       5. Delete an Entry\n')
-    search()
+    
+    input = int(input('Enter Choice: '))
+    if input == 1:
+        display()
+    elif input == 2:
+        search()
+    elif input == 3:
+        insert()
+    elif input == 4:
+        modify()
+    else :
+        delete()
 
 def display():
     cur_disp =  sqlcon.cursor()
