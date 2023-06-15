@@ -1,4 +1,4 @@
-import mysql.connector as msconn
+import mysql.connector as msconn #pip install mysql-connector-python
 
 sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'samy', database = 'school')
 
