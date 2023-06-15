@@ -73,7 +73,7 @@ def insert():
 
 def modify():
     cur_mod = sqlcon.cursor()
-    mod_id = int(input('Enter ID: '))
+    mod_id = int(input('Enter ID to modify: '))
     sal = int(input('Enter Salary: '))
     
     cur_mod.execute('update employee set sal = %s where empno = %s'%(sal,mod_id))
