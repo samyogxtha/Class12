@@ -28,7 +28,7 @@ def main():
 
 def display():
     cur_disp =  sqlcon.cursor()
-    cur_disp.execute('select * from employee')
+    cur_disp.execute('select * from employee order by empno')
     mydata = cur_disp.fetchall()
     n_rec = cur_disp.rowcount
     print('\nThe Total records are',n_rec)
@@ -74,7 +74,6 @@ def insert():
 def modify():
     cur_mod = sqlcon.cursor()
     mod_id = int(input('Enter ID: '))
-
     sal = int(input('Enter Salary: '))
     
     cur_mod.execute('update employee set sal = %s where empno = %s'%(sal,mod_id))
@@ -84,21 +83,10 @@ def modify():
     cur_mod.close()
 
 def delete():
-    inp = input('Delete by Name or ID Number (n/i): ')
     cur_del =  sqlcon.cursor()
-    
-    if inp in 'nN':
-        del_name = input('Enter Name: ')
-        cur_del.execute('delete from employee where name = "'+del_name+'"')
-    else:
-        del_num = input('Enter ID: ')
-        cur_del.execute('delete from employee where name = "'+str(del_num)+'"')
-
-    mydata = cur_del.fetchall()
-    if cur_del.rowcount == 0:
-        print('No records found.\n')
-    else:
-        print('\nRecord Deleted.\n')
+    del_num = input('Enter ID to delete: ')
+    cur_del.execute('delete from employee where empno = '+str(del_num))
+    print('\nRecord Deleted.\n')
     cur_del.close()
 
 if __name__ == '__main__':
