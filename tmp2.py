@@ -1,3 +1,7 @@
-nos = 25
-ev10 = 13//10
-print(ev10)
+fruits = ("apple", "banana", "cherry", "strawberry", "raspberry")
+
+(green, *yellow,red) = fruits
+
+print(green)
+print(yellow)
+print(red)
