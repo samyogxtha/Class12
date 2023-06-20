@@ -30,7 +30,7 @@ def main():
 def books():
     def disp_book():
         cur_disp =  sqlcon.cursor()
-        cur_disp.execute('select * from library order by slno')
+        cur_disp.execute('select * from books order by slno')
         mydata = cur_disp.fetchall()
         n_rec = cur_disp.rowcount
         print('\nThe Total no of Books are',n_rec)
@@ -43,9 +43,9 @@ def books():
         search = input('\nEnter Book Name or ISBN Number: ')
 
         if search.isalnum():
-            cur_search.execute('select * from library where ISBNo = "'+search+'"')
+            cur_search.execute('select * from books where ISBNo = "'+search+'"')
         else:
-            cur_search.execute('select * from library where Book_Name = "'+search+'"')
+            cur_search.execute('select * from books where Book_Name = "'+search+'"')
 
         data_search = cur_search.fetchall()
         print('\n')
@@ -54,7 +54,7 @@ def books():
                 print(row)
             print('\n')
         else:
-            print('No Books found.\n')
+            print('\n--No Books found--\n')
 
         cur_search.close()
 
@@ -69,9 +69,9 @@ def books():
         price = int(input('Enter Price: '))
         num = int(input('Enter Quantity: '))
 
-        cur_insert.execute('insert into library(isbno,book_name,author,publisher,catagory,price,no_of_copies) values(%s,"%s","%s","%s","%s",%s,%s)'%(isbno,name,author,publisher,catagory,price,num))
+        cur_insert.execute('insert into books(isbno,book_name,author,publisher,catagory,price,no_of_copies) values(%s,"%s","%s","%s","%s",%s,%s)'%(isbno,name,author,publisher,catagory,price,num))
         sqlcon.commit()
-        print('\nRecord Saved')
+        print('\n--Book Saved--\n')
         cur_insert.close()
 
     def modify_book():
@@ -80,7 +80,7 @@ def books():
         isbno = int(input('\nEnter ISBNo to modify: '))
         price = int(input('Enter Salary: '))
         
-        cur_mod.execute('update library set price = "%s" where isbno = "%s"'%(price,isbno))
+        cur_mod.execute('update books set price = "%s" where isbno = "%s"'%(price,isbno))
         sqlcon.commit()
         print('Price Updated')
 
@@ -89,7 +89,7 @@ def books():
     def delete_book():
         cur_del =  sqlcon.cursor()
         del_num = input('Enter ISBNo to delete: ')
-        cur_del.execute('delete from library where isbno = '+str(del_num))
+        cur_del.execute('delete from books where isbno = '+str(del_num))
         print('\nBook Deleted.\n')
         cur_del.close()
 
@@ -122,7 +122,7 @@ def books():
 def customer():
     def disp_book():
         cur_disp =  sqlcon.cursor()
-        cur_disp.execute('select * from library order by slno')
+        cur_disp.execute('select * from books order by slno')
         mydata = cur_disp.fetchall()
         n_rec = cur_disp.rowcount
         print('\nThe Total no of Books are',n_rec)
@@ -175,7 +175,7 @@ def issue_book():
     data_search = cur.fetchall()
     nbook = cur.rowcount
         
-    if data_search != None:
+    if nbook != 0:
         custid = int(input('\nEnter Customer ID: '))
         tdate = str(date.today())
         cur.execute('select book_name from books where isbno = %s'%(isbno,))
@@ -188,7 +188,7 @@ def issue_book():
         sqlcon.commit()
         print('Book Issued')
     else:
-        print('Book Out of Stock\n') 
+        print('\n--Book Out of Stock--\n') 
 
     cur.close()
 
@@ -198,7 +198,7 @@ def return_book():
     mod_id = int(input('Enter ID to modify: '))
     sal = int(input('Enter Salary: '))
     
-    cur_mod.execute('update library set sal = %s where empno = %s'%(sal,mod_id))
+    cur_mod.execute('update books set sal = %s where empno = %s'%(sal,mod_id))
     sqlcon.commit()
     print('Record Updated')
 
