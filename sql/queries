@@ -1,5 +1,5 @@
 CREATE database library
 use library
 create table Books(slno int auto_increment UNIQUE, ISBNo int primary key, Book_Name varchar(50) not null, Author varchar(30) not null, Publisher varchar(30) not null, Catagory varchar(30) not null, Price int not null, No_of_copies int);
-create table Issue(slno int auto_increment UNIQUE, Date_of_issue DATE NOT NULL,ISBno INT NOT NULL, Book_Name varchar(50) not null, CustID int not null, Publisher varchar(30) not null, Catagory varchar(30) not null, Price int not null, No_of_copies int);
+create table Issue(slno int auto_increment UNIQUE, Date_of_issue DATE NOT NULL,ISBno INT NOT NULL, Book_Name varchar(50) not null, Cust_ID int not null, Cust_Name varchar(30) not null);
 

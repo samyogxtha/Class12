@@ -1,7 +1,7 @@
-from datetime import date
 import mysql.connector as msconn #pip install mysql-connector-python
 
-sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'samy', database = 'library')
+sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'samy', database = 'hotel')
+
 
 def main():
     while True:
@@ -89,7 +89,7 @@ def books():
     def delete_book():
         cur_del =  sqlcon.cursor()
         del_num = input('Enter ISBNo to delete: ')
-        cur_del.execute('delete from library where isbno = '+str(del_num))
+        cur_del.execute('delete from employee where empno = '+str(del_num))
         print('\nBook Deleted.\n')
         cur_del.close()
 
@@ -169,28 +169,17 @@ def customer():
 
 #issuing
 def issue_book():
-    cur = sqlcon.cursor()
-    isbno = int(input('\nEnter ISBNo of the book: '))
-    cur.execute('select * from books where ISBNo = %s'%(isbno,))
-    data_search = cur.fetchall()
-    nbook = cur.rowcount
-        
-    if data_search != None:
-        custid = int(input('\nEnter Customer ID: '))
-        tdate = str(date.today())
-        cur.execute('select book_name from books where isbno = %s'%(isbno,))
-        bookname = cur.fetchall()[0][0]
-        cur.execute('select cust_name from customer where cust_id = %s'%(custid,))
-        custname = cur.fetchall()[0][0]
+    cur_insert = sqlcon.cursor()
 
-        cur.execute('update books set no_of_copies = "%s" where isbno = "%s"'%(nbook-1,isbno))
-        cur.execute('insert into issue(date_of_issue,isbno,book_name,cust_id,cust_name) values("%s",%s,"%s",%s,"%s")'%(tdate,isbno,bookname,custid,custname))
-        sqlcon.commit()
-        print('Book Issued')
-    else:
-        print('Book Out of Stock\n') 
+    empno = int(input('\nEnter library ID: '))
+    name = input('Enter Name: ')
+    dept = input('Enter Department: ')
+    sal = int(input('Enter Salary: '))
 
-    cur.close()
+    cur_insert.execute('insert into library values(%s,"%s","%s",%s)'%(empno,name,dept,sal))
+    sqlcon.commit()
+    print('\nRecord Saved')
+    cur_insert.close()
 
 #returning
 def return_book():
