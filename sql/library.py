@@ -1,6 +1,19 @@
 from datetime import date
 import mysql.connector as msconn #pip install mysql-connector-python
 
+#chk database
+def check_database():
+    cur = sqlcon.cursor()
+    cur.execute('show databases')
+    db = cur.fetchall()
+    if 'library' not in db:
+            cur.execute('CREATE database library',
+                        'create table Books(slno int auto_increment UNIQUE, ISBNo int primary key, Book_Name varchar(50) not null, Author varchar(30) not null, Publisher varchar(30) not null, Genre varchar(30) not null, Price int not null, No_of_copies int)',
+                        'create table Customers(slno int auto_increment UNIQUE, CustID int primary key, Cust_Name varchar(50) not null, Age int(3) , Date_Of_Birth date,Address varchar(30) not null, Mobile int not null, Email varchar(50) not null)',
+                        'create table Issue(slno int auto_increment primary key, Date_of_issue DATETIME default now(),ISBno INT NOT NULL, Book_Name varchar(50) not null, Cust_ID int not null, Cust_Name varchar(30) not null,constraint mykey foreign key(ISBNo) references books(ISBNo),constraint mykey2 foreign key(Cust_ID) references customers(CustID))',
+                        'create table Returns(slno int auto_increment Primary key, Date_of_return DATETIME default now(),ISBno int NOT NULL, Cust_ID int not null,Fine_Amount decimal(10,2),paid char(1) ,constraint mykey3 foreign key(ISBNo) references books(ISBNo),constraint mykey4 foreign key(Cust_ID) references customers(CustID) )')
+    cur.close()
+    
 def main():
     while True:
         print('='*40)
