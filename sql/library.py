@@ -3,16 +3,30 @@ import mysql.connector as msconn #pip install mysql-connector-python
 
 #chk database
 def check_database():
-    cur = sqlcon.cursor()
+    global sqlcon
+    cur = sqldb.cursor()
     cur.execute('show databases')
     db = cur.fetchall()
-    if 'library' not in db:
-            cur.execute('CREATE database library',
-                        'create table Books(slno int auto_increment UNIQUE, ISBNo int primary key, Book_Name varchar(50) not null, Author varchar(30) not null, Publisher varchar(30) not null, Genre varchar(30) not null, Price int not null, No_of_copies int)',
-                        'create table Customers(slno int auto_increment UNIQUE, CustID int primary key, Cust_Name varchar(50) not null, Age int(3) , Date_Of_Birth date,Address varchar(30) not null, Mobile int not null, Email varchar(50) not null)',
-                        'create table Issue(slno int auto_increment primary key, Date_of_issue DATETIME default now(),ISBno INT NOT NULL, Book_Name varchar(50) not null, Cust_ID int not null, Cust_Name varchar(30) not null,constraint mykey foreign key(ISBNo) references books(ISBNo),constraint mykey2 foreign key(Cust_ID) references customers(CustID))',
-                        'create table Returns(slno int auto_increment Primary key, Date_of_return DATETIME default now(),ISBno int NOT NULL, Cust_ID int not null,Fine_Amount decimal(10,2),paid char(1) ,constraint mykey3 foreign key(ISBNo) references books(ISBNo),constraint mykey4 foreign key(Cust_ID) references customers(CustID) )')
-    cur.close()
+    dbs = []
+    for i in db:
+        dbs.append(i[0])
+    if 'library' not in dbs:
+            cur.execute('CREATE database library')
+            sqldb.commit()
+            cur.close()
+            sqldb.close()
+            sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'samy', database = 'library')
+            cur2 = sqlcon.cursor()
+            cur2.execute('create table Books(slno int auto_increment UNIQUE, ISBNo int primary key, Book_Name varchar(50) not null, Author varchar(30) not null, Publisher varchar(30) not null, Genre varchar(30) not null, Price int not null, No_of_copies int)')
+            cur2.execute('create table Customers(slno int auto_increment UNIQUE, CustID int primary key, Cust_Name varchar(50) not null, Age int(3) , Date_Of_Birth date,Address varchar(30) not null, Mobile bigint not null, Email varchar(50) not null)')
+            cur2.execute('create table Issue(slno int auto_increment primary key, Date_of_issue DATETIME default now(),ISBno INT NOT NULL, Book_Name varchar(50) not null, Cust_ID int not null, Cust_Name varchar(30) not null,constraint mykey foreign key(ISBNo) references books(ISBNo),constraint mykey2 foreign key(Cust_ID) references customers(CustID))')
+            cur2.execute('create table Returns(slno int auto_increment Primary key, Date_of_return DATETIME default now(),ISBno int NOT NULL, Cust_ID int not null,Fine_Amount decimal(10,2),paid char(1) ,constraint mykey3 foreign key(ISBNo) references books(ISBNo),constraint mykey4 foreign key(Cust_ID) references customers(CustID))')
+            sqlcon.commit()
+            cur2.close()
+    else:
+        cur.close()
+        sqldb.close()
+        sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'samy', database = 'library')    
 
 def main():
     while True:
@@ -44,10 +58,14 @@ def books():
         cur_disp.execute('select * from books order by slno')
         mydata = cur_disp.fetchall()
         n_rec = cur_disp.rowcount
-        print('\nThe Total no of Books are',n_rec)
-        for row in mydata:
-            print(row[0],'|',row[1],'|',row[2],'|',row[3],'|',row[4],'|',row[5],'|',row[6],'|',row[7])
-        print('\n')
+        if n_rec != 0:
+            print('\nThe Total no of Books are',n_rec)
+            for row in mydata:
+                print(row[0],'|',row[1],'|',row[2],'|',row[3],'|',row[4],'|',row[5],'|',row[6],'|',row[7])
+            print('\n')
+        else:
+            print('\n--No Books Found--\n')
+        cur_disp.close()
 
     def search_book():
         cur_search = sqlcon.cursor()
@@ -345,7 +363,7 @@ def return_book():
     cur.close()
 
 if __name__ == '__main__':
-    sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'samy', database = 'library')
+    sqldb = msconn.connect(host = 'localhost', user = 'root', passwd = 'samy')
     check_database()
     main()
     sqlcon.close()
