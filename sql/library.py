@@ -13,7 +13,7 @@ def check_database():
                         'create table Issue(slno int auto_increment primary key, Date_of_issue DATETIME default now(),ISBno INT NOT NULL, Book_Name varchar(50) not null, Cust_ID int not null, Cust_Name varchar(30) not null,constraint mykey foreign key(ISBNo) references books(ISBNo),constraint mykey2 foreign key(Cust_ID) references customers(CustID))',
                         'create table Returns(slno int auto_increment Primary key, Date_of_return DATETIME default now(),ISBno int NOT NULL, Cust_ID int not null,Fine_Amount decimal(10,2),paid char(1) ,constraint mykey3 foreign key(ISBNo) references books(ISBNo),constraint mykey4 foreign key(Cust_ID) references customers(CustID) )')
     cur.close()
-    
+
 def main():
     while True:
         print('='*40)
@@ -345,7 +345,7 @@ def return_book():
     cur.close()
 
 if __name__ == '__main__':
-    sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'idris7', database = 'library')
+    sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'samy', database = 'library')
     check_database()
     main()
     sqlcon.close()
