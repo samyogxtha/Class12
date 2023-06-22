@@ -1,33 +1,6 @@
 from datetime import date
 import mysql.connector as msconn #pip install mysql-connector-python
 
-#chk database
-def check_database():
-    global sqlcon
-    cur = sqldb.cursor()
-    cur.execute('show databases')
-    db = cur.fetchall()
-    dbs = []
-    for i in db:
-        dbs.append(i[0])
-    if 'library' not in dbs:
-            cur.execute('CREATE database library')
-            sqldb.commit()
-            cur.close()
-            sqldb.close()
-            sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'samy', database = 'library')
-            cur2 = sqlcon.cursor()
-            cur2.execute('create table Books(slno int auto_increment UNIQUE, ISBNo int primary key, Book_Name varchar(50) not null, Author varchar(30) not null, Publisher varchar(30) not null, Genre varchar(30) not null, Price int not null, No_of_copies int)')
-            cur2.execute('create table Customers(slno int auto_increment UNIQUE, CustID int primary key, Cust_Name varchar(50) not null, Age int(3) , Date_Of_Birth date,Address varchar(30) not null, Mobile bigint not null, Email varchar(50) not null)')
-            cur2.execute('create table Issue(slno int auto_increment primary key, Date_of_issue DATETIME default now(),ISBno INT NOT NULL, Book_Name varchar(50) not null, Cust_ID int not null, Cust_Name varchar(30) not null,constraint mykey foreign key(ISBNo) references books(ISBNo),constraint mykey2 foreign key(Cust_ID) references customers(CustID))')
-            cur2.execute('create table Returns(slno int auto_increment Primary key, Date_of_return DATETIME default now(),ISBno int NOT NULL, Cust_ID int not null,Fine_Amount decimal(10,2),paid char(1) ,constraint mykey3 foreign key(ISBNo) references books(ISBNo),constraint mykey4 foreign key(Cust_ID) references customers(CustID))')
-            sqlcon.commit()
-            cur2.close()
-    else:
-        cur.close()
-        sqldb.close()
-        sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'samy', database = 'library')    
-
 def main():
     while True:
         print('='*40)
@@ -58,20 +31,16 @@ def books():
         cur_disp.execute('select * from books order by slno')
         mydata = cur_disp.fetchall()
         n_rec = cur_disp.rowcount
-        if n_rec != 0:
-            print('\nThe Total no of Books are',n_rec)
-            for row in mydata:
-                print(row[0],'|',row[1],'|',row[2],'|',row[3],'|',row[4],'|',row[5],'|',row[6],'|',row[7])
-            print('\n')
-        else:
-            print('\n--No Books Found--\n')
-        cur_disp.close()
+        print('\nThe Total no of Books are',n_rec)
+        for row in mydata:
+            print(row[0],'|',row[1],'|',row[2],'|',row[3],'|',row[4],'|',row[5],'|',row[6],'|',row[7])
+        print('\n')
 
     def search_book():
         cur_search = sqlcon.cursor()
         search = input('\nEnter Book Name or ISBN Number: ')
 
-        if search.isnum():
+        if search.isdigit():
             cur_search.execute('select * from books where ISBNo = '+search)
         else:
             cur_search.execute('select * from books where Book_Name = "'+search+'"')
@@ -92,7 +61,7 @@ def books():
 
         isbno = int(input('\nEnter ISBNo: '))
         num = int(input('Enter Quantity: '))
-        
+
         cur.execute('select no_of_copies from books where ISBNo = %s'%(isbno,))
         data = cur.fetchall()
         nbook = cur.rowcount
@@ -102,9 +71,9 @@ def books():
             name = input('Enter Book Name: ')
             author = input('Enter Author: ')
             publisher = input('Enter Publisher: ')
-            catagory = input('Enter Catogory: ')
+            catagory = input('Enter Genre: ')
             price = int(input('Enter Price: '))
-            cur.execute('insert into books(isbno,book_name,author,publisher,catagory,price,no_of_copies) values(%s,"%s","%s","%s","%s",%s,%s)'%(isbno,name,author,publisher,catagory,price,num))
+            cur.execute('insert into books(isbno,book_name,author,publisher,genre,price,no_of_copies) values(%s,"%s","%s","%s","%s",%s,%s)'%(isbno,name,author,publisher,catagory,price,num))
 
         sqlcon.commit()
         print('\n--Book Saved--\n')
@@ -125,34 +94,30 @@ def books():
         choice = int(input('Enter Choice: '))
         if choice == 1:
             name = input('\nEnter Book Name: ')
-            cur_mod.execute('update customers set Book_name = "%s" where isbno = %s'%(name,isbno))
+            cur_mod.execute('update books set Book_name = "%s" where isbno = %s'%(name,isbno))
         elif choice == 2:
             auth = input('\nEnter Author: ')
-            cur_mod.execute('update customers set Author = "%s" where isbno = %s'%(auth,isbno))
+            cur_mod.execute('update books set Author = "%s" where isbno = %s'%(auth,isbno))
         elif choice == 3:
             pblshr = input('\nEnter Publisher: ')
-            cur_mod.execute('update customers set Publisher = "%s" where isbno = %s'%(pblshr,isbno))
+            cur_mod.execute('update books set Publisher = "%s" where isbno = %s'%(pblshr,isbno))
         elif choice == 4:
             gnr = input('\nEnter Genre: ')
-            cur_mod.execute('update customers set Genre = "%s" where isbno = %s'%(gnr,isbno))
+            cur_mod.execute('update books set Genre = "%s" where isbno = %s'%(gnr,isbno))
         elif choice == 5:
             price = input('\nEnter Price: ')
-            cur_mod.execute('update customers set Price = %s where isbno = %s'%(price,isbno))
+            cur_mod.execute('update books set Price = %s where isbno = %s'%(price,isbno))
         else :
             name = input('\nEnter Book Name: ')
             auth = input('\nEnter Author: ')
             pblshr = input('\nEnter Publisher: ')
             gnr = input('\nEnter Genre: ')
             price = input('\nEnter Price: ')
-            
-            cur_mod.execute('update customers set Book_name = "%s",Author = "%s",Publisher = "%s",Genre = "%s",Price = %s where isbno = %s'%(name,auth,pblshr,gnr,price,isbno))
-            cur_mod.execute('update customers set Author = "%s" where isbno = "%s"'%(auth,isbno))
-            cur_mod.execute('update customers set Publisher = "%s" where isbno = "%s"'%(pblshr,isbno))
-            cur_mod.execute('update customers set Genre = "%s" where isbno = "%s"'%(gnr,isbno))
-            cur_mod.execute('update customers set Price = "%s" where isbno = "%s"'%(price,isbno))
+
+            cur_mod.execute('update books set Book_name = "%s",Author = "%s",Publisher = "%s",Genre = "%s",Price = %s where isbno = %s'%(name,auth,pblshr,gnr,price,isbno))
 
         sqlcon.commit()
-        print('--Customer Updated--')
+        print('--Book Updated--')
         cur_mod.close()
 
     def delete_book():
@@ -160,7 +125,7 @@ def books():
         del_num = input('Enter ISBNo to delete: ')
         cur_del.execute('delete from books where isbno = '+str(del_num))
         print('\n--Book Deleted--\n')
-        cur_del.commit()
+        sqlcon.commit()
         cur_del.close()
 
     while True:
@@ -192,7 +157,7 @@ def books():
 def customer():
     def disp_customer():
         cur_disp =  sqlcon.cursor()
-        cur_disp.execute('select * from customer order by slno')
+        cur_disp.execute('select * from customers order by slno')
         mydata = cur_disp.fetchall()
         n_rec = cur_disp.rowcount
         print('\nThe Total no of customers are',n_rec)
@@ -202,12 +167,12 @@ def customer():
 
     def search_customer():
         cur_search = sqlcon.cursor()
-        search = input('\nEnter |Customer Name or Customer ID Number: ')
+        search = input('\nEnter |Customer Name or Customers ID Number: ')
 
-        if search.isnum():
-            cur_search.execute('select * from Customer where ISBNo = "'+search+'"')
+        if search.isdigit():
+            cur_search.execute('select * from Customers where custid ='+search)
         else:
-            cur_search.execute('select * from Customer where Book_Name = "'+search+'"')
+            cur_search.execute('select * from Customers where cust_name = "'+search+'"')
 
         data_search = cur_search.fetchall()
         print('\n')
@@ -230,7 +195,7 @@ def customer():
         address = input('Enter Address: ')
         mob = int(input('Enter Mobile Number: '))
         mail = input('Enter Email ID: ')
-        cur.execute('insert into books(CustID,Cust_name,age,date_of_birth,address,mobile,email) values(%s,"%s",%s,"%s","%s",%s,"%s")'%(custid,name,age,dob,address,mob,mail))
+        cur.execute('insert into customers(CustID,Cust_name,age,date_of_birth,address,mobile,email) values(%s,"%s",%s,"%s","%s",%s,"%s")'%(custid,name,age,dob,address,mob,mail))
 
         sqlcon.commit()
         print('\n--Customer Saved--\n')
@@ -363,7 +328,6 @@ def return_book():
     cur.close()
 
 if __name__ == '__main__':
-    sqldb = msconn.connect(host = 'localhost', user = 'root', passwd = 'samy')
-    check_database()
+    sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'idris7', database = 'library')
     main()
     sqlcon.close()
