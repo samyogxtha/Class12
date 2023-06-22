@@ -1,4 +1,3 @@
-from datetime import date
 import mysql.connector as msconn #pip install mysql-connector-python
 
 #chk database
@@ -330,14 +329,13 @@ def issue_book():
 
     if nbook != 0:
         custid = int(input('\nEnter Customer ID: '))
-        tdate = str(date.today())
         cur.execute('select book_name from books where isbno = %s'%(isbno,))
         bookname = cur.fetchall()[0][0]
         cur.execute('select cust_name from customers where custid = %s'%(custid,))
         custname = cur.fetchall()[0][0]
 
         cur.execute('update books set no_of_copies = "%s" where isbno = "%s"'%(nbook-1,isbno))
-        cur.execute('insert into issue(date_of_issue,isbno,book_name,cust_id,cust_name) values("%s",%s,"%s",%s,"%s")'%(tdate,isbno,bookname,custid,custname))
+        cur.execute('insert into issue(isbno,book_name,cust_id,cust_name) values(%s,"%s",%s,"%s")'%(isbno,bookname,custid,custname))
         sqlcon.commit()
         print('\n--Book Issued--\n')
     else:
@@ -349,23 +347,22 @@ def issue_book():
 def return_book():
     cur = sqlcon.cursor()
     isbno = int(input('\nEnter ISBNo of the book: '))
-    cur.execute('select * from books where ISBNo = %s'%(isbno,))
+    cur.execute('select * from issue where ISBNo = %s'%(isbno,))
     nbook = cur.fetchall()[0][7]
 
-    if nbook != 0:
+    if nbook != None:
         custid = int(input('\nEnter Customer ID: '))
-        tdate = str(date.today())
         cur.execute('select book_name from books where isbno = %s'%(isbno,))
         bookname = cur.fetchall()[0][0]
         cur.execute('select cust_name from customer where cust_id = %s'%(custid,))
         custname = cur.fetchall()[0][0]
 
         cur.execute('update books set no_of_copies = "%s" where isbno = "%s"'%(nbook+1,isbno))
-        cur.execute('insert into return(date_of_issue,isbno,book_name,cust_id,cust_name) values("%s",%s,"%s",%s,"%s")'%(tdate,isbno,bookname,custid,custname))
+        cur.execute('insert into return(isbno,cust_id,fine_amount,paid) values(%s,%s,%s,"%s")'%(isbno,custid,fine,paid))
         sqlcon.commit()
         print('\n--Book Returned--\n')
     else:
-        print('\n--Book Out of Stock--\n')
+        print('\n--Book Not in Library--\n')
 
     cur.close()
 
