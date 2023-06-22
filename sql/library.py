@@ -15,7 +15,7 @@ def check_database():
             sqldb.commit()
             cur.close()
             sqldb.close()
-            sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'samy', database = 'library')
+            sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = '%s'%(passw,), database = 'library')
             cur2 = sqlcon.cursor()
             cur2.execute('create table Books(slno int auto_increment UNIQUE, ISBNo int primary key, Book_Name varchar(50) not null, Author varchar(30) not null, Publisher varchar(30) not null, Genre varchar(30) not null, Price int not null, No_of_copies int)')
             cur2.execute('create table Customers(slno int auto_increment UNIQUE, CustID int primary key, Cust_Name varchar(50) not null, Age int(3) , Date_Of_Birth date,Address varchar(30) not null, Mobile bigint not null, Email varchar(50) not null)')
@@ -30,9 +30,8 @@ def check_database():
 
 def main():
     while True:
-        print('='*40)
-        print('\n\tLIBRARY MANAGER\n')
-        print('='*40,'\n\n\
+        print('='*40,'\n\tLIBRARY MANAGER\n')
+        print('='*40,'\n\
         1. Books\n\
         2. Customer\n\
         3. Issue Book\n\
@@ -50,6 +49,7 @@ def main():
         elif choice == 4:
             return_book()
         else :
+            print('\t--Thank You.!--\n')
             break
 
 #books
@@ -169,9 +169,8 @@ def books():
         cur_del.close()
 
     while True:
-        print('='*40)
-        print('\n\tBook Manager\n')
-        print('='*40,'\n\n\
+        print('='*40,'\n\n\tBook Manager\n\n')
+        print('='*40,'\n\
         1. Display all Books\n\
         2. Search for a Book\n\
         3. Add a Book\n\
@@ -351,31 +350,49 @@ def issue_book():
 #returning
 def return_book():
     cur = sqlcon.cursor()
+    print('='*40,'\n\n\tReturn Book\n\n')
+    print('='*40)
     isbno = int(input('\nEnter ISBNo of the book: '))
     cur.execute('select * from issue where ISBNo = %s'%(isbno,))
     data = cur.fetchall()
+    
     custid = int(input('\nEnter Customer ID: '))
     if data[0][4] == custid:
-        
-        fine = 0
-        if (data[0][1] - dt.date.today()) > 14:
-            fine += 100
+        date = data[0][1]
+        now = str((dt.datetime.now()).strftime("%Y-%m-%d %H:%M:%S"))
 
-            
-        paid = input('Paid? (y/n): ')
-        cur.execute('select no_of_books from books where isbno = %s'%(isbno))
-        nbook = int(cur.fetchone()[0])
+        cur.execute('select datediff("%s","%s")'%(now,date))
+        diff = cur.fetchall()[0][0]
+        print('\nBook Returned after %s days.'%(diff))
+
+        fine = 0
+        
+        if diff > 14:
+            print('\nBook Borrowed for more than 14 days.')
+
+            fine += 100*(diff-14)
+            print('\nFine Amount: ',fine)
+            paid = input('\nDo you want to pay now? (y/n): ')
+            cur.execute('insert into returns(isbno,cust_id,fine_amount,paid) values(%s,%s,%s,"%s")'%(isbno,custid,fine,paid))
+        else:
+            print('\nBook returned within Due date.')
+            cur.execute('insert into returns(isbno,cust_id) values(%s,%s)'%(isbno,custid))
+        
+        cur.execute('select no_of_copies from books where isbno = %s'%(isbno))
+        nbook = int(cur.fetchall()[0][0])
         cur.execute('update books set no_of_copies = %s where isbno = %s'%(nbook+1,isbno))
-        cur.execute('insert into return(isbno,cust_id,fine_amount,paid) values(%s,%s,%s,"%s")'%(isbno,custid,fine,paid))
+        cur.execute('delete from issue where isbno = %s and cust_id = %s'%(isbno,custid))
         sqlcon.commit()
         print('\n--Book Returned--\n')
     else:
-        print('\n--Book Not in Library--\n')
+        print('\n--Invalid Details--\n')
 
     cur.close()
 
 if __name__ == '__main__':
-    sqldb = msconn.connect(host = 'localhost', user = 'root', passwd = 'samy')
+    global passw
+    passw = input('Enter Password: ')
+    sqldb = msconn.connect(host = 'localhost', user = 'root', passwd = '%s'%(passw,))
     check_database()
     main()
     sqlcon.close()
