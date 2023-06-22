@@ -1,3 +1,4 @@
+import datetime as dt
 import mysql.connector as msconn #pip install mysql-connector-python
 
 #chk database
@@ -233,8 +234,12 @@ def customer():
 
         custid = int(input('\nEnter Customer ID: '))
         name = input('Enter Customer Name: ')
-        age = int(input('Enter Age: '))
         dob = input('Enter Date of Birth (yyyy-mm-dd): ')
+        
+        current_date = dt.date.today()
+        birth_date = dt.datetime.strptime(dob, '%Y-%m-%d').date()
+        age = current_date.year - birth_date.year - (current_date.month < birth_date.month or (current_date.month == birth_date.month and current_date.day < birth_date.day))
+
         address = input('Enter Address: ')
         mob = int(input('Enter Mobile Number: '))
         mail = input('Enter Email ID: ')
