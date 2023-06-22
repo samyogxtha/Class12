@@ -360,9 +360,12 @@ def return_book():
         fine = 0
         if (data[0][1] - dt.date.today()) > 14:
             fine += 100
-        paid = input('Paid? (y/n): ')
 
-        cur.execute('update books set no_of_copies = "%s" where isbno = "%s"'%(nbook+1,isbno))
+            
+        paid = input('Paid? (y/n): ')
+        cur.execute('select no_of_books from books where isbno = %s'%(isbno))
+        nbook = int(cur.fetchone()[0])
+        cur.execute('update books set no_of_copies = %s where isbno = %s'%(nbook+1,isbno))
         cur.execute('insert into return(isbno,cust_id,fine_amount,paid) values(%s,%s,%s,"%s")'%(isbno,custid,fine,paid))
         sqlcon.commit()
         print('\n--Book Returned--\n')
