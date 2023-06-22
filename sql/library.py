@@ -353,14 +353,14 @@ def return_book():
     cur = sqlcon.cursor()
     isbno = int(input('\nEnter ISBNo of the book: '))
     cur.execute('select * from issue where ISBNo = %s'%(isbno,))
-    nbook = cur.fetchall()[0][7]
-
-    if nbook != None:
-        custid = int(input('\nEnter Customer ID: '))
-        cur.execute('select book_name from books where isbno = %s'%(isbno,))
-        bookname = cur.fetchall()[0][0]
-        cur.execute('select cust_name from customer where cust_id = %s'%(custid,))
-        custname = cur.fetchall()[0][0]
+    data = cur.fetchall()
+    custid = int(input('\nEnter Customer ID: '))
+    if data[0][4] == custid:
+        
+        fine = 0
+        if (data[0][1] - dt.date.today()) > 14:
+            fine += 100
+        paid = input('Paid? (y/n): ')
 
         cur.execute('update books set no_of_copies = "%s" where isbno = "%s"'%(nbook+1,isbno))
         cur.execute('insert into return(isbno,cust_id,fine_amount,paid) values(%s,%s,%s,"%s")'%(isbno,custid,fine,paid))
