@@ -31,7 +31,7 @@ def check_database():
 def main():
     while True:
         print('='*40)
-        print('\n\tLIBRARY MANAGEMENT\n')
+        print('\n\tLIBRARY MANAGER\n')
         print('='*40,'\n\n\
         1. Books\n\
         2. Customer\n\
@@ -72,7 +72,7 @@ def books():
         cur_search = sqlcon.cursor()
         search = input('\nEnter Book Name or ISB Number: ')
 
-        if search.isnum():
+        if search.isnumeric():
             cur_search.execute('select * from books where ISBNo = '+search)
         else:
             cur_search.execute('select * from books where Book_Name = "'+search+'"')
@@ -104,10 +104,10 @@ def books():
             name = input('Enter Book Name: ')
             author = input('Enter Author: ')
             publisher = input('Enter Publisher: ')
-            catagory = input('Enter Catogory: ')
+            catagory = input('Enter Genre: ')
             price = int(input('Enter Price: '))
             num = int(input('Enter Quantity: '))
-            cur.execute('insert into books(isbno,book_name,author,publisher,catagory,price,no_of_copies) values(%s,"%s","%s","%s","%s",%s,%s)'%(isbno,name,author,publisher,catagory,price,num))
+            cur.execute('insert into books(isbno,book_name,author,publisher,genre,price,no_of_copies) values(%s,"%s","%s","%s","%s",%s,%s)'%(isbno,name,author,publisher,catagory,price,num))
 
         sqlcon.commit()
         print('\n--Book Saved--\n')
@@ -118,29 +118,34 @@ def books():
         isbno = input('\nEnter ISBNo Of The Book Data You Want To Modify: \n')
 
         print('\nEnter What You Want to modify\n\
-            1. Book Name\n\
-            2. Books Author\n\
-            3. Books Publisher\n\
-            4. Books Genre\n\
-            5. Books Price\n\
-            6. Modify All\n')
+        1. Book Name\n\
+        2. Books Author\n\
+        3. Books Publisher\n\
+        4. Books Genre\n\
+        5. Books Price\n\
+        6. Modify All\n')
 
         choice = int(input('Enter Choice: '))
         if choice == 1:
             name = input('\nEnter Book Name: ')
             cur_mod.execute('update books set Book_name = "%s" where isbno = %s'%(name,isbno))
+            print('\n--Name Updated--\n')
         elif choice == 2:
             auth = input('\nEnter Author: ')
             cur_mod.execute('update books set Author = "%s" where isbno = %s'%(auth,isbno))
+            print('\n--Author Updated--\n')
         elif choice == 3:
             pblshr = input('\nEnter Publisher: ')
             cur_mod.execute('update books set Publisher = "%s" where isbno = %s'%(pblshr,isbno))
+            print('\n--Publisher Updated--\n')
         elif choice == 4:
             gnr = input('\nEnter Genre: ')
             cur_mod.execute('update books set Genre = "%s" where isbno = %s'%(gnr,isbno))
+            print('\n--Genre Updated--\n')
         elif choice == 5:
             price = input('\nEnter Price: ')
             cur_mod.execute('update books set Price = %s where isbno = %s'%(price,isbno))
+            print('\n--Price Updated--\n')
         else :
             name = input('\nEnter Book Name: ')
             auth = input('\nEnter Author: ')
@@ -149,9 +154,10 @@ def books():
             price = input('\nEnter Price: ')
 
             cur_mod.execute('update books set Book_name = "%s",Author = "%s",Publisher = "%s",Genre = "%s",Price = %s where isbno = %s'%(name,auth,pblshr,gnr,price,isbno))
+        
+            print('--Book Updated--\n')
 
         sqlcon.commit()
-        print('--Book Updated--')
         cur_mod.close()
 
     def delete_book():
@@ -166,12 +172,12 @@ def books():
         print('='*40)
         print('\n\tBook Manager\n')
         print('='*40,'\n\n\
-            1. Display all Books\n\
-            2. Search for a Book\n\
-            3. Add a Book\n\
-            4. Modify a Book\n\
-            5. Delete a Book\n\
-            6. Exit\n')
+        1. Display all Books\n\
+        2. Search for a Book\n\
+        3. Add a Book\n\
+        4. Modify a Book\n\
+        5. Delete a Book\n\
+        6. Exit\n')
 
         choice = int(input('Enter Choice: '))
         if choice == 1:
@@ -191,7 +197,7 @@ def books():
 def customer():
     def disp_customer():
         cur_disp =  sqlcon.cursor()
-        cur_disp.execute('select * from customer order by slno')
+        cur_disp.execute('select * from customers order by slno')
         mydata = cur_disp.fetchall()
         n_rec = cur_disp.rowcount
         if n_rec != 0:
@@ -229,7 +235,7 @@ def customer():
         custid = int(input('\nEnter Customer ID: '))
         name = input('Enter Customer Name: ')
         age = int(input('Enter Age: '))
-        dob = input('Enter Date OF Birth: ')
+        dob = input('Enter Date of Birth (yyyy-mm-dd): ')
         address = input('Enter Address: ')
         mob = int(input('Enter Mobile Number: '))
         mail = input('Enter Email ID: ')
@@ -245,15 +251,14 @@ def customer():
         custid = input('\nEnter Customer ID Of The Customer Data You Want To Modify: \n')
 
         print('\nEnter What You Want to modify\n\
-            1. Customer Name\n\
-            2. Customers Date Of Birth\n\
-            3. Customers Address\n\
-            4. Customers Mobile Number\n\
-            5. Customers Email ID\n\
-            6. Modify All\n')
+        1. Customer Name\n\
+        2. Customers Date Of Birth\n\
+        3. Customers Address\n\
+        4. Customers Mobile Number\n\
+        5. Customers Email ID\n\
+        6. Modify All\n')
 
         choice = int(input('Enter Choice: '))
-        print('\n')
         if choice == 1:
             name = input('\nEnter Customer Name: ')
             cur_mod.execute('update customers set cust_name = "%s" where CustID = %s'%(name,custid))
@@ -279,7 +284,7 @@ def customer():
             cur_mod.execute('update customers set cust_name = "%s",Date_of_birth = "%s",address = "%s",mobile = "%s",Email = "%s" where CustID = "%s"'%(name,dob,address,mob,mail,custid))
 
         sqlcon.commit()
-        print('\n--Customer Updated--\n')
+        print('\n--Customer Updated--\n\n')
 
         cur_mod.close()
 
@@ -295,12 +300,12 @@ def customer():
         print('='*40)
         print('\n\tCustomer Manager\n')
         print('='*40,'\n\n\
-            1. Display all Customer\n\
-            2. Search for a Customer\n\
-            3. Add a Customer\n\
-            4. Modify a Customer\n\
-            5. Delete a Customer\n\
-            6. Exit\n')
+        1. Display all Customer\n\
+        2. Search for a Customer\n\
+        3. Add a Customer\n\
+        4. Modify a Customer\n\
+        5. Delete a Customer\n\
+        6. Exit\n')
 
         choice = int(input('Enter Choice: '))
         if choice == 1:
@@ -319,17 +324,16 @@ def customer():
 #issuing
 def issue_book():
     cur = sqlcon.cursor()
-    isbno = int(input('\nEnter ISBNo of the book: '))
+    isbno = int(input('Enter ISBNo of the book: '))
     cur.execute('select * from books where ISBNo = %s'%(isbno,))
-    mydata = cur.fetchall()
-    nbook = cur.rowcount
+    nbook = cur.fetchall()[0][7]
 
     if nbook != 0:
         custid = int(input('\nEnter Customer ID: '))
         tdate = str(date.today())
         cur.execute('select book_name from books where isbno = %s'%(isbno,))
         bookname = cur.fetchall()[0][0]
-        cur.execute('select cust_name from customer where cust_id = %s'%(custid,))
+        cur.execute('select cust_name from customers where custid = %s'%(custid,))
         custname = cur.fetchall()[0][0]
 
         cur.execute('update books set no_of_copies = "%s" where isbno = "%s"'%(nbook-1,isbno))
@@ -346,8 +350,7 @@ def return_book():
     cur = sqlcon.cursor()
     isbno = int(input('\nEnter ISBNo of the book: '))
     cur.execute('select * from books where ISBNo = %s'%(isbno,))
-    mydata = cur.fetchall()
-    nbook = cur.rowcount
+    nbook = cur.fetchall()[0][7]
 
     if nbook != 0:
         custid = int(input('\nEnter Customer ID: '))
