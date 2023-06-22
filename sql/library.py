@@ -40,6 +40,7 @@ def main():
         5. Exit\n')
 
         choice = int(input('Enter Choice: '))
+        print('\n')
         if choice == 1:
             books()
         elif choice == 2:
@@ -69,7 +70,7 @@ def books():
 
     def search_book():
         cur_search = sqlcon.cursor()
-        search = input('\nEnter Book Name or ISBN Number: ')
+        search = input('\nEnter Book Name or ISB Number: ')
 
         if search.isnum():
             cur_search.execute('select * from books where ISBNo = '+search)
@@ -95,6 +96,7 @@ def books():
         cur.execute('select no_of_copies from books where ISBNo = %s'%(isbno,))
         data = cur.fetchall()
         nbook = cur.rowcount
+
         if nbook != 0:
             num = int(input('Enter Quantity: '))
             cur.execute('update books set no_of_copies = %s where isbno = %s'%((int(data[0][0])+num),isbno))
@@ -113,52 +115,48 @@ def books():
 
     def modify_book():
         cur_mod = sqlcon.cursor()
-        isbno = input('Enter ISBNo Of The Book Data You Want To Modify: \n')
+        isbno = input('\nEnter ISBNo Of The Book Data You Want To Modify: \n')
 
         print('\nEnter What You Want to modify\n\
-        1. Book Name\n\
-        2. Books Author\n\
-        3. Books Publisher\n\
-        4. Books Genre\n\
-        5. Books Price\n\
-        6. Modify All\n')
+            1. Book Name\n\
+            2. Books Author\n\
+            3. Books Publisher\n\
+            4. Books Genre\n\
+            5. Books Price\n\
+            6. Modify All\n')
 
         choice = int(input('Enter Choice: '))
         if choice == 1:
             name = input('\nEnter Book Name: ')
-            cur_mod.execute('update customers set Book_name = "%s" where isbno = %s'%(name,isbno))
+            cur_mod.execute('update books set Book_name = "%s" where isbno = %s'%(name,isbno))
         elif choice == 2:
             auth = input('\nEnter Author: ')
-            cur_mod.execute('update customers set Author = "%s" where isbno = %s'%(auth,isbno))
+            cur_mod.execute('update books set Author = "%s" where isbno = %s'%(auth,isbno))
         elif choice == 3:
             pblshr = input('\nEnter Publisher: ')
-            cur_mod.execute('update customers set Publisher = "%s" where isbno = %s'%(pblshr,isbno))
+            cur_mod.execute('update books set Publisher = "%s" where isbno = %s'%(pblshr,isbno))
         elif choice == 4:
             gnr = input('\nEnter Genre: ')
-            cur_mod.execute('update customers set Genre = "%s" where isbno = %s'%(gnr,isbno))
+            cur_mod.execute('update books set Genre = "%s" where isbno = %s'%(gnr,isbno))
         elif choice == 5:
             price = input('\nEnter Price: ')
-            cur_mod.execute('update customers set Price = %s where isbno = %s'%(price,isbno))
+            cur_mod.execute('update books set Price = %s where isbno = %s'%(price,isbno))
         else :
             name = input('\nEnter Book Name: ')
             auth = input('\nEnter Author: ')
             pblshr = input('\nEnter Publisher: ')
             gnr = input('\nEnter Genre: ')
             price = input('\nEnter Price: ')
-            
-            cur_mod.execute('update customers set Book_name = "%s",Author = "%s",Publisher = "%s",Genre = "%s",Price = %s where isbno = %s'%(name,auth,pblshr,gnr,price,isbno))
-            cur_mod.execute('update customers set Author = "%s" where isbno = "%s"'%(auth,isbno))
-            cur_mod.execute('update customers set Publisher = "%s" where isbno = "%s"'%(pblshr,isbno))
-            cur_mod.execute('update customers set Genre = "%s" where isbno = "%s"'%(gnr,isbno))
-            cur_mod.execute('update customers set Price = "%s" where isbno = "%s"'%(price,isbno))
+
+            cur_mod.execute('update books set Book_name = "%s",Author = "%s",Publisher = "%s",Genre = "%s",Price = %s where isbno = %s'%(name,auth,pblshr,gnr,price,isbno))
 
         sqlcon.commit()
-        print('--Customer Updated--')
+        print('--Book Updated--')
         cur_mod.close()
 
     def delete_book():
         cur_del =  sqlcon.cursor()
-        del_num = input('Enter ISBNo to delete: ')
+        del_num = input('\nEnter ISBNo to delete: ')
         cur_del.execute('delete from books where isbno = '+str(del_num))
         print('\n--Book Deleted--\n')
         cur_del.commit()
@@ -168,12 +166,12 @@ def books():
         print('='*40)
         print('\n\tBook Manager\n')
         print('='*40,'\n\n\
-        1. Display all Books\n\
-        2. Search for a Book\n\
-        3. Add a Book\n\
-        4. Modify a Book\n\
-        5. Delete a Book\n\
-        6. Exit\n')
+            1. Display all Books\n\
+            2. Search for a Book\n\
+            3. Add a Book\n\
+            4. Modify a Book\n\
+            5. Delete a Book\n\
+            6. Exit\n')
 
         choice = int(input('Enter Choice: '))
         if choice == 1:
@@ -196,14 +194,18 @@ def customer():
         cur_disp.execute('select * from customer order by slno')
         mydata = cur_disp.fetchall()
         n_rec = cur_disp.rowcount
-        print('\nThe Total no of customers are',n_rec)
-        for row in mydata:
-            print(row[0],'|',row[1],'|',row[2],'|',row[3],'|',row[4],'|',row[5],'|',row[6],'|',row[7])
-        print('\n')
+        if n_rec != 0:
+            print('\nThe Total no of customers are',n_rec)
+            for row in mydata:
+                print(row[0],'|',row[1],'|',row[2],'|',row[3],'|',row[4],'|',row[5],'|',row[6],'|',row[7])
+            print('\n')
+        else:
+            print('\n--No Customerss Found--\n')
+        cur_disp.close()
 
     def search_customer():
         cur_search = sqlcon.cursor()
-        search = input('\nEnter |Customer Name or Customer ID Number: ')
+        search = input('\nEnter Customer Name or Customer ID Number: ')
 
         if search.isnum():
             cur_search.execute('select * from Customer where ISBNo = "'+search+'"')
@@ -231,7 +233,7 @@ def customer():
         address = input('Enter Address: ')
         mob = int(input('Enter Mobile Number: '))
         mail = input('Enter Email ID: ')
-        cur.execute('insert into books(CustID,Cust_name,age,date_of_birth,address,mobile,email) values(%s,"%s",%s,"%s","%s",%s,"%s")'%(custid,name,age,dob,address,mob,mail))
+        cur.execute('insert into customers(CustID,Cust_name,age,date_of_birth,address,mobile,email) values(%s,"%s",%s,"%s","%s",%s,"%s")'%(custid,name,age,dob,address,mob,mail))
 
         sqlcon.commit()
         print('\n--Customer Saved--\n')
@@ -240,17 +242,18 @@ def customer():
     def modify_customer():
         cur_mod = sqlcon.cursor()
 
-        custid = input('Enter Customer ID Of The Customer Data You Want To Modify: \n')
+        custid = input('\nEnter Customer ID Of The Customer Data You Want To Modify: \n')
 
         print('\nEnter What You Want to modify\n\
-        1. Customer Name\n\
-        2. Customers Date Of Birth\n\
-        3. Customers Address\n\
-        4. Customers Mobile Number\n\
-        5. Customers Email ID\n\
-        6. Modify All\n')
+            1. Customer Name\n\
+            2. Customers Date Of Birth\n\
+            3. Customers Address\n\
+            4. Customers Mobile Number\n\
+            5. Customers Email ID\n\
+            6. Modify All\n')
 
         choice = int(input('Enter Choice: '))
+        print('\n')
         if choice == 1:
             name = input('\nEnter Customer Name: ')
             cur_mod.execute('update customers set cust_name = "%s" where CustID = %s'%(name,custid))
@@ -276,13 +279,13 @@ def customer():
             cur_mod.execute('update customers set cust_name = "%s",Date_of_birth = "%s",address = "%s",mobile = "%s",Email = "%s" where CustID = "%s"'%(name,dob,address,mob,mail,custid))
 
         sqlcon.commit()
-        print('--Customer Updated--')
+        print('\n--Customer Updated--\n')
 
         cur_mod.close()
 
     def delete_customer():
         cur_del =  sqlcon.cursor()
-        del_num = input('Enter CUST_ID to delete: ')
+        del_num = input('\nEnter Customer ID to delete: ')
         cur_del.execute('delete from customers where custid = '+str(del_num))
         print('\n--Customer Deleted--\n')
         cur_del.commit()
@@ -292,12 +295,12 @@ def customer():
         print('='*40)
         print('\n\tCustomer Manager\n')
         print('='*40,'\n\n\
-        1. Display all Customer\n\
-        2. Search for a Customer\n\
-        3. Add a Customer\n\
-        4. Modify a Customer\n\
-        5. Delete a Customer\n\
-        6. Exit\n')
+            1. Display all Customer\n\
+            2. Search for a Customer\n\
+            3. Add a Customer\n\
+            4. Modify a Customer\n\
+            5. Delete a Customer\n\
+            6. Exit\n')
 
         choice = int(input('Enter Choice: '))
         if choice == 1:
