@@ -1,6 +1,10 @@
 from datetime import date
 import mysql.connector as msconn #pip install mysql-connector-python
 
+#chk database
+def check_database():
+    pass
+
 def main():
     while True:
         print('='*40)
