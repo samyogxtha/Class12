@@ -91,12 +91,12 @@ def books():
         cur = sqlcon.cursor()
 
         isbno = int(input('\nEnter ISBNo: '))
-        num = int(input('Enter Quantity: '))
         
         cur.execute('select no_of_copies from books where ISBNo = %s'%(isbno,))
         data = cur.fetchall()
         nbook = cur.rowcount
         if nbook != 0:
+            num = int(input('Enter Quantity: '))
             cur.execute('update books set no_of_copies = %s where isbno = %s'%((int(data[0][0])+num),isbno))
         else:
             name = input('Enter Book Name: ')
@@ -104,6 +104,7 @@ def books():
             publisher = input('Enter Publisher: ')
             catagory = input('Enter Catogory: ')
             price = int(input('Enter Price: '))
+            num = int(input('Enter Quantity: '))
             cur.execute('insert into books(isbno,book_name,author,publisher,catagory,price,no_of_copies) values(%s,"%s","%s","%s","%s",%s,%s)'%(isbno,name,author,publisher,catagory,price,num))
 
         sqlcon.commit()
