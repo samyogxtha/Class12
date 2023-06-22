@@ -349,7 +349,7 @@ def return_book():
     cur.close()
 
 if __name__ == '__main__':
-    sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'idris7', database = 'library')
+    sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'samy', database = 'library')
     check_database()
     main()
     sqlcon.close()
