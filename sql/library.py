@@ -1,4 +1,5 @@
 import datetime as dt
+from tabulate import tabulate
 import mysql.connector as msconn #pip install mysql-connector-python
 
 #chk database
@@ -18,9 +19,9 @@ def check_database():
             sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = '%s'%(passw,), database = 'library')
             cur2 = sqlcon.cursor()
             cur2.execute('create table Books(slno int auto_increment UNIQUE, ISBNo int primary key, Book_Name varchar(50) not null, Author varchar(30) not null, Publisher varchar(30) not null, Genre varchar(30) not null, Price int not null, No_of_copies int)')
-            cur2.execute('create table Customers(slno int auto_increment UNIQUE, CustID int primary key, Cust_Name varchar(50) not null, Age int(3) , Date_Of_Birth date,Address varchar(30) not null, Mobile bigint not null, Email varchar(50) not null)')
-            cur2.execute('create table Issue(slno int auto_increment primary key, Date_of_issue DATETIME default now(),ISBno INT NOT NULL, Book_Name varchar(50) not null, Cust_ID int not null, Cust_Name varchar(30) not null,constraint mykey foreign key(ISBNo) references books(ISBNo),constraint mykey2 foreign key(Cust_ID) references customers(CustID))')
-            cur2.execute('create table Returns(slno int auto_increment Primary key, Date_of_return DATETIME default now(),ISBno int NOT NULL, Cust_ID int not null,Fine_Amount decimal(10,2),paid char(1) ,constraint mykey3 foreign key(ISBNo) references books(ISBNo),constraint mykey4 foreign key(Cust_ID) references customers(CustID))')
+            cur2.execute('create table Customers(slno int auto_increment UNIQUE, Cust_ID int primary key, Cust_Name varchar(50) not null, Age int(3) , Date_Of_Birth date,Address varchar(30) not null, Mobile bigint not null, Email varchar(50) not null)')
+            cur2.execute('create table Issue(slno int auto_increment primary key, Date_of_issue DATETIME default now(),ISBno INT NOT NULL, Book_Name varchar(50) not null, Cust_ID int not null, Cust_Name varchar(30) not null,constraint mykey foreign key(ISBNo) references books(ISBNo),constraint mykey2 foreign key(Cust_ID) references customers(Cust_ID))')
+            cur2.execute('create table Returns(slno int auto_increment Primary key, Date_of_return DATETIME default now(),ISBno int NOT NULL, Cust_ID int not null,Fine_Amount decimal(10,2),paid char(1) ,constraint mykey3 foreign key(ISBNo) references books(ISBNo),constraint mykey4 foreign key(Cust_ID) references customers(cust_id))')
             sqlcon.commit()
             cur2.close()
     else:
@@ -30,7 +31,7 @@ def check_database():
 
 def main():
     while True:
-        print('='*40,'\n\tLIBRARY MANAGER\n')
+        print('='*40,'\n\n\tLIBRARY MANAGER\n')
         print('='*40,'\n\
         1. Books\n\
         2. Customer\n\
@@ -63,12 +64,9 @@ def books():
     def disp_book():
         cur_disp =  sqlcon.cursor()
         cur_disp.execute('select * from books order by slno')
-        mydata = cur_disp.fetchall()
-        n_rec = cur_disp.rowcount
-        if n_rec != 0:
-            print('\nThe Total no of Books are',n_rec)
-            for row in mydata:
-                print(row[0],'|',row[1],'|',row[2],'|',row[3],'|',row[4],'|',row[5],'|',row[6],'|',row[7])
+        data = cur_disp.fetchall()
+        if data != []:
+            print(tabulate(data, headers=['slno','ISBNo','Book Name','Author','Publisher','Genre','Price','Quantity']  , tablefmt="rounded_outline"))
             print('\n')
         else:
             print('\n--No Books Found--\n')
@@ -85,9 +83,8 @@ def books():
 
         data_search = cur_search.fetchall()
         print('\n')
-        if data_search != None:
-            for row in data_search:
-                print(row)
+        if data_search != []:
+            print(tabulate(data_search, headers=['slno','ISBNo','Book Name','Author','Publisher','Genre','Price','Quantity']  , tablefmt="rounded_outline"))
             print('\n')
         else:
             print('\n--No Books found--\n')
@@ -121,7 +118,7 @@ def books():
 
     def modify_book():
         cur_mod = sqlcon.cursor()
-        isbno = input('\nEnter ISBNo Of The Book Data You Want To Modify: \n')
+        isbno = input('\nEnter ISBNo of the Book you want to Modify: ')
 
         print('\nEnter What You Want to modify\n\
         1. Book Name\n\
@@ -170,8 +167,8 @@ def books():
         cur_del =  sqlcon.cursor()
         del_num = input('\nEnter ISBNo to delete: ')
         cur_del.execute('delete from books where isbno = '+str(del_num))
+        sqlcon.commit()
         print('\n--Book Deleted--\n')
-        cur_del.commit()
         cur_del.close()
 
     while True:
@@ -203,12 +200,9 @@ def customer():
     def disp_customer():
         cur_disp =  sqlcon.cursor()
         cur_disp.execute('select * from customers order by slno')
-        mydata = cur_disp.fetchall()
-        n_rec = cur_disp.rowcount
-        if n_rec != 0:
-            print('\nThe Total no of customers are',n_rec)
-            for row in mydata:
-                print(row[0],'|',row[1],'|',row[2],'|',row[3],'|',row[4],'|',row[5],'|',row[6],'|',row[7])
+        data = cur_disp.fetchall()
+        if data != []:
+            print(tabulate(data, headers=['slno','Customer ID','Customer Name','Age','Date of Birth','Address','Mobile','Email'], tablefmt="rounded_outline"))
             print('\n')
         else:
             print('\n--No Customers Found--\n')
@@ -219,15 +213,14 @@ def customer():
         search = input('\nEnter Customer Name or Customer ID Number: ')
 
         if search.isnum():
-            cur_search.execute('select * from Customers where custid = "'+search+'"')
+            cur_search.execute('select * from Customers where cust_id = "'+search+'"')
         else:
             cur_search.execute('select * from Customers where cust_Name = "'+search+'"')
 
-        data_search = cur_search.fetchall()
+        data = cur_search.fetchall()
         print('\n')
-        if data_search != None:
-            for row in data_search:
-                print(row[0],'|',row[1],'|',row[2],'|',row[3],'|',row[4],'|',row[5],'|',row[6],'|',row[7])
+        if data != []:
+            print(tabulate(data, headers=['slno','Customer ID','Customer Name','Age','Date of Birth','Address','Mobile','Email'], tablefmt="rounded_outline"))
             print('\n')
         else:
             print('\n--No Customer found--\n')
@@ -237,10 +230,13 @@ def customer():
     def add_customer():
         cur = sqlcon.cursor()
 
-        custid = int(input('\nEnter Customer ID: '))
-        cur.execute('select * from Customers where cust_Name = "'+str(custid)+'"')
+        cust_id = int(input('\nEnter Customer ID: '))
+        cur.execute('select cust_id from Customers')
         data = cur.fetchall()
-        if data[0][1] == custid:
+        ids = []
+        for i in data:
+            ids.append(i[0])
+        if cust_id in ids:
             print('\n--This customer id already exists!--\n')
         else:
             name = input('Enter Customer Name: ')
@@ -253,7 +249,7 @@ def customer():
             address = input('Enter Address: ')
             mob = int(input('Enter Mobile Number: '))
             mail = input('Enter Email ID: ')
-            cur.execute('insert into customers(CustID,Cust_name,age,date_of_birth,address,mobile,email) values(%s,"%s",%s,"%s","%s",%s,"%s")'%(custid,name,age,dob,address,mob,mail))
+            cur.execute('insert into customers(cust_id,Cust_name,age,date_of_birth,address,mobile,email) values(%s,"%s",%s,"%s","%s",%s,"%s")'%(cust_id,name,age,dob,address,mob,mail))
 
             sqlcon.commit()
             print('\n--Customer Saved--\n')
@@ -262,9 +258,9 @@ def customer():
     def modify_customer():
         cur_mod = sqlcon.cursor()
 
-        custid = input('\nEnter Customer ID Of The Customer Data You Want To Modify: \n')
+        cust_id = input('\nEnter Customer ID of the Customer you want to Modify: ')
 
-        print('\nEnter What You Want to modify\n\
+        print('\nEnter what you want to modify\n\
         1. Customer Name\n\
         2. Customers Date Of Birth\n\
         3. Customers Address\n\
@@ -275,19 +271,19 @@ def customer():
         choice = int(input('Enter Choice: '))
         if choice == 1:
             name = input('\nEnter Customer Name: ')
-            cur_mod.execute('update customers set cust_name = "%s" where CustID = %s'%(name,custid))
+            cur_mod.execute('update customers set cust_name = "%s" where cust_id = %s'%(name,cust_id))
         elif choice == 2:
             dob = input('\nEnter Date Of Birth: ')
-            cur_mod.execute('update customers set Date_of_birth = "%s" where CustID = %s'%(dob,custid))
+            cur_mod.execute('update customers set Date_of_birth = "%s" where cust_id = %s'%(dob,cust_id))
         elif choice == 3:
             address = input('\nEnter Address: ')
-            cur_mod.execute('update customers set address = "%s" where CustID = %s'%(address,custid))
+            cur_mod.execute('update customers set address = "%s" where cust_id = %s'%(address,cust_id))
         elif choice == 4:
             mob = int(input('\nEnter Mobile Number: '))
-            cur_mod.execute('update customers set mobile = %s where CustID = %s'%(mob,custid))
+            cur_mod.execute('update customers set mobile = %s where cust_id = %s'%(mob,cust_id))
         elif choice == 5:
             mail = input('\nEnter Email ID: ')
-            cur_mod.execute('update customers set Email = "%s" where CustID = %s'%(mail,custid))
+            cur_mod.execute('update customers set Email = "%s" where cust_id = %s'%(mail,cust_id))
         else :
             name = input('\nEnter Name to modify: ')
             dob = input('Enter Date Of Birth: ')
@@ -295,7 +291,7 @@ def customer():
             mob = int(input('Enter Mobile Number: '))
             mail = input('Enter Email ID: ')
 
-            cur_mod.execute('update customers set cust_name = "%s",Date_of_birth = "%s",address = "%s",mobile = "%s",Email = "%s" where CustID = "%s"'%(name,dob,address,mob,mail,custid))
+            cur_mod.execute('update customers set cust_name = "%s",Date_of_birth = "%s",address = "%s",mobile = "%s",Email = "%s" where cust_id = "%s"'%(name,dob,address,mob,mail,cust_id))
 
         sqlcon.commit()
         print('\n--Customer Updated--\n\n')
@@ -305,9 +301,9 @@ def customer():
     def delete_customer():
         cur_del =  sqlcon.cursor()
         del_num = input('\nEnter Customer ID to delete: ')
-        cur_del.execute('delete from customers where custid = '+str(del_num))
+        cur_del.execute('delete from customers where cust_id = '+str(del_num))
+        sqlcon.commit()
         print('\n--Customer Deleted--\n')
-        cur_del.commit()
         cur_del.close()
 
     def view_issues():
@@ -315,11 +311,10 @@ def customer():
         print('='*40,'\n\n\tBook Issues\n\n')
         print('='*40)
         cid = input('\nEnter Customer ID: ')
-        cur.execute('select * from issue where custid = '+str(cid))
+        cur.execute('select * from issue where cust_id = '+str(cid))
         data = cur.fetchall()
-        if data != None:
-            for row in data:
-                print(row[0],'|',row[1],'|',row[2],'|',row[3],'|',row[4],'|',row[5],'|',row[6])
+        if data != []:
+            print('\n',tabulate(data, headers=['slno','Date','ISBNo','Book Name','Customer ID','Customer Name'], tablefmt="rounded_outline"))
             print('\n')
         else:
             print('\n--No Issuess--\n')
@@ -330,11 +325,10 @@ def customer():
         print('='*40,'\n\n\tBook Returns\n\n')
         print('='*40)
         cid = input('\nEnter Customer ID: ')
-        cur.execute('select * from returns where custid = '+str(cid))
+        cur.execute('select * from returns where cust_id = '+str(cid))
         data = cur.fetchall()
-        if data != None:
-            for row in data:
-                print(row[0],'|',row[1],'|',row[2],'|',row[3],'|',row[4],'|',row[5],'|',row[6])
+        if data != []:
+            print(tabulate(data, headers=['slno','Date','ISBNo','Customer ID','Fine','Paid?'], tablefmt="rounded_outline"))
             print('\n')
         else:
             print('\n--No Returns--\n')
@@ -381,14 +375,14 @@ def issue_book():
     nbook = cur.fetchall()[0][7]
 
     if nbook != 0:
-        custid = int(input('\nEnter Customer ID: '))
+        cust_id = int(input('\nEnter Customer ID: '))
         cur.execute('select book_name from books where isbno = %s'%(isbno,))
         bookname = cur.fetchall()[0][0]
-        cur.execute('select cust_name from customers where custid = %s'%(custid,))
+        cur.execute('select cust_name from customers where cust_id = %s'%(cust_id,))
         custname = cur.fetchall()[0][0]
 
         cur.execute('update books set no_of_copies = "%s" where isbno = "%s"'%(nbook-1,isbno))
-        cur.execute('insert into issue(isbno,book_name,cust_id,cust_name) values(%s,"%s",%s,"%s")'%(isbno,bookname,custid,custname))
+        cur.execute('insert into issue(isbno,book_name,cust_id,cust_name) values(%s,"%s",%s,"%s")'%(isbno,bookname,cust_id,custname))
         sqlcon.commit()
         print('\n--Book Issued--\n')
     else:
@@ -402,9 +396,8 @@ def view_issues():
     print('='*40,'\n')
     cur.execute('select * from issue order by slno')
     data = cur.fetchall()
-    if data != None:
-        for row in data:
-            print(row[0],'|',row[1],'|',row[2],'|',row[3],'|',row[4],'|',row[5],'|',row[6])
+    if data != []:
+        print(tabulate(data, headers=['slno','Date','ISBNo','Book Name','Customer ID','Customer Name'], tablefmt="rounded_outline"))
         print('\n')
     else:
         print('\n--No Issuess--\n')
@@ -419,8 +412,8 @@ def return_book():
     cur.execute('select * from issue where ISBNo = %s'%(isbno,))
     data = cur.fetchall()
     
-    custid = int(input('\nEnter Customer ID: '))
-    if data[0][4] == custid:
+    cust_id = int(input('\nEnter Customer ID: '))
+    if data[0][4] == cust_id:
         date = data[0][1]
         now = str((dt.datetime.now()).strftime("%Y-%m-%d %H:%M:%S"))
 
@@ -436,15 +429,15 @@ def return_book():
             fine += 100*(diff-14)
             print('\nFine Amount: ',fine)
             paid = input('\nDo you want to pay now? (y/n): ')
-            cur.execute('insert into returns(isbno,cust_id,fine_amount,paid) values(%s,%s,%s,"%s")'%(isbno,custid,fine,paid))
+            cur.execute('insert into returns(isbno,cust_id,fine_amount,paid) values(%s,%s,%s,"%s")'%(isbno,cust_id,fine,paid))
         else:
             print('\nBook returned within Due date.')
-            cur.execute('insert into returns(isbno,cust_id) values(%s,%s)'%(isbno,custid))
+            cur.execute('insert into returns(isbno,cust_id) values(%s,%s)'%(isbno,cust_id))
         
         cur.execute('select no_of_copies from books where isbno = %s'%(isbno))
         nbook = int(cur.fetchall()[0][0])
         cur.execute('update books set no_of_copies = %s where isbno = %s'%(nbook+1,isbno))
-        cur.execute('delete from issue where isbno = %s and cust_id = %s'%(isbno,custid))
+        cur.execute('delete from issue where isbno = %s and cust_id = %s'%(isbno,cust_id))
         sqlcon.commit()
         print('\n--Book Returned--\n')
     else:
@@ -458,9 +451,8 @@ def view_returns():
     print('='*40,'\n')
     cur.execute('select * from returns order by slno')
     data = cur.fetchall()
-    if data != None:
-        for row in data:
-            print(row[0],'|',row[1],'|',row[2],'|',row[3],'|',row[4],'|',row[5],'|',row[6])
+    if data != []:
+        print(tabulate(data, headers=['slno','Date','ISBNo','Customer ID','Fine','Paid?'], tablefmt="rounded_outline"))
         print('\n')
     else:
         print('\n--No Returns--\n')
@@ -473,5 +465,3 @@ if __name__ == '__main__':
     check_database()
     main()
     sqlcon.close()
-
-
