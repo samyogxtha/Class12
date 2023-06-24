@@ -376,15 +376,23 @@ def issue_book():
 
     if nbook != 0:
         cust_id = int(input('\nEnter Customer ID: '))
-        cur.execute('select book_name from books where isbno = %s'%(isbno,))
-        bookname = cur.fetchall()[0][0]
-        cur.execute('select cust_name from customers where cust_id = %s'%(cust_id,))
-        custname = cur.fetchall()[0][0]
+        cur.execute('select cust_id from issue where ISBNo = %s'%(isbno,))
+        ncust = cur.fetchall()
+        n_cust = []
+        for i in ncust:
+            n_cust.append(i[0])
+        if cust_id not in n_cust:
+            cur.execute('select book_name from books where isbno = %s'%(isbno,))
+            bookname = cur.fetchall()[0][0]
+            cur.execute('select cust_name from customers where cust_id = %s'%(cust_id,))
+            custname = cur.fetchall()[0][0]
 
-        cur.execute('update books set no_of_copies = "%s" where isbno = "%s"'%(nbook-1,isbno))
-        cur.execute('insert into issue(isbno,book_name,cust_id,cust_name) values(%s,"%s",%s,"%s")'%(isbno,bookname,cust_id,custname))
-        sqlcon.commit()
-        print('\n--Book Issued--\n')
+            cur.execute('update books set no_of_copies = "%s" where isbno = "%s"'%(nbook-1,isbno))
+            cur.execute('insert into issue(isbno,book_name,cust_id,cust_name) values(%s,"%s",%s,"%s")'%(isbno,bookname,cust_id,custname))
+            sqlcon.commit()
+            print('\n--Book Issued--\n')
+        else:
+            print('\n--Customer Already has this book issued!--\n')
     else:
         print('\n--Book Out of Stock--\n')
 
