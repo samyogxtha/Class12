@@ -36,7 +36,9 @@ def main():
         2. Customer\n\
         3. Issue Book\n\
         4. Return Book\n\
-        5. Exit\n')
+        5. View Issues\n\
+        6. View Returns\n\
+        7. Exit\n')
 
         choice = int(input('Enter Choice: '))
         print('\n')
@@ -48,6 +50,10 @@ def main():
             issue_book()
         elif choice == 4:
             return_book()
+        elif choice == 5:
+            view_issues()
+        elif choice == 6:
+            view_returns()
         else :
             print('\t--Thank You.!--\n')
             break
@@ -205,7 +211,7 @@ def customer():
                 print(row[0],'|',row[1],'|',row[2],'|',row[3],'|',row[4],'|',row[5],'|',row[6],'|',row[7])
             print('\n')
         else:
-            print('\n--No Customerss Found--\n')
+            print('\n--No Customers Found--\n')
         cur_disp.close()
 
     def search_customer():
@@ -213,15 +219,15 @@ def customer():
         search = input('\nEnter Customer Name or Customer ID Number: ')
 
         if search.isnum():
-            cur_search.execute('select * from Customer where ISBNo = "'+search+'"')
+            cur_search.execute('select * from Customers where custid = "'+search+'"')
         else:
-            cur_search.execute('select * from Customer where Book_Name = "'+search+'"')
+            cur_search.execute('select * from Customers where cust_Name = "'+search+'"')
 
         data_search = cur_search.fetchall()
         print('\n')
         if data_search != None:
             for row in data_search:
-                print(row)
+                print(row[0],'|',row[1],'|',row[2],'|',row[3],'|',row[4],'|',row[5],'|',row[6],'|',row[7])
             print('\n')
         else:
             print('\n--No Customer found--\n')
@@ -232,20 +238,25 @@ def customer():
         cur = sqlcon.cursor()
 
         custid = int(input('\nEnter Customer ID: '))
-        name = input('Enter Customer Name: ')
-        dob = input('Enter Date of Birth (yyyy-mm-dd): ')
-        
-        current_date = dt.date.today()
-        birth_date = dt.datetime.strptime(dob, '%Y-%m-%d').date()
-        age = current_date.year - birth_date.year - (current_date.month < birth_date.month or (current_date.month == birth_date.month and current_date.day < birth_date.day))
+        cur.execute('select * from Customers where cust_Name = "'+str(custid)+'"')
+        data = cur.fetchall()
+        if data[0][1] == custid:
+            print('\n--This customer id already exists!--\n')
+        else:
+            name = input('Enter Customer Name: ')
+            dob = input('Enter Date of Birth (yyyy-mm-dd): ')
+            
+            current_date = dt.date.today()
+            birth_date = dt.datetime.strptime(dob, '%Y-%m-%d').date()
+            age = current_date.year - birth_date.year - (current_date.month < birth_date.month or (current_date.month == birth_date.month and current_date.day < birth_date.day))
 
-        address = input('Enter Address: ')
-        mob = int(input('Enter Mobile Number: '))
-        mail = input('Enter Email ID: ')
-        cur.execute('insert into customers(CustID,Cust_name,age,date_of_birth,address,mobile,email) values(%s,"%s",%s,"%s","%s",%s,"%s")'%(custid,name,age,dob,address,mob,mail))
+            address = input('Enter Address: ')
+            mob = int(input('Enter Mobile Number: '))
+            mail = input('Enter Email ID: ')
+            cur.execute('insert into customers(CustID,Cust_name,age,date_of_birth,address,mobile,email) values(%s,"%s",%s,"%s","%s",%s,"%s")'%(custid,name,age,dob,address,mob,mail))
 
-        sqlcon.commit()
-        print('\n--Customer Saved--\n')
+            sqlcon.commit()
+            print('\n--Customer Saved--\n')
         cur.close()
 
     def modify_customer():
@@ -299,6 +310,36 @@ def customer():
         cur_del.commit()
         cur_del.close()
 
+    def view_issues():
+        cur = sqlcon.cursor()
+        print('='*40,'\n\n\tBook Issues\n\n')
+        print('='*40)
+        cid = input('\nEnter Customer ID: ')
+        cur.execute('select * from issue where custid = '+str(cid))
+        data = cur.fetchall()
+        if data != None:
+            for row in data:
+                print(row[0],'|',row[1],'|',row[2],'|',row[3],'|',row[4],'|',row[5],'|',row[6])
+            print('\n')
+        else:
+            print('\n--No Issuess--\n')
+        cur.close()
+
+    def view_returns():
+        cur = sqlcon.cursor()
+        print('='*40,'\n\n\tBook Returns\n\n')
+        print('='*40)
+        cid = input('\nEnter Customer ID: ')
+        cur.execute('select * from returns where custid = '+str(cid))
+        data = cur.fetchall()
+        if data != None:
+            for row in data:
+                print(row[0],'|',row[1],'|',row[2],'|',row[3],'|',row[4],'|',row[5],'|',row[6])
+            print('\n')
+        else:
+            print('\n--No Returns--\n')
+        cur.close()
+
     while True:
         print('='*40)
         print('\n\tCustomer Manager\n')
@@ -308,7 +349,9 @@ def customer():
         3. Add a Customer\n\
         4. Modify a Customer\n\
         5. Delete a Customer\n\
-        6. Exit\n')
+        6. View Issues\n\
+        7. View Returns\n\
+        8. Exit\n')
 
         choice = int(input('Enter Choice: '))
         if choice == 1:
@@ -321,12 +364,18 @@ def customer():
             modify_customer()
         elif choice == 5:
             delete_customer()
+        elif choice == 6:
+            view_issues()
+        elif choice == 6:
+            view_returns()
         else :
             break
 
 #issuing
 def issue_book():
     cur = sqlcon.cursor()
+    print('='*40,'\n\n\tIssue Book\n\n')
+    print('='*40)
     isbno = int(input('Enter ISBNo of the book: '))
     cur.execute('select * from books where ISBNo = %s'%(isbno,))
     nbook = cur.fetchall()[0][7]
@@ -345,6 +394,20 @@ def issue_book():
     else:
         print('\n--Book Out of Stock--\n')
 
+    cur.close()
+
+def view_issues():
+    cur = sqlcon.cursor()
+    print('='*40,'\n\n\tBook Issues\n\n')
+    print('='*40,'\n')
+    cur.execute('select * from issue order by slno')
+    data = cur.fetchall()
+    if data != None:
+        for row in data:
+            print(row[0],'|',row[1],'|',row[2],'|',row[3],'|',row[4],'|',row[5],'|',row[6])
+        print('\n')
+    else:
+        print('\n--No Issuess--\n')
     cur.close()
 
 #returning
@@ -387,6 +450,20 @@ def return_book():
     else:
         print('\n--Invalid Details--\n')
 
+    cur.close()
+
+def view_returns():
+    cur = sqlcon.cursor()
+    print('='*40,'\n\n\tBook Returns\n\n')
+    print('='*40,'\n')
+    cur.execute('select * from returns order by slno')
+    data = cur.fetchall()
+    if data != None:
+        for row in data:
+            print(row[0],'|',row[1],'|',row[2],'|',row[3],'|',row[4],'|',row[5],'|',row[6])
+        print('\n')
+    else:
+        print('\n--No Returns--\n')
     cur.close()
 
 if __name__ == '__main__':
