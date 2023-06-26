@@ -31,6 +31,7 @@ def check_database():
 
 def main():
     while True:
+        print('\n')
         print('='*40,'\n\n\tLIBRARY MANAGER\n')
         print('='*40,'\n\
         1. Books\n\
@@ -212,7 +213,7 @@ def customer():
         cur_search = sqlcon.cursor()
         search = input('\nEnter Customer Name or Customer ID Number: ')
 
-        if search.isnum():
+        if search.isnumeric():
             cur_search.execute('select * from Customers where cust_id = "'+search+'"')
         else:
             cur_search.execute('select * from Customers where cust_Name = "'+search+'"')
@@ -314,7 +315,7 @@ def customer():
         cur.execute('select * from issue where cust_id = '+str(cid))
         data = cur.fetchall()
         if data != []:
-            print('\n',tabulate(data, headers=['slno','Date','ISBNo','Book Name','Customer ID','Customer Name'], tablefmt="rounded_outline"))
+            print(tabulate(data, headers=['slno','Date','ISBNo','Book Name','Customer ID','Customer Name'], tablefmt="rounded_outline"))
             print('\n')
         else:
             print('\n--No Issuess--\n')
