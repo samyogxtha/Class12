@@ -1,5 +1,3 @@
-#code written by shubhank
-
 from tkinter import *
 from tkinter import ttk
 import time
