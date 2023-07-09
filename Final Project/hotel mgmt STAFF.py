@@ -1,8 +1,5 @@
-from tkinter import *
-from tkinter import ttk
-from PIL import ImageTk,Image
-from tkinter import messagebox
 import datetime
+from tabulate import tabulate
 import mysql.connector as msconn #pip install mysql-connector-python
 
 def rooms():
@@ -11,28 +8,34 @@ def rooms():
 def customer():
     pass
 
-def book():
+def bookings():
     pass
 
-def check_out():
+def payments():
     pass
 
 
 def main():
     while True:
         print('\n')
-        print('='*40,'\n\n\tHOTEL BOOKINGS\n')
+        print('='*40,'\n\n\tHOTEL MANAGER\n')
         print('='*40,'\n\
-        1. New Booking\n\
-        2. Check out\n\
-        3. Exit\n')
+        1. Rooms\n\
+        2. Customer\n\
+        3. Bookings\n\
+        4. Payments\n\
+        0. Exit\n')
 
         choice = int(input('Enter Choice: '))
         print('\n')
         if choice == 1:
-            book()
+            rooms()
         elif choice == 2:
-            check_out()
+            customer()
+        elif choice == 3:
+            bookings()
+        elif choice == 4:
+            payments()
         else :
             break
 
