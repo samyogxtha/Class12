@@ -7,6 +7,8 @@ import os
 import datetime
 import mysql.connector as msconn #pip install mysql-connector-python
 
+sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'samy', database = 'hotel') 
+
 def db_check():
     global sqlcon
     cur = sqlcon.cursor()
@@ -87,39 +89,20 @@ def db_check():
         cur.close()
         sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'root', database = 'hotel') 
 
-def rooms():
-    pass
-
-def customer():
-    pass
-
-def book():
-    pass
-
-def check_out():
-    pass
-
-
 def main():
-    while True:
-        print('\n')
-        print('='*40,'\n\n\tHOTEL BOOKINGS\n')
-        print('='*40,'\n\
-        1. New Booking\n\
-        2. Check out\n\
-        3. Exit\n')
+    root = CTk()
+    root.geometry('1080x500')
+    root.minsize(width=1080,height=550)
+    root.maxsize(width=1080,height=550)
+    root.title("Hotel Management")
+ 
 
-        choice = int(input('Enter Choice: '))
-        print('\n')
-        if choice == 1:
-            book()
-        elif choice == 2:
-            check_out()
-        else :
-            break
+
+
 
 if __name__ == '__main__':
     sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'root')
     db_check() 
     main()
     sqlcon.close()
+    mainloop()
