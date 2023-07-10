@@ -21,10 +21,10 @@ def db_check():
         cur.close()
         sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'root', database = 'hotel')
         cur = sqlcon.cursor()
-        cur.execute('CREATE TABLE IF NOT EXISTS customer(\
+        cur.execute('CREATE TABLE IF NOT EXISTS customers(\
                 slno	INT AUTO_INCREMENT UNIQUE ,\
                 cust_id	INT PRIMARY KEY ,\
-                cust_name	VARCHAR(50) ,\
+                cust_name VARCHAR(50) NOT NULL ,\
                 age	INT ,\
                 dob	DATE ,\
                 address	VARCHAR(50) ,\
