@@ -11,20 +11,21 @@ set_default_color_theme("green")
 def main():
     main = CTk()
     main.title("Zero Hotel Booking")
-    main.minsize(height=720,width=1440)
+    main.minsize(height=520,width=1040)
 
-    main_pic = CTkImage(Image.open('images/logo.jpg'),size = (720,720))
+    main_pic = CTkImage(Image.open('images/logo.jpg'),size = (520,520))
     main_label = CTkLabel(main,text = '', image = main_pic)
     main_label._image = main_pic
     main_label.place(x=0,y=0)
 
-    details = CTkFrame(main,height=720,width=720)
-    details.place(x=720)
-    CTkLabel(details,text='Zero Hotel Management Sytem', font=('Berlin Sans FB',40)).place(relx=0.5, rely=0.38, anchor=CENTER)
-    CTkLabel(details,text='Made By:', font=('Dubai',25)).place(relx=0.5, rely=0.47, anchor=CENTER)
-    CTkLabel(details,text='Samyog 12A', font=('Dubai',25)).place(relx=0.5, rely=0.52, anchor=CENTER)
+    details = CTkFrame(main,height=520,width=520)
+    details.place(x=520)
+    CTkLabel(details,text='Zero Hotel', font=('Berlin Sans FB',50)).place(relx=0.5, rely=0.35, anchor=CENTER)
+    CTkLabel(details,text='Management Sytem', font=('Berlin Sans FB',50)).place(relx=0.5, rely=0.45, anchor=CENTER)
+    CTkLabel(details,text='Made By:', font=('Dubai',25)).place(relx=0.5, rely=0.55, anchor=CENTER)
+    CTkLabel(details,text='Samyog 12A', font=('Dubai',25)).place(relx=0.5, rely=0.65, anchor=CENTER)
 
-    main.after(500,lambda:call_signup(main))
+    main.after(50,lambda:call_signup(main))
     main.resizable(False,False)
     main.mainloop()
 
@@ -96,7 +97,6 @@ def signup():
             cur.close()
             call_mainapp(sign)
 
-
     def save_login():
         lmisc = CTkLabel(login,text='',text_color='red',width=500)
         lmisc.place(relx = 0.5,y = 444,anchor = CENTER)
@@ -122,15 +122,19 @@ def signup():
                 lmisc.configure(text='Incorrect Email or Password',width = 500)
 
     main_pic = CTkImage(Image.open('images/logo.jpg'),size = (200,200))
-    
+    bottompic1 = CTkImage(Image.open('images/bottompic1.png'),size = (1440,111))
+
     #signup page
     signup = CTkFrame(sign,height=720,width=1440,corner_radius=15)
+    signup.place(relx = 0.5,rely = 0.5, anchor=CENTER)
 
     login_pic = CTkLabel(signup,text = '', image = main_pic)
     login_pic._image = main_pic
     login_pic.place(relx=0.5,rely=0.19,anchor = CENTER)
+    bpic1 = CTkLabel(signup,text = '', image = bottompic1)
+    bpic1._image = bottompic1
+    bpic1.place(relx=0.5,rely=0.95,anchor = CENTER)
 
-    signup.place(relx = 0.5,rely = 0.5, anchor=CENTER)
     entry_name = CTkEntry(signup,placeholder_text = 'Name',height=45,width=300)
     entry_name.place(relx = 0.5,y = 290, anchor=CENTER)
     entry_email = CTkEntry(signup,placeholder_text = 'Email',height=45,width=300)
@@ -144,14 +148,15 @@ def signup():
     button_signup = CTkButton(signup,text = 'Sign Up',width=300,height=45,command = lambda: save_signin())
     button_signup.place(relx=0.5,y=518,anchor = CENTER)
 
-
-
     #login page
     login = CTkFrame(sign,height=720,width=1440,corner_radius=15)
 
     signin_pic = CTkLabel(login,text = '', image = main_pic)
     signin_pic._image = main_pic
     signin_pic.place(relx=0.5,rely=0.19,anchor = CENTER)
+    sbpic1 = CTkLabel(login,text = '', image = bottompic1)
+    sbpic1._image = bottompic1
+    sbpic1.place(relx=0.5,rely=0.95,anchor = CENTER)
 
     login.place(relx = 0.5,rely = 0.5, anchor=CENTER)
     enter_email = CTkEntry(login,placeholder_text = 'Email',height=45,width=300)
@@ -172,7 +177,8 @@ def mainapp():
     root.title("Zero Hotel Booking")
     root.minsize(height=720,width=1440)
 
-
+    frame = CTkFrame(root,height=720,width=1440,corner_radius=15)
+    frame.place(relx = 0.5,rely = 0.5, anchor=CENTER)
 
 
 
