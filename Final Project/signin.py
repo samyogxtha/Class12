@@ -25,7 +25,7 @@ def main():
     CTkLabel(details,text='Made By:', font=('Dubai',25)).place(relx=0.5, rely=0.55, anchor=CENTER)
     CTkLabel(details,text='Samyog 12A', font=('Dubai',25)).place(relx=0.5, rely=0.65, anchor=CENTER)
 
-    main.after(50,lambda:call_signup(main))
+    main.after(2000,lambda:call_signup(main))
     main.resizable(False,False)
     main.mainloop()
 
@@ -124,16 +124,20 @@ def signup():
     main_pic = CTkImage(Image.open('images/logo.jpg'),size = (200,200))
     bottompic1 = CTkImage(Image.open('images/bottompic1.png'),size = (1440,111))
 
-    #signup page
-    signup = CTkFrame(sign,height=720,width=1440,corner_radius=15)
-    signup.place(relx = 0.5,rely = 0.5, anchor=CENTER)
-
-    login_pic = CTkLabel(signup,text = '', image = main_pic)
-    login_pic._image = main_pic
-    login_pic.place(relx=0.5,rely=0.19,anchor = CENTER)
-    bpic1 = CTkLabel(signup,text = '', image = bottompic1)
+    frame = CTkFrame(sign,height=720,width=1440)
+    frame.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+    
+    bpic1 = CTkLabel(frame,text = '', image = bottompic1)
     bpic1._image = bottompic1
     bpic1.place(relx=0.5,rely=0.95,anchor = CENTER)
+
+    #signup page
+    signup = CTkFrame(frame,height=620,width=540,corner_radius=20)
+    signup.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+    login_pic = CTkLabel(signup,text = '', image = main_pic)
+    login_pic._image = main_pic
+    login_pic.place(relx=0.5,rely=0.21,anchor = CENTER)
+    
 
     entry_name = CTkEntry(signup,placeholder_text = 'Name',height=45,width=300)
     entry_name.place(relx = 0.5,y = 290, anchor=CENTER)
@@ -141,36 +145,37 @@ def signup():
     entry_email.place(relx = 0.5,y = 349,anchor = CENTER)
     entry_passw = CTkEntry(signup,placeholder_text = 'Password',height=45,width=300)
     entry_passw.place(relx = 0.5,y = 409,anchor = CENTER)
-    login_text = CTkLabel(signup,text='Already have an account?',).place(relx = 0.44,y = 470,anchor = CENTER)
+    login_text = CTkLabel(signup,text='Already have an account?',).place(relx = 0.37,y = 470,anchor = CENTER)
     login_ = CTkLabel(signup,text='Log In', text_color='#44f1a6')
-    login_.place(relx = 0.6,y = 470,anchor = CENTER)
+    login_.place(relx = 0.73,y = 470,anchor = CENTER)
     login_.bind("<Button-1>", lambda x:login.tkraise())
     button_signup = CTkButton(signup,text = 'Sign Up',width=300,height=45,command = lambda: save_signin())
     button_signup.place(relx=0.5,y=518,anchor = CENTER)
 
     #login page
-    login = CTkFrame(sign,height=720,width=1440,corner_radius=15)
+    login = CTkFrame(frame,height=620,width=540,corner_radius=20)
 
     signin_pic = CTkLabel(login,text = '', image = main_pic)
     signin_pic._image = main_pic
-    signin_pic.place(relx=0.5,rely=0.19,anchor = CENTER)
-    sbpic1 = CTkLabel(login,text = '', image = bottompic1)
-    sbpic1._image = bottompic1
-    sbpic1.place(relx=0.5,rely=0.95,anchor = CENTER)
-
+    signin_pic.place(relx=0.5,rely=0.21,anchor = CENTER)
+    
     login.place(relx = 0.5,rely = 0.5, anchor=CENTER)
     enter_email = CTkEntry(login,placeholder_text = 'Email',height=45,width=300)
     enter_email.place(relx = 0.5,y = 332,anchor = CENTER)
     enter_passw = CTkEntry(login,placeholder_text = 'Password',height=45,width=300)
     enter_passw.place(relx = 0.5,y = 409,anchor = CENTER)
-    signup_text = CTkLabel(login,text='Don\'t have an account?',).place(relx = 0.44,y = 470,anchor = CENTER)
+    signup_text = CTkLabel(login,text='Don\'t have an account?',).place(relx = 0.35,y = 470,anchor = CENTER)
     signup_ = CTkLabel(login,text='Sign Up', text_color='#44f1a6')
-    signup_.place(relx = 0.6,y = 470,anchor = CENTER)
+    signup_.place(relx = 0.728,y = 470,anchor = CENTER)
     signup_.bind("<Button-1>", lambda x:signup.tkraise())
     button_login = CTkButton(login,text = 'Log In',width=300,height=45,command=lambda: save_login())
     button_login.place(relx=0.5,y=518,anchor = CENTER)
 
     sign.mainloop()
+
+def call_signup(main):
+	main.destroy()
+	signup()
 
 def mainapp():
     root = CTk()
@@ -180,6 +185,7 @@ def mainapp():
     frame = CTkFrame(root,height=720,width=1440,corner_radius=15)
     frame.place(relx = 0.5,rely = 0.5, anchor=CENTER)
 
+    
 
 
 
@@ -190,11 +196,9 @@ def call_mainapp(sign):
 	sign.destroy()
 	mainapp()
     
-def call_signup(main):
-	main.destroy()
-	signup()
-
 if __name__ == '__main__':
     sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'root', database = 'hotel')
-    main()
+    #main()
+    #signup()
+    mainapp()
     sqlcon.close()
