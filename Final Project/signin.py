@@ -4,14 +4,19 @@ from tkinter import *
 from customtkinter import *
 from PIL import ImageTk,Image
 import mysql.connector as msconn
+import time
 
-set_appearance_mode("System")
-set_default_color_theme("green")
+set_appearance_mode('system')
+set_default_color_theme('green')
+
+loggedin = [False]
 
 def main():
     main = CTk()
-    main.title("Zero Hotel Booking")
+    main.title("Mavrik Hotel Booking")
     main.minsize(height=520,width=1040)
+    main.attributes('-topmost', 1)
+    main.overrideredirect(True)
 
     main_pic = CTkImage(Image.open('images/logo.jpg'),size = (520,520))
     main_label = CTkLabel(main,text = '', image = main_pic)
@@ -20,18 +25,18 @@ def main():
 
     details = CTkFrame(main,height=520,width=520)
     details.place(x=520)
-    CTkLabel(details,text='Zero Hotel', font=('Berlin Sans FB',50)).place(relx=0.5, rely=0.35, anchor=CENTER)
+    CTkLabel(details,text='Mavrik Hotel', font=('Berlin Sans FB',50)).place(relx=0.5, rely=0.35, anchor=CENTER)
     CTkLabel(details,text='Management Sytem', font=('Berlin Sans FB',50)).place(relx=0.5, rely=0.45, anchor=CENTER)
     CTkLabel(details,text='Made By:', font=('Dubai',25)).place(relx=0.5, rely=0.55, anchor=CENTER)
     CTkLabel(details,text='Samyog 12A', font=('Dubai',25)).place(relx=0.5, rely=0.65, anchor=CENTER)
 
-    main.after(2000,lambda:call_signup(main))
+    main.after(2000,lambda:call_mainapp(main))
     main.resizable(False,False)
     main.mainloop()
 
 def signup():
     sign = CTk()
-    sign.title("Zero Hotel Booking")
+    sign.title("Mavrik Hotel Booking")
     sign.minsize(height=720,width=1440)
 
     cur = sqlcon.cursor()
@@ -95,6 +100,7 @@ def signup():
             cur.execute('insert into credentials(cust_name,cust_email,cust_pass) values("%s","%s","%s")'%(name,email,passw))
             sqlcon.commit()
             cur.close()
+            loggedin[0] = True
             call_mainapp(sign)
 
     def save_login():
@@ -117,20 +123,21 @@ def signup():
         else:
             if passw == password[0][0]:
                 cur.close()
-                call_mainapp(sign)
+                loggedin[0] = True
+                call_mainapp(sign)  
             else:
                 lmisc.configure(text='Incorrect Email or Password',width = 500)
 
-    main_pic = CTkImage(Image.open('images/logo.jpg'),size = (200,200))
-    bottompic1 = CTkImage(Image.open('images/bottompic1.png'),size = (1440,111))
+    main_pic = CTkImage(Image.open('images/logo.png'),size = (200,200))
+    bottompic1 = CTkImage(Image.open('images/loginbg.png'),size = (1440,720))
 
     frame = CTkFrame(sign,height=720,width=1440)
     frame.place(relx = 0.5,rely = 0.5, anchor=CENTER)
     
     bpic1 = CTkLabel(frame,text = '', image = bottompic1)
     bpic1._image = bottompic1
-    bpic1.place(relx=0.5,rely=0.95,anchor = CENTER)
-
+    bpic1.place(relx=0.5,rely=0.5,anchor = CENTER)
+    
     #signup page
     signup = CTkFrame(frame,height=620,width=540,corner_radius=20)
     signup.place(relx = 0.5,rely = 0.5, anchor=CENTER)
@@ -145,7 +152,7 @@ def signup():
     entry_email.place(relx = 0.5,y = 349,anchor = CENTER)
     entry_passw = CTkEntry(signup,placeholder_text = 'Password',height=45,width=300)
     entry_passw.place(relx = 0.5,y = 409,anchor = CENTER)
-    login_text = CTkLabel(signup,text='Already have an account?',).place(relx = 0.37,y = 470,anchor = CENTER)
+    CTkLabel(signup,text='Already have an account?',).place(relx = 0.37,y = 470,anchor = CENTER)
     login_ = CTkLabel(signup,text='Log In', text_color='#44f1a6')
     login_.place(relx = 0.73,y = 470,anchor = CENTER)
     login_.bind("<Button-1>", lambda x:login.tkraise())
@@ -154,40 +161,83 @@ def signup():
 
     #login page
     login = CTkFrame(frame,height=620,width=540,corner_radius=20)
+    login.place(relx = 0.5,rely = 0.5, anchor=CENTER)
 
     signin_pic = CTkLabel(login,text = '', image = main_pic)
     signin_pic._image = main_pic
     signin_pic.place(relx=0.5,rely=0.21,anchor = CENTER)
     
-    login.place(relx = 0.5,rely = 0.5, anchor=CENTER)
     enter_email = CTkEntry(login,placeholder_text = 'Email',height=45,width=300)
     enter_email.place(relx = 0.5,y = 332,anchor = CENTER)
     enter_passw = CTkEntry(login,placeholder_text = 'Password',height=45,width=300)
     enter_passw.place(relx = 0.5,y = 409,anchor = CENTER)
-    signup_text = CTkLabel(login,text='Don\'t have an account?',).place(relx = 0.35,y = 470,anchor = CENTER)
+    CTkLabel(login,text='Don\'t have an account?',).place(relx = 0.35,y = 470,anchor = CENTER)
     signup_ = CTkLabel(login,text='Sign Up', text_color='#44f1a6')
     signup_.place(relx = 0.728,y = 470,anchor = CENTER)
     signup_.bind("<Button-1>", lambda x:signup.tkraise())
     button_login = CTkButton(login,text = 'Log In',width=300,height=45,command=lambda: save_login())
-    button_login.place(relx=0.5,y=518,anchor = CENTER)
+    button_login.place(relx=0.5,y=518,anchor = CENTER)  
 
     sign.mainloop()
 
+def logout(root):
+    root.destroy()
+    loggedin[0] = False
+    mainapp()
+    
 def call_signup(main):
 	main.destroy()
 	signup()
 
 def mainapp():
     root = CTk()
-    root.title("Zero Hotel Booking")
+    root.title("Mavrik Hotel Booking")
     root.minsize(height=720,width=1440)
-
+    
     frame = CTkFrame(root,height=720,width=1440,corner_radius=15)
     frame.place(relx = 0.5,rely = 0.5, anchor=CENTER)
 
+    banner_pic = CTkImage(Image.open('images/banner2.png'),size = (1440,120))
+    topbanner = CTkLabel(frame,text = '', image = banner_pic)
+    topbanner._image = banner_pic
+    topbanner.place(relx=0.5,rely=0.0857,anchor = CENTER)
+
+    profile_pic = CTkImage(Image.open('images/profile.png'),size = (70,70))
+
+    button_login = CTkButton(frame,width=80,height=80,text='',command=lambda:call_signup(root))
+    button_login.place(relx=0.96,rely=0.08,anchor=CENTER)
+    if loggedin[0] is True:
+        button_login.configure(text='',image=profile_pic,command=lambda:logout(root))
+    else:
+        button_login.configure(text='Log In',image=None)
+    
+    def segmented_button_callback(value):
+        lambda:value.tkraise()
+        print("segmented button clicked:", value)
+
+    segemented_button_var = StringVar(value="rooms")
+    segemented_button = CTkSegmentedButton(frame,height=20, values=['Our Rooms', 'About', 'Contact','Pricings','Staffs','Book a Room'],
+                                                     command=segmented_button_callback,
+                                                     variable=segemented_button_var)
+    segemented_button.place(relx=0.5,rely=0.13,anchor=CENTER)
+
     
 
+    staffs = CTkFrame(frame,height=600,width=1440,corner_radius=15)
+    staffs.place(relx = 0.5,rely = 0.58, anchor=CENTER)
 
+    CTkLabel(staffs,text='staffs').place(relx = 0.5,rely = 0.5, anchor=CENTER)
+    '''
+    rooms = CTkFrame(frame,height=550,width=1440,corner_radius=15)
+    rooms.place(relx = 0.5,rely = 0.62, anchor=CENTER)
+
+    CTkLabel(rooms,text='rooms').place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+
+    pricings = CTkFrame(frame,height=60,width=1440,corner_radius=15)
+    pricings.place(relx = 0.5,rely = 0.62, anchor=CENTER)
+    
+    CTkLabel(pricings,text='pricing').place(relx = 0.5,rely = 0.5, anchor=CENTER)'''
 
 
     root.mainloop()
@@ -199,6 +249,5 @@ def call_mainapp(sign):
 if __name__ == '__main__':
     sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'root', database = 'hotel')
     #main()
-    #signup()
     mainapp()
     sqlcon.close()
