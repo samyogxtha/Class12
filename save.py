@@ -1,3 +1,6 @@
+from customtkinter import *
+from PIL import Image
+
 root = CTk()
 root.title("Zero Hotel Booking")
 root.minsize(height=720,width=1440)

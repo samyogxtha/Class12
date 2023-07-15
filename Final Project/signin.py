@@ -10,6 +10,7 @@ set_appearance_mode('system')
 set_default_color_theme('green')
 
 loggedin = [False]
+login_details = []
 
 def main():
     main = CTk()
@@ -99,8 +100,13 @@ def signup():
         if misc._text == '':
             cur.execute('insert into credentials(cust_name,cust_email,cust_pass) values("%s","%s","%s")'%(name,email,passw))
             sqlcon.commit()
+            cur.execute('select cust_id from credentials where cust_email = "%s"'%(email))
+            custid = cur.fetchall()[0]
             cur.close()
             loggedin[0] = True
+            login_details.append(custid)
+            login_details.append(name)
+            login_details.append(email)
             call_mainapp(sign)
 
     def save_login():
@@ -122,8 +128,13 @@ def signup():
             lmisc.configure(text='Enter Password.!',width = 500)
         else:
             if passw == password[0][0]:
+                cur.execute('select * from credentials where cust_email = "%s"'%(email))
+                data = cur.fetchall()[0]
                 cur.close()
                 loggedin[0] = True
+                login_details.append(data[0])
+                login_details.append(data[1])
+                login_details.append(email)
                 call_mainapp(sign)  
             else:
                 lmisc.configure(text='Incorrect Email or Password',width = 500)
@@ -183,6 +194,7 @@ def signup():
 def logout(root):
     root.destroy()
     loggedin[0] = False
+    login_details.clear()
     mainapp()
     
 def call_signup(main):
@@ -200,46 +212,202 @@ def mainapp():
     banner_pic = CTkImage(Image.open('images/banner2.png'),size = (1440,120))
     topbanner = CTkLabel(frame,text = '', image = banner_pic)
     topbanner._image = banner_pic
-    topbanner.place(relx=0.5,rely=0.0857,anchor = CENTER)
+    topbanner.place(relx=0.5,rely=0.086,anchor = CENTER)
 
-    profile_pic = CTkImage(Image.open('images/profile.png'),size = (70,70))
+    profile_pic = CTkImage(Image.open('images/profile.png'),size = (58,58))
 
-    button_login = CTkButton(frame,width=80,height=80,text='',command=lambda:call_signup(root))
-    button_login.place(relx=0.96,rely=0.08,anchor=CENTER)
+    button_login = CTkButton(frame,width=70,height=70,text='',command=lambda:call_signup(root))
+    button_login.place(relx=0.97,rely=0.065,anchor=CENTER)
     if loggedin[0] is True:
         button_login.configure(text='',image=profile_pic,command=lambda:logout(root))
     else:
         button_login.configure(text='Log In',image=None)
     
-    def segmented_button_callback(value):
-        lambda:value.tkraise()
-        print("segmented button clicked:", value)
+    #tabs
+    tabview = CTkTabview(frame,width=1440,height=630)
+    tabview.place(relx=0.5,rely=0.56,anchor=CENTER)
 
-    segemented_button_var = StringVar(value="rooms")
-    segemented_button = CTkSegmentedButton(frame,height=20, values=['Our Rooms', 'About', 'Contact','Pricings','Staffs','Book a Room'],
-                                                     command=segmented_button_callback,
-                                                     variable=segemented_button_var)
-    segemented_button.place(relx=0.5,rely=0.13,anchor=CENTER)
-
+    #about tab
+    about = tabview.add("About")
     
+    pic = CTkFrame(about,height=630,width=1440,corner_radius=15)
+    pic.place(relx = 0.5,rely = 0.5, anchor=CENTER)
 
-    staffs = CTkFrame(frame,height=600,width=1440,corner_radius=15)
-    staffs.place(relx = 0.5,rely = 0.58, anchor=CENTER)
+    image_files = ['images/image0.jpg','images/image1.jpg', 'images/image2.jpg', 'images/image3.jpg','images/image4.jpg','images/image5.jpg']
+    images = []
 
-    CTkLabel(staffs,text='staffs').place(relx = 0.5,rely = 0.5, anchor=CENTER)
-    '''
-    rooms = CTkFrame(frame,height=550,width=1440,corner_radius=15)
-    rooms.place(relx = 0.5,rely = 0.62, anchor=CENTER)
+    def load_images():
+        for file in image_files:
+            image = CTkImage(Image.open(file),size=(1440,720))
+            images.append(image)
+        canvas.configure(image=images[0])
+
+    canvas = CTkLabel(pic, text = '', width=1440, height=720)
+    canvas.pack()
+
+    def next_image(index):
+        canvas.configure(image=images[index])
+        index += 1
+        if index >= len(images):
+            index = 0
+        root.after(5000, next_image, index)
+
+    load_images()
+    next_image(0)
+
+    #rooms tab
+    room = tabview.add("Our Rooms")
+    rooms = CTkFrame(room,height=600,width=1440,corner_radius=15)
+    rooms.place(relx = 0.5,rely = 0.58, anchor=CENTER)
 
     CTkLabel(rooms,text='rooms').place(relx = 0.5,rely = 0.5, anchor=CENTER)
 
 
-    pricings = CTkFrame(frame,height=60,width=1440,corner_radius=15)
-    pricings.place(relx = 0.5,rely = 0.62, anchor=CENTER)
+
+
+
+
+
+    #contacs tab
+    contact = tabview.add("Contact")
+
+
+    fr_mgr = CTkFrame(contact,height=275,width=680,corner_radius=15)
+    fr_mgr.place(relx = 0.25,rely = 0.25, anchor=CENTER)
+
+    mgr_pic = CTkImage(Image.open('images/mgr.jpg'),size = (275,275))
+    mgr = CTkLabel(fr_mgr,text = '', image = mgr_pic)
+    mgr._image = mgr_pic
+    mgr.place(x=137.5,rely=0.5,anchor = CENTER)
+
+    CTkLabel(fr_mgr,text="Manager",font=('Berlin Sans FB',47,'bold')).place(x=290,y=60)
+    CTkLabel(fr_mgr,text="Mr. Gru",font=('Berlin Sans FB',32,'bold')).place(x=290,y=109)
+    CTkLabel(fr_mgr,text="Extention : 117",font=('Berlin Sans FB',27)).place(x=290,y=150)
+    CTkLabel(fr_mgr,text="Mail : manager@mavrik.com",font=('Berlin Sans FB',27)).place(x=290,y=185)
+
+
+    fr_rec = CTkFrame(contact,height=275,width=680,corner_radius=15)
+    fr_rec.place(relx = 0.75,rely = 0.25, anchor=CENTER)
+
+    rec_pic = CTkImage(Image.open('images/rec.jpg'),size = (275,275))
+    rec = CTkLabel(fr_rec,text = '', image = rec_pic)
+    rec._image = rec_pic
+    rec.place(x=137.5,rely=0.5,anchor = CENTER)
+
+    CTkLabel(fr_rec,text="Customer Service",font=('Berlin Sans FB',47,'bold')).place(x=290,y=60)
+    CTkLabel(fr_rec,text="Mr. Sam",font=('Berlin Sans FB',32,'bold')).place(x=290,y=109)
+    CTkLabel(fr_rec,text="Extention : 225",font=('Berlin Sans FB',27)).place(x=290,y=150)
+    CTkLabel(fr_rec,text="Mail : customerservice@mavrik.com",font=('Berlin Sans FB',27)).place(x=290,y=185)
     
-    CTkLabel(pricings,text='pricing').place(relx = 0.5,rely = 0.5, anchor=CENTER)'''
+
+    fr_serv = CTkFrame(contact,height=275,width=680,corner_radius=15)
+    fr_serv.place(relx = 0.25,rely = 0.75, anchor=CENTER)
+
+    serv_pic = CTkImage(Image.open('images/serv.jpg'),size = (275,275))
+    serv = CTkLabel(fr_serv,text = '', image = serv_pic)
+    serv._image = serv_pic
+    serv.place(x=137.5,rely=0.5,anchor = CENTER)
+
+    CTkLabel(fr_serv,text="Room Service",font=('Berlin Sans FB',47,'bold')).place(x=290,y=60)
+    CTkLabel(fr_serv,text="Ms. Anya",font=('Berlin Sans FB',32,'bold')).place(x=290,y=109)
+    CTkLabel(fr_serv,text="Extention : 147",font=('Berlin Sans FB',27)).place(x=290,y=150)
+    CTkLabel(fr_serv,text="Mail : roomservice@mavrik.com",font=('Berlin Sans FB',27)).place(x=290,y=185)
 
 
+    fr_cook = CTkFrame(contact,height=275,width=680,corner_radius=15)
+    fr_cook.place(relx = 0.75,rely = 0.75, anchor=CENTER)
+
+    cook_pic = CTkImage(Image.open('images/cook.jpg'),size = (275,275))
+    cook = CTkLabel(fr_cook,text = '', image = cook_pic)
+    cook._image = cook_pic
+    cook.place(x=137.5,rely=0.5,anchor = CENTER)
+
+    CTkLabel(fr_cook,text="Restaurant",font=('Berlin Sans FB',47,'bold')).place(x=290,y=60)
+    CTkLabel(fr_cook,text="Mr. Kim",font=('Berlin Sans FB',32,'bold')).place(x=290,y=109)
+    CTkLabel(fr_cook,text="Extention : 125",font=('Berlin Sans FB',27)).place(x=290,y=150)
+    CTkLabel(fr_cook,text="Mail : dining@mavrik.com",font=('Berlin Sans FB',27)).place(x=290,y=185)
+
+    #pricing tab
+    pricing = tabview.add("Pricings")
+
+
+    fr_single = CTkFrame(pricing,height=275,width=680,corner_radius=15)
+    fr_single.place(relx = 0.25,rely = 0.25, anchor=CENTER)
+
+    single_pic = CTkImage(Image.open('images/single.jpg'),size = (275,275))
+    single = CTkLabel(fr_single,text = '', image = single_pic)
+    single._image = single_pic
+    single.place(x=137.5,rely=0.5,anchor = CENTER)
+
+    CTkLabel(fr_single,text="Manager",font=('Berlin Sans FB',47,'bold')).place(x=290,y=60)
+    CTkLabel(fr_single,text="Mr. Gru",font=('Berlin Sans FB',32,'bold')).place(x=290,y=109)
+    CTkLabel(fr_single,text="Extention : 117",font=('Berlin Sans FB',27)).place(x=290,y=150)
+    CTkLabel(fr_single,text="Mail : manager@mavrik.com",font=('Berlin Sans FB',27)).place(x=290,y=185)
+
+
+    fr_double = CTkFrame(pricing,height=275,width=680,corner_radius=15)
+    fr_double.place(relx = 0.75,rely = 0.25, anchor=CENTER)
+
+    double_pic = CTkImage(Image.open('images/double.jpg'),size = (275,275))
+    double = CTkLabel(fr_double,text = '', image = double_pic)
+    double._image = double_pic
+    double.place(x=137.5,rely=0.5,anchor = CENTER)
+
+    CTkLabel(fr_double,text="Customer Service",font=('Berlin Sans FB',47,'bold')).place(x=290,y=60)
+    CTkLabel(fr_double,text="Mr. Sam",font=('Berlin Sans FB',32,'bold')).place(x=290,y=109)
+    CTkLabel(fr_double,text="Extention : 225",font=('Berlin Sans FB',27)).place(x=290,y=150)
+    CTkLabel(fr_double,text="Mail : customerservice@mavrik.com",font=('Berlin Sans FB',27)).place(x=290,y=185)
+    
+
+    fr_triple = CTkFrame(pricing,height=275,width=680,corner_radius=15)
+    fr_triple.place(relx = 0.25,rely = 0.75, anchor=CENTER)
+
+    triple_pic = CTkImage(Image.open('images/triple.jpg'),size = (275,275))
+    triple = CTkLabel(fr_triple,text = '', image = triple_pic)
+    triple._image = triple_pic
+    triple.place(x=137.5,rely=0.5,anchor = CENTER)
+
+    CTkLabel(fr_triple,text="Room Service",font=('Berlin Sans FB',47,'bold')).place(x=290,y=60)
+    CTkLabel(fr_triple,text="Ms. Anya",font=('Berlin Sans FB',32,'bold')).place(x=290,y=109)
+    CTkLabel(fr_triple,text="Extention : 147",font=('Berlin Sans FB',27)).place(x=290,y=150)
+    CTkLabel(fr_triple,text="Mail : roomservice@mavrik.com",font=('Berlin Sans FB',27)).place(x=290,y=185)
+
+
+    fr_quad = CTkFrame(pricing,height=275,width=680,corner_radius=15)
+    fr_quad.place(relx = 0.75,rely = 0.75, anchor=CENTER)
+
+    quad_pic = CTkImage(Image.open('images/quad.jpg'),size = (275,275))
+    quad = CTkLabel(fr_quad,text = '', image = quad_pic)
+    quad._image = quad_pic
+    quad.place(x=137.5,rely=0.5,anchor = CENTER)
+
+    CTkLabel(fr_quad,text="Restaurant",font=('Berlin Sans FB',47,'bold')).place(x=290,y=60)
+    CTkLabel(fr_quad,text="Mr. Kim",font=('Berlin Sans FB',32,'bold')).place(x=290,y=109)
+    CTkLabel(fr_quad,text="Extention : 125",font=('Berlin Sans FB',27)).place(x=290,y=150)
+    CTkLabel(fr_quad,text="Mail : dining@mavrik.com",font=('Berlin Sans FB',27)).place(x=290,y=185)
+
+
+
+
+
+
+
+
+    #books tab
+    book = tabview.add("Book a Room")
+    books = CTkFrame(book,height=600,width=1440,corner_radius=15)
+    books.place(relx = 0.5,rely = 0.58, anchor=CENTER)
+    
+    CTkLabel(books,text='book').place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+
+
+
+
+
+
+    tabview.set("Contact")
+    
     root.mainloop()
 
 def call_mainapp(sign):

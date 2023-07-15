@@ -1,10 +1,9 @@
-from customtkinter import *
-app=CTk()
-def segmented_button_callback(value):
-    print("segmented button clicked:", value)
+import customtkinter
+import tkinter
 
-segemented_button = CTkSegmentedButton(app, values=["Value 1", "Value 2", "Value 3"],
-                                                     command=segmented_button_callback)
-segemented_button.pack()
-segemented_button.set("Value 1")
+app = customtkinter.CTk()
+app.minsize(height=200,width=440)
+scrollable_frame = customtkinter.CTkScrollableFrame(app, width=200, height=200)
+scrollable_frame.pack()
+customtkinter.CTkLabel(scrollable_frame,height=1000).pack()
 app.mainloop()
