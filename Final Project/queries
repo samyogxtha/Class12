@@ -36,38 +36,113 @@ INSERT IGNORE INTO customers(cust_id,cust_name,age,dob,address,mobile,email) VAL
 	(1002, 'hussain', 17, '2006-03-29', 'muaji', 8765443, 'hussain@gmail.com'),
 	(1003, 'test', 11, '2011-11-11', '111111', 11111111, 'test@gmail.com');
 
-CREATE TABLE rooms
-(
-  room_no      INT  PRIMARY KEY AUTO_INCREMENT,
-  availability CHAR(1) NOT NULL,
-  type         VARCHAR(10) NOT NULL,
-  ac           CHAR(1),
-  tv           CHAR(1),
-  wifi         CHAR(1),
-  price        INT  NOT NULL
+CREATE TABLE rooms(
+   room_no      INTEGER  NOT NULL PRIMARY KEY 
+  ,availability VARCHAR(1) NOT NULL
+  ,type         VARCHAR(6) NOT NULL
+  ,wifi         VARCHAR(1)
+  ,tv           VARCHAR(1)
+  ,ac           VARCHAR(1)
+  ,price        INTEGER  NOT NULL
 );
+INSERT INTO rooms(room_no,availability,type,wifi,tv,ac,price) VALUES
+ (1,'y','single',NULL,NULL,NULL,200)
+,(2,'y','single',NULL,NULL,'y',250)
+,(3,'y','single',NULL,'y',NULL,300)
+,(4,'y','single','y',NULL,NULL,350)
+,(5,'y','single',NULL,'y','y',400)
+,(6,'y','single','y','y',NULL,450)
+,(7,'y','single','y',NULL,'y',500)
+,(8,'y','single','y','y','y',550)
+,(9,'y','single',NULL,NULL,NULL,200)
+,(10,'y','single',NULL,NULL,'y',250)
+,(11,'y','single',NULL,'y',NULL,300)
+,(12,'y','single','y',NULL,NULL,350)
+,(13,'y','single',NULL,'y','y',400)
+,(14,'y','single','y','y',NULL,450)
+,(15,'y','single','y',NULL,'y',500)
+,(16,'y','single','y','y','y',550)
+,(17,'y','single',NULL,NULL,NULL,200)
+,(18,'y','single',NULL,NULL,'y',250)
+,(19,'y','single',NULL,'y',NULL,300)
+,(20,'y','single','y',NULL,NULL,350)
+,(21,'y','single',NULL,'y','y',400)
+,(22,'y','single','y','y',NULL,450)
+,(23,'y','single','y',NULL,'y',500)
+,(24,'y','single','y','y','y',550)
+,(25,'y','double',NULL,NULL,NULL,200)
+,(26,'y','double',NULL,NULL,'y',250)
+,(27,'y','double',NULL,'y',NULL,300)
+,(28,'y','double','y',NULL,NULL,350)
+,(29,'y','double',NULL,'y','y',400)
+,(30,'y','double','y','y',NULL,450)
+,(31,'y','double','y',NULL,'y',500)
+,(32,'y','double','y','y','y',550)
+,(33,'y','double',NULL,NULL,NULL,200)
+,(34,'y','double',NULL,NULL,'y',250)
+,(35,'y','double',NULL,'y',NULL,300)
+,(36,'y','double','y',NULL,NULL,350)
+,(37,'y','double',NULL,'y','y',400)
+,(38,'y','double','y','y',NULL,450)
+,(39,'y','double','y',NULL,'y',500)
+,(40,'y','double','y','y','y',550)
+,(41,'y','double',NULL,NULL,NULL,200)
+,(42,'y','double',NULL,NULL,'y',250)
+,(43,'y','double',NULL,'y',NULL,300)
+,(44,'y','double','y',NULL,NULL,350)
+,(45,'y','double',NULL,'y','y',400)
+,(46,'y','double','y','y',NULL,450)
+,(47,'y','double','y',NULL,'y',500)
+,(48,'y','double','y','y','y',550)
+,(49,'y','triple',NULL,NULL,NULL,200)
+,(50,'y','triple',NULL,NULL,'y',250)
+,(51,'y','triple',NULL,'y',NULL,300)
+,(52,'y','triple','y',NULL,NULL,350)
+,(53,'y','triple',NULL,'y','y',400)
+,(54,'y','triple','y','y',NULL,450)
+,(55,'y','triple','y',NULL,'y',500)
+,(56,'y','triple','y','y','y',550)
+,(57,'y','triple',NULL,NULL,NULL,200)
+,(58,'y','triple',NULL,NULL,'y',250)
+,(59,'y','triple',NULL,'y',NULL,300)
+,(60,'y','triple','y',NULL,NULL,350)
+,(61,'y','triple',NULL,'y','y',400)
+,(62,'y','triple','y','y',NULL,450)
+,(63,'y','triple','y',NULL,'y',500)
+,(64,'y','triple','y','y','y',550)
+,(65,'y','triple',NULL,NULL,NULL,200)
+,(66,'y','triple',NULL,NULL,'y',250)
+,(67,'y','triple',NULL,'y',NULL,300)
+,(68,'y','triple','y',NULL,NULL,350)
+,(69,'y','triple',NULL,'y','y',400)
+,(70,'y','triple','y','y',NULL,450)
+,(71,'y','triple','y',NULL,'y',500)
+,(72,'y','triple','y','y','y',550)
+,(73,'y','quad',NULL,NULL,NULL,200)
+,(74,'y','quad',NULL,NULL,'y',250)
+,(75,'y','quad',NULL,'y',NULL,300)
+,(76,'y','quad','y',NULL,NULL,350)
+,(77,'y','quad',NULL,'y','y',400)
+,(78,'y','quad','y','y',NULL,450)
+,(79,'y','quad','y',NULL,'y',500)
+,(80,'y','quad','y','y','y',550)
+,(81,'y','quad',NULL,NULL,NULL,200)
+,(82,'y','quad',NULL,NULL,'y',250)
+,(83,'y','quad',NULL,'y',NULL,300)
+,(84,'y','quad','y',NULL,NULL,350)
+,(85,'y','quad',NULL,'y','y',400)
+,(86,'y','quad','y','y',NULL,450)
+,(87,'y','quad','y',NULL,'y',500)
+,(88,'y','quad','y','y','y',550)
+,(89,'y','quad',NULL,NULL,NULL,200)
+,(90,'y','quad',NULL,NULL,'y',250)
+,(91,'y','quad',NULL,'y',NULL,300)
+,(92,'y','quad','y',NULL,NULL,350)
+,(93,'y','quad',NULL,'y','y',400)
+,(94,'y','quad','y','y',NULL,450)
+,(95,'y','quad','y',NULL,'y',500)
+,(96,'y','quad','y','y','y',550);
 
-INSERT IGNORE INTO rooms VALUES 
-  (1,'y','single',NULL,NULL,'y',1000),
-  (2,'y','single','y','y',NULL,1100),
-  (3,'y','single',NULL,'y','y',1200),
-  (4,'y','single','y',NULL,'y',1300),
-  (5,'y','single','y','y','y',1400),
-  (6,'y','double',NULL,NULL,'y',2000),
-  (7,'y','double','y','y',NULL,2100),
-  (8,'y','double',NULL,'y','y',2200),
-  (9,'y','double','y',NULL,'y',2300),
-  (10,'y','double','y','y','y',2400),
-  (11,'y','triple',NULL,NULL,'y',3000),
-  (12,'y','triple','y','y',NULL,3100),
-  (13,'y','triple',NULL,'y','y',3200),
-  (14,'y','triple','y',NULL,'y',3300),
-  (15,'y','triple','y','y','y',3400),
-  (16,'y','quad',NULL,NULL,'y',4000),
-  (17,'y','quad','y','y',NULL,4100),
-  (18,'y','quad',NULL,'y','y',4200),
-  (19,'y','quad','y',NULL,'y',4300),
-  (20,'y','quad','y','y','y',4400);
 
 CREATE TABLE bookings
 (
