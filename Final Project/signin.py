@@ -6,12 +6,6 @@ from PIL import ImageTk,Image
 import mysql.connector as msconn
 import time
 
-set_appearance_mode('system')
-set_default_color_theme('green')
-
-loggedin = [False]
-login_details = []
-
 def main():
     main = CTk()
     main.title("Mavrik Hotel Booking")
@@ -415,7 +409,13 @@ def call_mainapp(sign):
 	mainapp()
     
 if __name__ == '__main__':
+    set_appearance_mode('system')
+    set_default_color_theme('green')
+
+    loggedin = [False]
+    login_details = []
+    
     sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'root', database = 'hotel')
-    #main()
-    mainapp()
+    main()
+    #mainapp()
     sqlcon.close()
