@@ -1,37 +1,23 @@
-from customtkinter import *
-from PIL import Image
+import customtkinter
+from CTkTable import *
 
-root = CTk()
-root.title("Zero Hotel Booking")
-root.minsize(height=720,width=1440)
+root = customtkinter.CTk()
 
-frame = CTkFrame(root,height=720,width=1440,corner_radius=15)
-frame.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+def show(cell):
+    print("row:", cell["row"])
+    print("column:", cell["column"])
+    print("value:", cell["value"])
+          
+value = [[1,2,3,4,5],
+         [1,2,3,4,5],
+         [1,2,3,4,5],
+         [1,2,3,4,5],
+         [1,2,3,4,5],]
 
-image_files = ['images/image0.jpg','images/image1.jpg', 'images/image2.jpg', 'images/image3.jpg','images/image4.jpg','images/image5.jpg']
-images = []
+frame = customtkinter.CTkFrame(root)
+frame.pack(expand=True, fill="both")
 
-def load_images():
-    for file in image_files:
-        image = CTkImage(Image.open(file),size=(1440,720))
-        images.append(image)
-    canvas.configure(image=images[0])
-
-canvas = CTkLabel(frame, text = '', width=1440, height=720)
-canvas.pack()
-
-def next_image(index):
-    canvas.configure(image=images[index])
-    index += 1
-    if index >= len(images):
-        index = 0
-    root.after(5000, next_image, index)
-
-load_images()
-next_image(0)
-
-
-
-
+table = CTkTable(master=frame, row=5, column=5, values=value, height=100, command=show)
+table.pack(expand=True, fill="both", padx=20, pady=20)
 
 root.mainloop()

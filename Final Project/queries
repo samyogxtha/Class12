@@ -28,120 +28,93 @@ CREATE TABLE customers(
   FOREIGN KEY (cust_id)   REFERENCES credentials (cust_id)
 );
 
-ALTER TABLE customers AUTO_INCREMENT=1;
-
 INSERT IGNORE INTO customers(cust_id,cust_name,age,dob,address,mobile,email) VALUES
 	(1000, 'samyog', 16, '2006-10-07', 'sarooj', 54702457, 'samyog@gmail.com'),
 	(1001, 'idris', 17, '2006-07-01', 'sarooj', 6543245, ' idris@gmail.com'),
 	(1002, 'hussain', 17, '2006-03-29', 'muaji', 8765443, 'hussain@gmail.com'),
-	(1003, 'test', 11, '2011-11-11', '111111', 11111111, 'test@gmail.com');
+	(1003, 'test', 11, '2011-11-11', '111111', 11111111, 'test@gmail.com')
+;
+
 
 CREATE TABLE rooms(
-   room_no      INTEGER  NOT NULL PRIMARY KEY 
-  ,availability VARCHAR(1) NOT NULL
-  ,type         VARCHAR(6) NOT NULL
-  ,wifi         VARCHAR(1)
-  ,tv           VARCHAR(1)
-  ,ac           VARCHAR(1)
-  ,price        INTEGER  NOT NULL
+   room_no        INTEGER    NOT NULL PRIMARY KEY 
+  ,availability   CHAR(3)    NOT NULL
+  ,type           VARCHAR(6) NOT NULL
+  ,wifi           CHAR(3)    NOT NULL
+  ,tv             CHAR(3)    NOT NULL
+  ,ac             CHAR(3)    NOT NULL
+  ,price          INTEGER    NOT NULL
+  ,Button         VARCHAR(4) NOT NULL
 );
-INSERT INTO rooms(room_no,availability,type,wifi,tv,ac,price) VALUES
- (1,'y','single',NULL,NULL,NULL,200)
-,(2,'y','single',NULL,NULL,'y',250)
-,(3,'y','single',NULL,'y',NULL,300)
-,(4,'y','single','y',NULL,NULL,350)
-,(5,'y','single',NULL,'y','y',400)
-,(6,'y','single','y','y',NULL,450)
-,(7,'y','single','y',NULL,'y',500)
-,(8,'y','single','y','y','y',550)
-,(9,'y','single',NULL,NULL,NULL,200)
-,(10,'y','single',NULL,NULL,'y',250)
-,(11,'y','single',NULL,'y',NULL,300)
-,(12,'y','single','y',NULL,NULL,350)
-,(13,'y','single',NULL,'y','y',400)
-,(14,'y','single','y','y',NULL,450)
-,(15,'y','single','y',NULL,'y',500)
-,(16,'y','single','y','y','y',550)
-,(17,'y','single',NULL,NULL,NULL,200)
-,(18,'y','single',NULL,NULL,'y',250)
-,(19,'y','single',NULL,'y',NULL,300)
-,(20,'y','single','y',NULL,NULL,350)
-,(21,'y','single',NULL,'y','y',400)
-,(22,'y','single','y','y',NULL,450)
-,(23,'y','single','y',NULL,'y',500)
-,(24,'y','single','y','y','y',550)
-,(25,'y','double',NULL,NULL,NULL,200)
-,(26,'y','double',NULL,NULL,'y',250)
-,(27,'y','double',NULL,'y',NULL,300)
-,(28,'y','double','y',NULL,NULL,350)
-,(29,'y','double',NULL,'y','y',400)
-,(30,'y','double','y','y',NULL,450)
-,(31,'y','double','y',NULL,'y',500)
-,(32,'y','double','y','y','y',550)
-,(33,'y','double',NULL,NULL,NULL,200)
-,(34,'y','double',NULL,NULL,'y',250)
-,(35,'y','double',NULL,'y',NULL,300)
-,(36,'y','double','y',NULL,NULL,350)
-,(37,'y','double',NULL,'y','y',400)
-,(38,'y','double','y','y',NULL,450)
-,(39,'y','double','y',NULL,'y',500)
-,(40,'y','double','y','y','y',550)
-,(41,'y','double',NULL,NULL,NULL,200)
-,(42,'y','double',NULL,NULL,'y',250)
-,(43,'y','double',NULL,'y',NULL,300)
-,(44,'y','double','y',NULL,NULL,350)
-,(45,'y','double',NULL,'y','y',400)
-,(46,'y','double','y','y',NULL,450)
-,(47,'y','double','y',NULL,'y',500)
-,(48,'y','double','y','y','y',550)
-,(49,'y','triple',NULL,NULL,NULL,200)
-,(50,'y','triple',NULL,NULL,'y',250)
-,(51,'y','triple',NULL,'y',NULL,300)
-,(52,'y','triple','y',NULL,NULL,350)
-,(53,'y','triple',NULL,'y','y',400)
-,(54,'y','triple','y','y',NULL,450)
-,(55,'y','triple','y',NULL,'y',500)
-,(56,'y','triple','y','y','y',550)
-,(57,'y','triple',NULL,NULL,NULL,200)
-,(58,'y','triple',NULL,NULL,'y',250)
-,(59,'y','triple',NULL,'y',NULL,300)
-,(60,'y','triple','y',NULL,NULL,350)
-,(61,'y','triple',NULL,'y','y',400)
-,(62,'y','triple','y','y',NULL,450)
-,(63,'y','triple','y',NULL,'y',500)
-,(64,'y','triple','y','y','y',550)
-,(65,'y','triple',NULL,NULL,NULL,200)
-,(66,'y','triple',NULL,NULL,'y',250)
-,(67,'y','triple',NULL,'y',NULL,300)
-,(68,'y','triple','y',NULL,NULL,350)
-,(69,'y','triple',NULL,'y','y',400)
-,(70,'y','triple','y','y',NULL,450)
-,(71,'y','triple','y',NULL,'y',500)
-,(72,'y','triple','y','y','y',550)
-,(73,'y','quad',NULL,NULL,NULL,200)
-,(74,'y','quad',NULL,NULL,'y',250)
-,(75,'y','quad',NULL,'y',NULL,300)
-,(76,'y','quad','y',NULL,NULL,350)
-,(77,'y','quad',NULL,'y','y',400)
-,(78,'y','quad','y','y',NULL,450)
-,(79,'y','quad','y',NULL,'y',500)
-,(80,'y','quad','y','y','y',550)
-,(81,'y','quad',NULL,NULL,NULL,200)
-,(82,'y','quad',NULL,NULL,'y',250)
-,(83,'y','quad',NULL,'y',NULL,300)
-,(84,'y','quad','y',NULL,NULL,350)
-,(85,'y','quad',NULL,'y','y',400)
-,(86,'y','quad','y','y',NULL,450)
-,(87,'y','quad','y',NULL,'y',500)
-,(88,'y','quad','y','y','y',550)
-,(89,'y','quad',NULL,NULL,NULL,200)
-,(90,'y','quad',NULL,NULL,'y',250)
-,(91,'y','quad',NULL,'y',NULL,300)
-,(92,'y','quad','y',NULL,NULL,350)
-,(93,'y','quad',NULL,'y','y',400)
-,(94,'y','quad','y','y',NULL,450)
-,(95,'y','quad','y',NULL,'y',500)
-,(96,'y','quad','y','y','y',550);
+
+INSERT INTO rooms VALUES
+ (1,'yes','Single','no','no','no',200,'Book'),
+ (2,'yes','Single','no','no','no',200,'Book'),
+ (3,'yes','Single','no','no','yes',250,'Book'),
+ (4,'yes','Single','no','no','yes',250,'Book'),
+ (5,'yes','Single','no','yes','no',300,'Book'),
+ (6,'yes','Single','no','yes','no',300,'Book'),
+ (7,'yes','Single','yes','no','no',350,'Book'),
+ (8,'yes','Single','yes','no','no',350,'Book'),
+ (9,'yes','Single','no','yes','yes',400,'Book'),
+ (10,'yes','Single','no','yes','yes',400,'Book'),
+ (11,'yes','Single','yes','yes','no',450,'Book'),
+ (12,'yes','Single','yes','yes','no',450,'Book'),
+ (13,'yes','Single','yes','no','yes',500,'Book'),
+ (14,'yes','Single','yes','no','yes',500,'Book'),
+ (15,'yes','Single','yes','yes','yes',550,'Book'),
+ (16,'yes','Single','yes','yes','yes',550,'Book'),
+ (17,'yes','Double','no','no','no',250,'Book'),
+ (18,'yes','Double','no','no','no',250,'Book'),
+ (19,'yes','Double','no','no','yes',300,'Book'),
+ (20,'yes','Double','no','no','yes',300,'Book'),
+ (21,'yes','Double','no','yes','no',350,'Book'),
+ (22,'yes','Double','no','yes','no',350,'Book'),
+ (23,'yes','Double','yes','no','no',400,'Book'),
+ (24,'yes','Double','yes','no','no',400,'Book'),
+ (25,'yes','Double','no','yes','yes',450,'Book'),
+ (26,'yes','Double','no','yes','yes',450,'Book'),
+ (27,'yes','Double','yes','yes','no',500,'Book'),
+ (28,'yes','Double','yes','yes','no',500,'Book'),
+ (29,'yes','Double','yes','no','yes',550,'Book'),
+ (30,'yes','Double','yes','no','yes',550,'Book'),
+ (31,'yes','Double','yes','yes','yes',600,'Book'),
+ (32,'yes','Double','yes','yes','yes',600,'Book'),
+ (33,'yes','Triple','no','no','no',300,'Book'),
+ (34,'yes','Triple','no','no','no',300,'Book'),
+ (35,'yes','Triple','no','no','yes',350,'Book'),
+ (36,'yes','Triple','no','no','yes',350,'Book'),
+ (37,'yes','Triple','no','yes','no',400,'Book'),
+ (38,'yes','Triple','no','yes','no',400,'Book'),
+ (39,'yes','Triple','yes','no','no',450,'Book'),
+ (40,'yes','Triple','yes','no','no',450,'Book'),
+ (41,'yes','Triple','no','yes','yes',500,'Book'),
+ (42,'yes','Triple','no','yes','yes',500,'Book'),
+ (43,'yes','Triple','yes','yes','no',550,'Book'),
+ (44,'yes','Triple','yes','yes','no',550,'Book'),
+ (45,'yes','Triple','yes','no','yes',600,'Book'),
+ (46,'yes','Triple','yes','no','yes',600,'Book'),
+ (47,'yes','Triple','yes','yes','yes',650,'Book'),
+ (48,'yes','Triple','yes','yes','yes',650,'Book'),
+ (49,'yes','Quad','no','no','no',350,'Book'),
+ (50,'yes','Quad','no','no','no',350,'Book'),
+ (51,'yes','Quad','no','no','yes',400,'Book'),
+ (52,'yes','Quad','no','no','yes',400,'Book'),
+ (53,'yes','Quad','no','yes','no',450,'Book'),
+ (54,'yes','Quad','no','yes','no',450,'Book'),
+ (55,'yes','Quad','yes','no','no',500,'Book'),
+ (56,'yes','Quad','yes','no','no',500,'Book'),
+ (57,'yes','Quad','no','yes','yes',550,'Book'),
+ (58,'yes','Quad','no','yes','yes',550,'Book'),
+ (59,'yes','Quad','yes','yes','no',600,'Book'),
+ (60,'yes','Quad','yes','yes','no',600,'Book'),
+ (61,'yes','Quad','yes','no','yes',650,'Book'),
+ (62,'yes','Quad','yes','no','yes',650,'Book'),
+ (63,'yes','Quad','yes','yes','yes',700,'Book'),
+ (64,'yes','Quad','yes','yes','yes',700,'Book')
+;
+
+
 
 
 CREATE TABLE bookings
@@ -158,7 +131,7 @@ CREATE TABLE bookings
 );
 
 CREATE TABLE payments(
-  slno            INT   NOT NULL PRIMARY KEY ,
+  slno            INT   NOT NULL PRIMARY KEY AUTO_INCREMENT,
   cust_id         INT   NOT NULL,
   room_no         INT   NOT NULL,
   checkin_date    DATE  NOT NULL,

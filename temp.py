@@ -1,9 +1,13 @@
 import customtkinter
+from customtkinter import *
 import tkinter
 
-app = customtkinter.CTk()
-app.minsize(height=200,width=440)
-scrollable_frame = customtkinter.CTkScrollableFrame(app, width=200, height=200)
-scrollable_frame.pack()
-customtkinter.CTkLabel(scrollable_frame,height=1000).pack()
-app.mainloop()
+import tkinter as tkinter
+root = CTk()
+def combobox_callback(choice):
+    print("combobox dropdown clicked:", choice)
+
+combobox = customtkinter.CTkComboBox(root,values=['All', 'Single','Double','Triple','Quad'],command=combobox_callback)
+combobox.pack(padx=20, pady=10)
+combobox.set("All")
+root.mainloop()
