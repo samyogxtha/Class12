@@ -1,10 +1,7 @@
-import tkinter as tk
-from tkinter import *
-from CTkTable import *
-from customtkinter import *
-from PIL import ImageTk,Image
+from CTkTable import CTkTable
+from customtkinter import CTkButton,CTk,CTkImage,CTkEntry,CENTER,CTkLabel,CTkFrame,StringVar,CTkCheckBox,DISABLED,CTkTabview,CTkScrollableFrame,CTkComboBox,set_default_color_theme,set_appearance_mode
+from PIL import Image
 import mysql.connector as msconn
-import time
 
 def main():
     main = CTk()
