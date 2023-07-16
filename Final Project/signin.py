@@ -10,7 +10,7 @@ def main():
     main.attributes('-topmost', 1)
     main.overrideredirect(True)
 
-    main_pic = CTkImage(Image.open('images/logo.jpg'),size = (520,520))
+    main_pic = CTkImage(Image.open('images/logo.png'),size = (520,520))
     main_label = CTkLabel(main,text = '', image = main_pic)
     main_label._image = main_pic
     main_label.place(x=0,y=0)
@@ -22,7 +22,7 @@ def main():
     CTkLabel(details,text='Made By:', font=('Dubai',25)).place(relx=0.5, rely=0.55, anchor=CENTER)
     CTkLabel(details,text='Samyog 12A', font=('Dubai',25)).place(relx=0.5, rely=0.65, anchor=CENTER)
 
-    main.after(2000,lambda:call_mainapp(main))
+    main.after(3000,lambda:call_mainapp(main))
     main.resizable(False,False)
     main.mainloop()
 
