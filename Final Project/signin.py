@@ -178,7 +178,7 @@ def signup():
     signup_.place(relx = 0.728,y = 470,anchor = CENTER)
     signup_.bind("<Button-1>", lambda x:signup.tkraise())
     button_login = CTkButton(login,text = 'Log In',width=300,height=45,command=lambda: save_login())
-    button_login.place(relx=0.5,y=518,anchor = CENTER)  
+    button_login.place(relx=0.5,y=518,anchor = CENTER)
 
     sign.mainloop()
 
@@ -231,11 +231,11 @@ def mainapp():
 
     def load_images():
         for file in image_files:
-            image = CTkImage(Image.open(file),size=(1440,720))
+            image = CTkImage(Image.open(file),size=(1440,630))
             images.append(image)
         canvas.configure(image=images[0])
 
-    canvas = CTkLabel(pic, text = '', width=1440, height=720)
+    canvas = CTkLabel(pic, text = '', width=1440, height=630)
     canvas.pack()
 
     def next_image(index):
@@ -413,7 +413,7 @@ def mainapp():
     single._image = single_pic
     single.place(x=137.5,rely=0.5,anchor = CENTER)
 
-    CTkLabel(fr_single,text="Manager",font=('Berlin Sans FB',47,'bold')).place(x=290,y=60)
+    CTkLabel(fr_single,text="Single Room",font=('Berlin Sans FB',47,'bold')).place(x=290,y=60)
     CTkLabel(fr_single,text="Mr. Gru",font=('Berlin Sans FB',32,'bold')).place(x=290,y=109)
     CTkLabel(fr_single,text="Extention : 117",font=('Berlin Sans FB',27)).place(x=290,y=150)
     CTkLabel(fr_single,text="Mail : manager@mavrik.com",font=('Berlin Sans FB',27)).place(x=290,y=185)
