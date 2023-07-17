@@ -1,5 +1,5 @@
 from CTkTable import CTkTable
-from customtkinter import CTkButton,CTk,CTkProgressBar,CTkImage,CTkEntry,CENTER,CTkLabel,CTkFrame,StringVar,CTkCheckBox,DISABLED,CTkTabview,CTkScrollableFrame,CTkComboBox,set_default_color_theme,set_appearance_mode
+from customtkinter import CTkButton,CTk,CTkProgressBar,CTkImage,CTkEntry,CTkLabel,CTkFrame,StringVar,CTkCheckBox,CTkTabview,CTkScrollableFrame,CTkComboBox,CENTER,DISABLED,set_default_color_theme,set_appearance_mode
 from PIL import Image
 import mysql.connector as msconn
 
@@ -10,7 +10,7 @@ def main():
     main.attributes('-topmost', 1)
     main.overrideredirect(True)
 
-    main_pic = CTkImage(Image.open('images/logo.png'),size = (520,520))
+    main_pic = CTkImage(Image.open('assets/logo.png'),size = (520,520))
     main_label = CTkLabel(main,text = '', image = main_pic)
     main_label._image = main_pic
     main_label.place(x=0,y=0)
@@ -44,7 +44,7 @@ def mainapp():
             frame_logout = CTkFrame(root,height=720,width=1440)
             frame_logout.place(relx = 0.5,rely = 0.5,anchor = CENTER)
 
-            bottompic2 = CTkImage(Image.open('images/loginbg.png'),size = (1440,720))
+            bottompic2 = CTkImage(Image.open('assets/loginbg.png'),size = (1440,720))
             bpic2 = CTkLabel(frame_logout,text = '', image = bottompic2)
             bpic2._image = bottompic2
             bpic2.place(relx=0.5,rely=0.5,anchor = CENTER)
@@ -191,8 +191,8 @@ def mainapp():
                 else:
                     lmisc.configure(text='Incorrect Email or Password',width = 500)
 
-        main_pic = CTkImage(Image.open('images/logo.png'),size = (200,200))
-        bottompic1 = CTkImage(Image.open('images/loginbg.png'),size = (1440,720))
+        main_pic = CTkImage(Image.open('assets/logo.png'),size = (200,200))
+        bottompic1 = CTkImage(Image.open('assets/loginbg.png'),size = (1440,720))
 
         frame_login = CTkFrame(root,height=720,width=1440)
         frame_login.place(relx = 0.5,rely = 0.5, anchor=CENTER)
@@ -242,7 +242,7 @@ def mainapp():
         button_login.place(relx=0.5,y=518,anchor = CENTER)
 
     def update_logbutton():
-        #profile_pic = CTkImage(Image.open('images/profile.png'),size = (58,58))
+        #profile_pic = CTkImage(Image.open('assets/profile.png'),size = (58,58))
         button_login.configure(text='Log Out',command=lambda:logout())#text='',image=profile_pic
         #button_login._image = profile_pic
 
@@ -252,7 +252,7 @@ def mainapp():
     frame = CTkFrame(root,height=720,width=1440,corner_radius=15)
     frame.place(relx = 0.5,rely = 0.5, anchor=CENTER)
 
-    banner_pic = CTkImage(Image.open('images/banner2.png'),size = (1440,120))
+    banner_pic = CTkImage(Image.open('assets/banner2.png'),size = (1440,120))
     topbanner = CTkLabel(frame,text = '', image = banner_pic)
     topbanner._image = banner_pic
     topbanner.place(relx=0.5,rely=0.086,anchor = CENTER)
@@ -270,7 +270,7 @@ def mainapp():
     pic = CTkFrame(about,height=630,width=1440,corner_radius=15)
     pic.place(relx = 0.5,rely = 0.5, anchor=CENTER)
 
-    image_files = ['images/image0.jpg','images/image1.jpg', 'images/image2.jpg', 'images/image3.jpg','images/image4.jpg','images/image5.jpg']
+    image_files = ['assets/image0.jpg','assets/image1.jpg', 'assets/image2.jpg', 'assets/image3.jpg','assets/image4.jpg','assets/image5.jpg']
     images = []
 
     def load_images():
@@ -394,7 +394,7 @@ def mainapp():
     fr_mgr = CTkFrame(contact,height=275,width=680,corner_radius=15)
     fr_mgr.place(relx = 0.25,rely = 0.25, anchor=CENTER)
 
-    mgr_pic = CTkImage(Image.open('images/mgr.jpg'),size = (275,275))
+    mgr_pic = CTkImage(Image.open('assets/mgr.jpg'),size = (275,275))
     mgr = CTkLabel(fr_mgr,text = '', image = mgr_pic)
     mgr._image = mgr_pic
     mgr.place(x=137.5,rely=0.5,anchor = CENTER)
@@ -408,7 +408,7 @@ def mainapp():
     fr_rec = CTkFrame(contact,height=275,width=680,corner_radius=15)
     fr_rec.place(relx = 0.75,rely = 0.25, anchor=CENTER)
 
-    rec_pic = CTkImage(Image.open('images/rec.jpg'),size = (275,275))
+    rec_pic = CTkImage(Image.open('assets/rec.jpg'),size = (275,275))
     rec = CTkLabel(fr_rec,text = '', image = rec_pic)
     rec._image = rec_pic
     rec.place(x=137.5,rely=0.5,anchor = CENTER)
@@ -422,7 +422,7 @@ def mainapp():
     fr_serv = CTkFrame(contact,height=275,width=680,corner_radius=15)
     fr_serv.place(relx = 0.25,rely = 0.75, anchor=CENTER)
 
-    serv_pic = CTkImage(Image.open('images/serv.jpg'),size = (275,275))
+    serv_pic = CTkImage(Image.open('assets/serv.jpg'),size = (275,275))
     serv = CTkLabel(fr_serv,text = '', image = serv_pic)
     serv._image = serv_pic
     serv.place(x=137.5,rely=0.5,anchor = CENTER)
@@ -436,7 +436,7 @@ def mainapp():
     fr_cook = CTkFrame(contact,height=275,width=680,corner_radius=15)
     fr_cook.place(relx = 0.75,rely = 0.75, anchor=CENTER)
 
-    cook_pic = CTkImage(Image.open('images/cook.jpg'),size = (275,275))
+    cook_pic = CTkImage(Image.open('assets/cook.jpg'),size = (275,275))
     cook = CTkLabel(fr_cook,text = '', image = cook_pic)
     cook._image = cook_pic
     cook.place(x=137.5,rely=0.5,anchor = CENTER)
@@ -452,7 +452,7 @@ def mainapp():
     fr_single = CTkFrame(pricing,height=275,width=680,corner_radius=15)
     fr_single.place(relx = 0.25,rely = 0.25, anchor=CENTER)
 
-    single_pic = CTkImage(Image.open('images/single.jpg'),size = (275,275))
+    single_pic = CTkImage(Image.open('assets/single.jpg'),size = (275,275))
     single = CTkLabel(fr_single,text = '', image = single_pic)
     single._image = single_pic
     single.place(x=137.5,rely=0.5,anchor = CENTER)
@@ -466,7 +466,7 @@ def mainapp():
     fr_double = CTkFrame(pricing,height=275,width=680,corner_radius=15)
     fr_double.place(relx = 0.75,rely = 0.25, anchor=CENTER)
 
-    double_pic = CTkImage(Image.open('images/double.jpg'),size = (275,275))
+    double_pic = CTkImage(Image.open('assets/double.jpg'),size = (275,275))
     double = CTkLabel(fr_double,text = '', image = double_pic)
     double._image = double_pic
     double.place(x=137.5,rely=0.5,anchor = CENTER)
@@ -480,7 +480,7 @@ def mainapp():
     fr_triple = CTkFrame(pricing,height=275,width=680,corner_radius=15)
     fr_triple.place(relx = 0.25,rely = 0.75, anchor=CENTER)
 
-    triple_pic = CTkImage(Image.open('images/triple.jpg'),size = (275,275))
+    triple_pic = CTkImage(Image.open('assets/triple.jpg'),size = (275,275))
     triple = CTkLabel(fr_triple,text = '', image = triple_pic)
     triple._image = triple_pic
     triple.place(x=137.5,rely=0.5,anchor = CENTER)
@@ -494,7 +494,7 @@ def mainapp():
     fr_quad = CTkFrame(pricing,height=275,width=680,corner_radius=15)
     fr_quad.place(relx = 0.75,rely = 0.75, anchor=CENTER)
 
-    quad_pic = CTkImage(Image.open('images/quad.jpg'),size = (275,275))
+    quad_pic = CTkImage(Image.open('assets/quad.jpg'),size = (275,275))
     quad = CTkLabel(fr_quad,text = '', image = quad_pic)
     quad._image = quad_pic
     quad.place(x=137.5,rely=0.5,anchor = CENTER)
@@ -527,7 +527,7 @@ def call_mainapp(main):
 
 if __name__ == '__main__':
     set_appearance_mode('system')
-    set_default_color_theme('green')
+    set_default_color_theme('assets/color theme.json')
 
     loggedin = [False]
     login_details = []
