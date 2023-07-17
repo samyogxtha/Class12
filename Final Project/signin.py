@@ -1,5 +1,5 @@
 from CTkTable import CTkTable
-from customtkinter import CTkButton,CTk,CTkImage,CTkEntry,CENTER,CTkLabel,CTkFrame,StringVar,CTkCheckBox,DISABLED,CTkTabview,CTkScrollableFrame,CTkComboBox,set_default_color_theme,set_appearance_mode
+from customtkinter import CTkButton,CTk,CTkProgressBar,CTkImage,CTkEntry,CENTER,CTkLabel,CTkFrame,StringVar,CTkCheckBox,DISABLED,CTkTabview,CTkScrollableFrame,CTkComboBox,set_default_color_theme,set_appearance_mode
 from PIL import Image
 import mysql.connector as msconn
 
@@ -17,8 +17,8 @@ def main():
 
     details = CTkFrame(main,height=520,width=520)
     details.place(x=520)
-    CTkLabel(details,text='Mavrik Hotel', font=('Berlin Sans FB',50)).place(relx=0.5, rely=0.35, anchor=CENTER)
-    CTkLabel(details,text='Management Sytem', font=('Berlin Sans FB',50)).place(relx=0.5, rely=0.45, anchor=CENTER)
+    CTkLabel(details,text='Mavrik Hotel', font=('HP Simplified',50)).place(relx=0.5, rely=0.35, anchor=CENTER)
+    CTkLabel(details,text='Management Sytem', font=('HP Simplified',50)).place(relx=0.5, rely=0.45, anchor=CENTER)
     CTkLabel(details,text='Made By:', font=('Dubai',25)).place(relx=0.5, rely=0.55, anchor=CENTER)
     CTkLabel(details,text='Samyog 12A', font=('Dubai',25)).place(relx=0.5, rely=0.65, anchor=CENTER)
 
@@ -26,177 +26,227 @@ def main():
     main.resizable(False,False)
     main.mainloop()
 
-def signup():
-    sign = CTk()
-    sign.title("Mavrik Hotel Booking")
-    sign.minsize(height=720,width=1440)
-
-    cur = sqlcon.cursor()
-
-    cur.execute('select cust_email from credentials')
-    edata = cur.fetchall()
-    emails = []
-    for i in edata:
-        emails.append(i[0])
-
-    def save_signin():
-        misc = CTkLabel(signup,text='',text_color='red',width=500)
-        misc.place(relx = 0.5,y = 444,anchor = CENTER)
-
-        at = dot = up = no = spl = False
-        
-        email = entry_email.get()
-        if email == '':
-            misc.configure(text='Enter Email.!',width = 500)
-        elif email in emails:
-            misc.configure(text='Email already registered',width = 500)
-        else:
-            if '@' in email:
-                at = True
-            if '.' in email:
-                dot = True
-            if at is False or dot is False:
-                misc.configure(text='Enter Correct Email Id.',width = 500)
-
-        passw = entry_passw.get()
-        if passw == '':
-            misc.configure(text='Enter Password.!',width = 500)
-        else:
-            schar = '!@#$%^&*()_+|-=\\\'./'
-            for i in passw:
-                if i.isupper():
-                    up = True
-                    break
-            for i in passw:
-                if i.isdigit():
-                    no = True
-                    break
-            for i in passw:
-                if i in schar:
-                    spl = True
-                    break
-            if spl == False:
-                misc.configure(text='Your Password must have atleast one Special character.',width = 500)
-            if no == False:
-                misc.configure(text='Your Password must have atleast one Number.',width = 500)
-            if up == False:
-                misc.configure(text='Your Password must have atleast one Upper case character.',width = 500)
-            if len(passw)<=8:
-                misc.configure(text='The Password must have atleast 8 Characters.',width = 500)
-
-        name = entry_name.get()
-        if name == '':
-            misc.configure(text='Enter Name.!',width = 500)
-        
-        if misc._text == '':
-            cur.execute('insert into credentials(cust_name,cust_email,cust_pass) values("%s","%s","%s")'%(name,email,passw))
-            sqlcon.commit()
-            cur.execute('select cust_id from credentials where cust_email = "%s"'%(email))
-            custid = cur.fetchall()[0]
-            cur.close()
-            loggedin[0] = True
-            login_details.insert(0,email)
-            login_details.insert(0,name)
-            login_details.insert(0,custid)
-            call_mainapp(sign)
-
-    def save_login():
-        lmisc = CTkLabel(login,text='',text_color='red',width=500)
-        lmisc.place(relx = 0.5,y = 444,anchor = CENTER)
-
-        password = ''
-        email = enter_email.get()
-        if email == '':
-            lmisc.configure(text='Enter Email.!',width = 500)
-        else:
-            cur.execute('select cust_pass from credentials where cust_email = "%s"'%(email,))
-            password = cur.fetchall()
-            if password == []:
-                lmisc.configure(text='Incorrect Email or Password',width = 500)
-
-        passw = enter_passw.get()
-        if passw == '':
-            lmisc.configure(text='Enter Password.!',width = 500)
-        else:
-            if passw == password[0][0]:
-                cur.execute('select * from credentials where cust_email = "%s"'%(email))
-                data = cur.fetchall()[0]
-                cur.close()
-                loggedin[0] = True
-                login_details.insert(0,email)
-                login_details.insert(0,data[1])
-                login_details.insert(0,data[0])
-                call_mainapp(sign)  
-            else:
-                lmisc.configure(text='Incorrect Email or Password',width = 500)
-
-    main_pic = CTkImage(Image.open('images/logo.png'),size = (200,200))
-    bottompic1 = CTkImage(Image.open('images/loginbg.png'),size = (1440,720))
-
-    frame = CTkFrame(sign,height=720,width=1440)
-    frame.place(relx = 0.5,rely = 0.5, anchor=CENTER)
-    
-    bpic1 = CTkLabel(frame,text = '', image = bottompic1)
-    bpic1._image = bottompic1
-    bpic1.place(relx=0.5,rely=0.5,anchor = CENTER)
-    
-    #signup page
-    signup = CTkFrame(frame,height=620,width=540,corner_radius=20)
-    signup.place(relx = 0.5,rely = 0.5, anchor=CENTER)
-    login_pic = CTkLabel(signup,text = '', image = main_pic)
-    login_pic._image = main_pic
-    login_pic.place(relx=0.5,rely=0.21,anchor = CENTER)
-    
-
-    entry_name = CTkEntry(signup,placeholder_text = 'Name',height=45,width=300)
-    entry_name.place(relx = 0.5,y = 290, anchor=CENTER)
-    entry_email = CTkEntry(signup,placeholder_text = 'Email',height=45,width=300)
-    entry_email.place(relx = 0.5,y = 349,anchor = CENTER)
-    entry_passw = CTkEntry(signup,placeholder_text = 'Password',height=45,width=300)
-    entry_passw.place(relx = 0.5,y = 409,anchor = CENTER)
-    CTkLabel(signup,text='Already have an account?',).place(relx = 0.37,y = 470,anchor = CENTER)
-    login_ = CTkLabel(signup,text='Log In', text_color='#44f1a6')
-    login_.place(relx = 0.73,y = 470,anchor = CENTER)
-    login_.bind("<Button-1>", lambda x:login.tkraise())
-    button_signup = CTkButton(signup,text = 'Sign Up',width=300,height=45,command = lambda: save_signin())
-    button_signup.place(relx=0.5,y=518,anchor = CENTER)
-
-    #login page
-    login = CTkFrame(frame,height=620,width=540,corner_radius=20)
-    login.place(relx = 0.5,rely = 0.5, anchor=CENTER)
-
-    signin_pic = CTkLabel(login,text = '', image = main_pic)
-    signin_pic._image = main_pic
-    signin_pic.place(relx=0.5,rely=0.21,anchor = CENTER)
-    
-    enter_email = CTkEntry(login,placeholder_text = 'Email',height=45,width=300)
-    enter_email.place(relx = 0.5,y = 332,anchor = CENTER)
-    enter_passw = CTkEntry(login,placeholder_text = 'Password',height=45,width=300)
-    enter_passw.place(relx = 0.5,y = 409,anchor = CENTER)
-    CTkLabel(login,text='Don\'t have an account?',).place(relx = 0.35,y = 470,anchor = CENTER)
-    signup_ = CTkLabel(login,text='Sign Up', text_color='#44f1a6')
-    signup_.place(relx = 0.728,y = 470,anchor = CENTER)
-    signup_.bind("<Button-1>", lambda x:signup.tkraise())
-    button_login = CTkButton(login,text = 'Log In',width=300,height=45,command=lambda: save_login())
-    button_login.place(relx=0.5,y=518,anchor = CENTER)
-
-    sign.mainloop()
-
-def logout(root):
-    root.destroy()
-    loggedin[0] = False
-    login_details.clear()
-    mainapp()
-    
-def call_signup(main):
-	main.destroy()
-	signup()
-
 def mainapp():
     root = CTk()
     root.title("Mavrik Hotel Booking")
     root.minsize(height=720,width=1440)
-    
+
+    def logout():
+            def logged_out():
+                progressbar.stop()
+                CTkLabel(logout_,height=620,width=540,corner_radius=20,text='Logged Out Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
+                tabview.set("About")
+                root.after(2000,lambda:frame_logout.destroy())
+
+            loggedin[0] = False
+            login_details.clear()
+            button_login.configure(text='Log In',image=None)
+            frame_logout = CTkFrame(root,height=720,width=1440)
+            frame_logout.place(relx = 0.5,rely = 0.5,anchor = CENTER)
+
+            bottompic2 = CTkImage(Image.open('images/loginbg.png'),size = (1440,720))
+            bpic2 = CTkLabel(frame_logout,text = '', image = bottompic2)
+            bpic2._image = bottompic2
+            bpic2.place(relx=0.5,rely=0.5,anchor = CENTER)
+
+            logout_ = CTkFrame(frame_logout,height=620,width=540,corner_radius=20)
+            logout_.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+            progressbar = CTkProgressBar(logout_,height=50,mode="indeterminate")
+            progressbar.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+            CTkLabel(logout_,text='Logging Out...',font=('HP Simplified',20,'bold')).place(relx=0.5,rely=0.6,anchor = CENTER)
+            progressbar.start()
+
+            root.after(3000,lambda:logged_out())
+
+    def loggin():
+        cur0 = sqlcon.cursor()
+
+        cur0.execute('select cust_email from credentials')
+        edata = cur0.fetchall()
+        emails = []
+        for i in edata:
+            emails.append(i[0])
+
+        def save_signin():
+            def logged_in(progress):
+                progress.stop()
+                cur0.close()
+                CTkLabel(signin_,height=620,width=540,corner_radius=20,text='Signed In Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
+                tabview.set("About")
+                update_logbutton()
+                root.after(2000,lambda:frame_login.destroy())
+
+            misc = CTkLabel(signup,text='',text_color='red',width=500)
+            misc.place(relx = 0.5,y = 444,anchor = CENTER)
+
+            at = dot = up = no = spl = False
+            
+            email = entry_email.get()
+            if email == '':
+                misc.configure(text='Enter Email.!',width = 500)
+            elif email in emails:
+                misc.configure(text='Email already registered',width = 500)
+            else:
+                if '@' in email:
+                    at = True
+                if '.' in email:
+                    dot = True
+                if at is False or dot is False:
+                    misc.configure(text='Enter Correct Email Id.',width = 500)
+
+            passw = entry_passw.get()
+            if passw == '':
+                misc.configure(text='Enter Password.!',width = 500)
+            else:
+                schar = '!@#$%^&*()_+|-=\\\'./'
+                for i in passw:
+                    if i.isupper():
+                        up = True
+                        break
+                for i in passw:
+                    if i.isdigit():
+                        no = True
+                        break
+                for i in passw:
+                    if i in schar:
+                        spl = True
+                        break
+                if spl == False:
+                    misc.configure(text='Your Password must have atleast one Special character.',width = 500)
+                if no == False:
+                    misc.configure(text='Your Password must have atleast one Number.',width = 500)
+                if up == False:
+                    misc.configure(text='Your Password must have atleast one Upper case character.',width = 500)
+                if len(passw)<=8:
+                    misc.configure(text='The Password must have atleast 8 Characters.',width = 500)
+
+            name = entry_name.get()
+            if name == '':
+                misc.configure(text='Enter Name.!',width = 500)
+            
+            if misc._text == '':
+                cur0.execute('insert into credentials(cust_name,cust_email,cust_pass) values("%s","%s","%s")'%(name,email,passw))
+                sqlcon.commit()
+                cur0.execute('select cust_id from credentials where cust_email = "%s"'%(email))
+                custid = cur0.fetchall()[0]
+                loggedin[0] = True
+                login_details.insert(0,email)
+                login_details.insert(0,name)
+                login_details.insert(0,custid)
+
+                signin_ = CTkFrame(frame_login,height=620,width=540,corner_radius=20)
+                signin_.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+                progressbar = CTkProgressBar(signin_,height=50,mode="indeterminate")
+                progressbar.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+                CTkLabel(signin_,text='Signing In...',font=('HP Simplified',20,'bold')).place(relx=0.5,rely=0.6,anchor = CENTER)
+                progressbar.start()
+
+                root.after(3000,lambda:logged_in(progressbar))
+
+        def save_login():
+            def logged_in(progress):
+                progress.stop()
+                cur0.close()
+                CTkLabel(logoin_,height=620,width=540,corner_radius=20,text='Logged In Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
+                tabview.set("About")
+                update_logbutton()
+                root.after(2000,lambda:frame_login.destroy())
+
+            lmisc = CTkLabel(login,text='',text_color='red',width=500)
+            lmisc.place(relx = 0.5,y = 444,anchor = CENTER)
+
+            password = ''
+            email = enter_email.get()
+            if email == '':
+                lmisc.configure(text='Enter Email.!',width = 500)
+            else:
+                cur0.execute('select cust_pass from credentials where cust_email = "%s"'%(email,))
+                password = cur0.fetchall()
+                if password == []:
+                    lmisc.configure(text='Incorrect Email or Password',width = 500)
+
+            passw = enter_passw.get()
+            if passw == '':
+                lmisc.configure(text='Enter Password.!',width = 500)
+            else:
+                if passw == password[0][0]:
+                    cur0.execute('select * from credentials where cust_email = "%s"'%(email))
+                    data = cur0.fetchall()[0]
+                    loggedin[0] = True
+                    login_details.insert(0,email)
+                    login_details.insert(0,data[1])
+                    login_details.insert(0,data[0])
+
+                    logoin_ = CTkFrame(frame_login,height=620,width=540,corner_radius=20)
+                    logoin_.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+                    progressbar = CTkProgressBar(logoin_,height=50,mode="indeterminate")
+                    progressbar.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+                    CTkLabel(logoin_,text='Logging In...',font=('HP Simplified',20,'bold')).place(relx=0.5,rely=0.6,anchor = CENTER)
+                    progressbar.start()
+
+                    root.after(3000,lambda:logged_in(progressbar))
+                else:
+                    lmisc.configure(text='Incorrect Email or Password',width = 500)
+
+        main_pic = CTkImage(Image.open('images/logo.png'),size = (200,200))
+        bottompic1 = CTkImage(Image.open('images/loginbg.png'),size = (1440,720))
+
+        frame_login = CTkFrame(root,height=720,width=1440)
+        frame_login.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+        
+        bpic1 = CTkLabel(frame_login,text = '', image = bottompic1)
+        bpic1._image = bottompic1
+        bpic1.place(relx=0.5,rely=0.5,anchor = CENTER)
+        
+        #signup page
+        signup = CTkFrame(frame_login,height=620,width=540,corner_radius=20)
+        signup.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+        login_pic = CTkLabel(signup,text = '', image = main_pic)
+        login_pic._image = main_pic
+        login_pic.place(relx=0.5,rely=0.21,anchor = CENTER)
+        
+
+        entry_name = CTkEntry(signup,placeholder_text = 'Name',height=45,width=300)
+        entry_name.place(relx = 0.5,y = 290, anchor=CENTER)
+        entry_email = CTkEntry(signup,placeholder_text = 'Email',height=45,width=300)
+        entry_email.place(relx = 0.5,y = 349,anchor = CENTER)
+        entry_passw = CTkEntry(signup,placeholder_text = 'Password',height=45,width=300)
+        entry_passw.place(relx = 0.5,y = 409,anchor = CENTER)
+        CTkLabel(signup,text='Already have an account?',).place(relx = 0.37,y = 470,anchor = CENTER)
+        login_ = CTkLabel(signup,text='Log In', text_color='#44f1a6')
+        login_.place(relx = 0.73,y = 470,anchor = CENTER)
+        login_.bind("<Button-1>", lambda x:login.tkraise())
+        button_signup = CTkButton(signup,text = 'Sign Up',width=300,height=45,command = lambda: save_signin())
+        button_signup.place(relx=0.5,y=518,anchor = CENTER)
+
+        #login page
+        login = CTkFrame(frame_login,height=620,width=540,corner_radius=20)
+        login.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+        signin_pic = CTkLabel(login,text = '', image = main_pic)
+        signin_pic._image = main_pic
+        signin_pic.place(relx=0.5,rely=0.21,anchor = CENTER)
+        
+        enter_email = CTkEntry(login,placeholder_text = 'Email',height=45,width=300)
+        enter_email.place(relx = 0.5,y = 332,anchor = CENTER)
+        enter_passw = CTkEntry(login,placeholder_text = 'Password',height=45,width=300)
+        enter_passw.place(relx = 0.5,y = 409,anchor = CENTER)
+        CTkLabel(login,text='Don\'t have an account?',).place(relx = 0.35,y = 470,anchor = CENTER)
+        signup_ = CTkLabel(login,text='Sign Up', text_color='#44f1a6')
+        signup_.place(relx = 0.728,y = 470,anchor = CENTER)
+        signup_.bind("<Button-1>", lambda x:signup.tkraise())
+        button_login = CTkButton(login,text = 'Log In',width=300,height=45,command=lambda: save_login())
+        button_login.place(relx=0.5,y=518,anchor = CENTER)
+
+    def update_logbutton():
+        #profile_pic = CTkImage(Image.open('images/profile.png'),size = (58,58))
+        button_login.configure(text='Log Out',command=lambda:logout())#text='',image=profile_pic
+        #button_login._image = profile_pic
+
+    #main app
     cur = sqlcon.cursor()
 
     frame = CTkFrame(root,height=720,width=1440,corner_radius=15)
@@ -207,14 +257,8 @@ def mainapp():
     topbanner._image = banner_pic
     topbanner.place(relx=0.5,rely=0.086,anchor = CENTER)
 
-    profile_pic = CTkImage(Image.open('images/profile.png'),size = (58,58))
-
-    button_login = CTkButton(frame,width=70,height=70,text='',command=lambda:call_signup(root))
+    button_login = CTkButton(frame,width=70,height=70,text='Log In',command=lambda:loggin())
     button_login.place(relx=0.97,rely=0.065,anchor=CENTER)
-    if loggedin[0] is True:
-        button_login.configure(text='',image=profile_pic,command=lambda:logout(root))
-    else:
-        button_login.configure(text='Log In',image=None)
     
     #tabs
     tabview = CTkTabview(frame,width=1440,height=630)
@@ -355,10 +399,10 @@ def mainapp():
     mgr._image = mgr_pic
     mgr.place(x=137.5,rely=0.5,anchor = CENTER)
 
-    CTkLabel(fr_mgr,text="Manager",font=('Berlin Sans FB',47,'bold')).place(x=290,y=60)
-    CTkLabel(fr_mgr,text="Mr. Gru",font=('Berlin Sans FB',32,'bold')).place(x=290,y=109)
-    CTkLabel(fr_mgr,text="Extention : 117",font=('Berlin Sans FB',27)).place(x=290,y=150)
-    CTkLabel(fr_mgr,text="Mail : manager@mavrik.com",font=('Berlin Sans FB',27)).place(x=290,y=185)
+    CTkLabel(fr_mgr,text="Manager",font=('HP Simplified',47,'bold')).place(x=290,y=60)
+    CTkLabel(fr_mgr,text="Mr. Gru",font=('HP Simplified',32,'bold')).place(x=290,y=109)
+    CTkLabel(fr_mgr,text="Extention : 117",font=('HP Simplified',27)).place(x=290,y=150)
+    CTkLabel(fr_mgr,text="Mail : manager@mavrik.com",font=('HP Simplified',27)).place(x=290,y=185)
 
 
     fr_rec = CTkFrame(contact,height=275,width=680,corner_radius=15)
@@ -369,10 +413,10 @@ def mainapp():
     rec._image = rec_pic
     rec.place(x=137.5,rely=0.5,anchor = CENTER)
 
-    CTkLabel(fr_rec,text="Customer Service",font=('Berlin Sans FB',47,'bold')).place(x=290,y=60)
-    CTkLabel(fr_rec,text="Mr. Sam",font=('Berlin Sans FB',32,'bold')).place(x=290,y=109)
-    CTkLabel(fr_rec,text="Extention : 225",font=('Berlin Sans FB',27)).place(x=290,y=150)
-    CTkLabel(fr_rec,text="Mail : customerservice@mavrik.com",font=('Berlin Sans FB',27)).place(x=290,y=185)
+    CTkLabel(fr_rec,text="Customer Service",font=('HP Simplified',47,'bold')).place(x=290,y=60)
+    CTkLabel(fr_rec,text="Mr. Sam",font=('HP Simplified',32,'bold')).place(x=290,y=109)
+    CTkLabel(fr_rec,text="Extention : 225",font=('HP Simplified',27)).place(x=290,y=150)
+    CTkLabel(fr_rec,text="Mail : customerservice@mavrik.com",font=('HP Simplified',27)).place(x=290,y=185)
     
 
     fr_serv = CTkFrame(contact,height=275,width=680,corner_radius=15)
@@ -383,10 +427,10 @@ def mainapp():
     serv._image = serv_pic
     serv.place(x=137.5,rely=0.5,anchor = CENTER)
 
-    CTkLabel(fr_serv,text="Room Service",font=('Berlin Sans FB',47,'bold')).place(x=290,y=60)
-    CTkLabel(fr_serv,text="Ms. Anya",font=('Berlin Sans FB',32,'bold')).place(x=290,y=109)
-    CTkLabel(fr_serv,text="Extention : 147",font=('Berlin Sans FB',27)).place(x=290,y=150)
-    CTkLabel(fr_serv,text="Mail : roomservice@mavrik.com",font=('Berlin Sans FB',27)).place(x=290,y=185)
+    CTkLabel(fr_serv,text="Room Service",font=('HP Simplified',47,'bold')).place(x=290,y=60)
+    CTkLabel(fr_serv,text="Ms. Anya",font=('HP Simplified',32,'bold')).place(x=290,y=109)
+    CTkLabel(fr_serv,text="Extention : 147",font=('HP Simplified',27)).place(x=290,y=150)
+    CTkLabel(fr_serv,text="Mail : roomservice@mavrik.com",font=('HP Simplified',27)).place(x=290,y=185)
 
 
     fr_cook = CTkFrame(contact,height=275,width=680,corner_radius=15)
@@ -397,10 +441,10 @@ def mainapp():
     cook._image = cook_pic
     cook.place(x=137.5,rely=0.5,anchor = CENTER)
 
-    CTkLabel(fr_cook,text="Restaurant",font=('Berlin Sans FB',47,'bold')).place(x=290,y=60)
-    CTkLabel(fr_cook,text="Mr. Kim",font=('Berlin Sans FB',32,'bold')).place(x=290,y=109)
-    CTkLabel(fr_cook,text="Extention : 125",font=('Berlin Sans FB',27)).place(x=290,y=150)
-    CTkLabel(fr_cook,text="Mail : dining@mavrik.com",font=('Berlin Sans FB',27)).place(x=290,y=185)
+    CTkLabel(fr_cook,text="Restaurant",font=('HP Simplified',47,'bold')).place(x=290,y=60)
+    CTkLabel(fr_cook,text="Mr. Kim",font=('HP Simplified',32,'bold')).place(x=290,y=109)
+    CTkLabel(fr_cook,text="Extention : 125",font=('HP Simplified',27)).place(x=290,y=150)
+    CTkLabel(fr_cook,text="Mail : dining@mavrik.com",font=('HP Simplified',27)).place(x=290,y=185)
 
     #pricing tab
     pricing = tabview.add("Pricings")
@@ -413,10 +457,10 @@ def mainapp():
     single._image = single_pic
     single.place(x=137.5,rely=0.5,anchor = CENTER)
 
-    CTkLabel(fr_single,text="Single Room",font=('Berlin Sans FB',47,'bold')).place(x=290,y=60)
-    CTkLabel(fr_single,text="Mr. Gru",font=('Berlin Sans FB',32,'bold')).place(x=290,y=109)
-    CTkLabel(fr_single,text="Extention : 117",font=('Berlin Sans FB',27)).place(x=290,y=150)
-    CTkLabel(fr_single,text="Mail : manager@mavrik.com",font=('Berlin Sans FB',27)).place(x=290,y=185)
+    CTkLabel(fr_single,text="Single Room",font=('HP Simplified',47,'bold')).place(x=290,y=60)
+    CTkLabel(fr_single,text="Mr. Gru",font=('HP Simplified',32,'bold')).place(x=290,y=109)
+    CTkLabel(fr_single,text="Extention : 117",font=('HP Simplified',27)).place(x=290,y=150)
+    CTkLabel(fr_single,text="Mail : manager@mavrik.com",font=('HP Simplified',27)).place(x=290,y=185)
 
 
     fr_double = CTkFrame(pricing,height=275,width=680,corner_radius=15)
@@ -427,10 +471,10 @@ def mainapp():
     double._image = double_pic
     double.place(x=137.5,rely=0.5,anchor = CENTER)
 
-    CTkLabel(fr_double,text="Customer Service",font=('Berlin Sans FB',47,'bold')).place(x=290,y=60)
-    CTkLabel(fr_double,text="Mr. Sam",font=('Berlin Sans FB',32,'bold')).place(x=290,y=109)
-    CTkLabel(fr_double,text="Extention : 225",font=('Berlin Sans FB',27)).place(x=290,y=150)
-    CTkLabel(fr_double,text="Mail : customerservice@mavrik.com",font=('Berlin Sans FB',27)).place(x=290,y=185)
+    CTkLabel(fr_double,text="Customer Service",font=('HP Simplified',47,'bold')).place(x=290,y=60)
+    CTkLabel(fr_double,text="Mr. Sam",font=('HP Simplified',32,'bold')).place(x=290,y=109)
+    CTkLabel(fr_double,text="Extention : 225",font=('HP Simplified',27)).place(x=290,y=150)
+    CTkLabel(fr_double,text="Mail : customerservice@mavrik.com",font=('HP Simplified',27)).place(x=290,y=185)
     
 
     fr_triple = CTkFrame(pricing,height=275,width=680,corner_radius=15)
@@ -441,10 +485,10 @@ def mainapp():
     triple._image = triple_pic
     triple.place(x=137.5,rely=0.5,anchor = CENTER)
 
-    CTkLabel(fr_triple,text="Room Service",font=('Berlin Sans FB',47,'bold')).place(x=290,y=60)
-    CTkLabel(fr_triple,text="Ms. Anya",font=('Berlin Sans FB',32,'bold')).place(x=290,y=109)
-    CTkLabel(fr_triple,text="Extention : 147",font=('Berlin Sans FB',27)).place(x=290,y=150)
-    CTkLabel(fr_triple,text="Mail : roomservice@mavrik.com",font=('Berlin Sans FB',27)).place(x=290,y=185)
+    CTkLabel(fr_triple,text="Room Service",font=('HP Simplified',47,'bold')).place(x=290,y=60)
+    CTkLabel(fr_triple,text="Ms. Anya",font=('HP Simplified',32,'bold')).place(x=290,y=109)
+    CTkLabel(fr_triple,text="Extention : 147",font=('HP Simplified',27)).place(x=290,y=150)
+    CTkLabel(fr_triple,text="Mail : roomservice@mavrik.com",font=('HP Simplified',27)).place(x=290,y=185)
 
 
     fr_quad = CTkFrame(pricing,height=275,width=680,corner_radius=15)
@@ -455,10 +499,10 @@ def mainapp():
     quad._image = quad_pic
     quad.place(x=137.5,rely=0.5,anchor = CENTER)
 
-    CTkLabel(fr_quad,text="Restaurant",font=('Berlin Sans FB',47,'bold')).place(x=290,y=60)
-    CTkLabel(fr_quad,text="Mr. Kim",font=('Berlin Sans FB',32,'bold')).place(x=290,y=109)
-    CTkLabel(fr_quad,text="Extention : 125",font=('Berlin Sans FB',27)).place(x=290,y=150)
-    CTkLabel(fr_quad,text="Mail : dining@mavrik.com",font=('Berlin Sans FB',27)).place(x=290,y=185)
+    CTkLabel(fr_quad,text="Restaurant",font=('HP Simplified',47,'bold')).place(x=290,y=60)
+    CTkLabel(fr_quad,text="Mr. Kim",font=('HP Simplified',32,'bold')).place(x=290,y=109)
+    CTkLabel(fr_quad,text="Extention : 125",font=('HP Simplified',27)).place(x=290,y=150)
+    CTkLabel(fr_quad,text="Mail : dining@mavrik.com",font=('HP Simplified',27)).place(x=290,y=185)
 
     #booking tab
     book = tabview.add("Book a Room")
@@ -477,10 +521,10 @@ def mainapp():
     cur.close()
     root.mainloop()
 
-def call_mainapp(sign):
-	sign.destroy()
+def call_mainapp(main):
+	main.destroy()
 	mainapp()
-    
+
 if __name__ == '__main__':
     set_appearance_mode('system')
     set_default_color_theme('green')
