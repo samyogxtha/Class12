@@ -305,12 +305,17 @@ def mainapp():
 
     def filter_all():
         cur2 = sqlcon.cursor()
+        #pb = CTkProgressBar(filters,mode='indeterminate',width=140,height=28)
+        #pb.place(relx = 0.775,rely = 0.25, anchor=CENTER)
+        #pb.start()
         if fil[0] == 'All':
             cur2.execute('select * from rooms where  availability = "%s" and wifi = "%s" and tv = "%s" and ac = "%s"'%(fil[1],fil[2],fil[3],fil[4]))
             fil_data = cur2.fetchall()
         else:
             cur2.execute('select * from rooms where type = "%s" and availability = "%s" and wifi = "%s" and tv = "%s" and ac = "%s"'%(fil[0],fil[1],fil[2],fil[3],fil[4]))
             fil_data = cur2.fetchall()
+        
+        #filters.after(2000,pb.destroy())
         table.configure(row=len(fil_data), column=7, values=fil_data)
         cur2.close()
 
@@ -326,7 +331,7 @@ def mainapp():
             
     def combobox_callback(choice):
         fil[0] = choice
-    combobox = CTkComboBox(filters,values=['All', 'Single','Double','Triple','Quad'],
+    combobox = CTkComboBox(filters, font=('HP Simplified',13),values=['All', 'Single','Double','Triple','Quad'],
                                         command=combobox_callback)
     combobox.place(relx = 0.08,rely = 0.25, anchor=CENTER)
     combobox.set('All')
@@ -334,58 +339,58 @@ def mainapp():
     check_var_avai = StringVar()
     def checkbox_avai_event():
         fil[1] = check_var_avai.get()
-    checkbox_avai = CTkCheckBox(filters, text='Availability', command=checkbox_avai_event,
+    checkbox_avai = CTkCheckBox(filters, font=('HP Simplified',13), text='Availability', command=checkbox_avai_event,
                                         variable=check_var_avai, onvalue='yes', offvalue='no')
     checkbox_avai.place(relx = 0.22,rely = 0.25, anchor=CENTER)
     
     check_var_wifi = StringVar()
     def checkbox_wifi_event():
         fil[2] = check_var_wifi.get()
-    checkbox_wifi = CTkCheckBox(filters, text='WiFi', command=checkbox_wifi_event,
+    checkbox_wifi = CTkCheckBox(filters, font=('HP Simplified',13), text='WiFi', command=checkbox_wifi_event,
                                         variable=check_var_wifi, onvalue='yes', offvalue='no')
     checkbox_wifi.place(relx = 0.36,rely = 0.25, anchor=CENTER)
 
     check_var_tv = StringVar()
     def checkbox_tv_event():
         fil[3] = check_var_tv.get()
-    checkbox_tv = CTkCheckBox(filters, text='TV', command=checkbox_tv_event,
+    checkbox_tv = CTkCheckBox(filters, font=('HP Simplified',13), text='TV', command=checkbox_tv_event,
                                         variable=check_var_tv, onvalue='yes', offvalue='no')
     checkbox_tv.place(relx = 0.5,rely = 0.25, anchor=CENTER)
 
     check_var_ac = StringVar()
     def checkbox_event_ac():
         fil[4] = check_var_ac.get()
-    checkbox_ac = CTkCheckBox(filters, text='AC', command=checkbox_event_ac,
+    checkbox_ac = CTkCheckBox(filters, font=('HP Simplified',13), text='AC', command=checkbox_event_ac,
                                         variable=check_var_ac, onvalue='yes', offvalue='no')
     checkbox_ac.place(relx = 0.635,rely = 0.25, anchor=CENTER)
 
-    button_filter = CTkButton(filters,text='Filter',command=lambda:filter_all())
+    button_filter = CTkButton(filters, font=('HP Simplified',13),text='Filter',command=lambda:filter_all())
     button_filter.place(relx = 0.775,rely = 0.25, anchor=CENTER)
 
-    button_clear = CTkButton(filters,text='Clear Filters',command=lambda:filter_clear())
+    button_clear = CTkButton(filters, font=('HP Simplified',13),text='Clear Filters',command=lambda:filter_clear())
     button_clear.place(relx = 0.915,rely = 0.25, anchor=CENTER)
 
-    button0 = CTkButton(filters,text='Sl.No.',state=DISABLED,width=250,corner_radius=0,text_color_disabled='white')
+    button0 = CTkButton(filters,text='Sl.No.', font=('HP Simplified',13),width=250,corner_radius=0,state=DISABLED,text_color_disabled='white')
     button0.place(relx = 0.08,rely = 0.75, anchor=CENTER)
-    button1 = CTkButton(filters,text='Availability',state=DISABLED,width=250,corner_radius=0,text_color_disabled='white')
+    button1 = CTkButton(filters,text='Availability', font=('HP Simplified',13),width=250,corner_radius=0,state=DISABLED,text_color_disabled='white')
     button1.place(relx = 0.2,rely = 0.75, anchor=CENTER)
-    button2 = CTkButton(filters,text='Type',state=DISABLED,width=250,corner_radius=0,text_color_disabled='white')
+    button2 = CTkButton(filters,text='Type', font=('HP Simplified',13),width=250,corner_radius=0,state=DISABLED,text_color_disabled='white')
     button2.place(relx = 0.31,rely = 0.75, anchor=CENTER)
-    button3 = CTkButton(filters,text='WiFi',state=DISABLED,width=250,corner_radius=0,text_color_disabled='white')
+    button3 = CTkButton(filters,text='WiFi', font=('HP Simplified',13),width=250,corner_radius=0,state=DISABLED,text_color_disabled='white')
     button3.place(relx = 0.435,rely = 0.75, anchor=CENTER)
-    button4 = CTkButton(filters,text='TV',state=DISABLED,width=250,corner_radius=0,text_color_disabled='white')
+    button4 = CTkButton(filters,text='TV', font=('HP Simplified',13),width=250,corner_radius=0,state=DISABLED,text_color_disabled='white')
     button4.place(relx = 0.555,rely = 0.75, anchor=CENTER)
-    button5 = CTkButton(filters,text='AC',state=DISABLED,width=250,corner_radius=0,text_color_disabled='white')
+    button5 = CTkButton(filters,text='AC', font=('HP Simplified',13),width=250,corner_radius=0,state=DISABLED,text_color_disabled='white')
     button5.place(relx = 0.675,rely = 0.75, anchor=CENTER)
-    button6 = CTkButton(filters,text='Price',state=DISABLED,width=250,corner_radius=0,text_color_disabled='white')
+    button6 = CTkButton(filters,text='Price', font=('HP Simplified',13),width=250,corner_radius=0,state=DISABLED,text_color_disabled='white')
     button6.place(relx = 0.79,rely = 0.75, anchor=CENTER)
-    button7 = CTkButton(filters,text='Book',state=DISABLED,width=250,corner_radius=0,text_color_disabled='white')
+    button7 = CTkButton(filters,text='Book', font=('HP Simplified',13),width=250,corner_radius=0,state=DISABLED,text_color_disabled='white')
     button7.place(relx = 0.915,rely = 0.75, anchor=CENTER)
 
     room_scrollframe = CTkScrollableFrame(room, width=1400, height=470)
     room_scrollframe.pack()
 
-    table = CTkTable(room_scrollframe, row=64, column=8, hover_color= '#575757', values=room_data,command=tableclick)
+    table = CTkTable(room_scrollframe, font=('HP Simplified',13),height=40, row=64, column=8, hover_color= '#575757', values=room_data,command=tableclick)
     table.pack(expand=False, fill='both', padx=20)
 
     #contacs tab
@@ -449,6 +454,11 @@ def mainapp():
     #pricing tab
     pricing = tabview.add("Pricings")
 
+    def price_book(type):
+        print(type)
+        
+
+
     fr_single = CTkFrame(pricing,height=275,width=680,corner_radius=15)
     fr_single.place(relx = 0.25,rely = 0.25, anchor=CENTER)
 
@@ -457,10 +467,12 @@ def mainapp():
     single._image = single_pic
     single.place(x=137.5,rely=0.5,anchor = CENTER)
 
-    CTkLabel(fr_single,text="Single Room",font=('HP Simplified',47,'bold')).place(x=290,y=60)
-    CTkLabel(fr_single,text="Mr. Gru",font=('HP Simplified',32,'bold')).place(x=290,y=109)
-    CTkLabel(fr_single,text="Extention : 117",font=('HP Simplified',27)).place(x=290,y=150)
-    CTkLabel(fr_single,text="Mail : manager@mavrik.com",font=('HP Simplified',27)).place(x=290,y=185)
+    CTkLabel(fr_single,text="Single Room",font=('HP Simplified',47,'bold')).place(x=290,y=45)
+    CTkLabel(fr_single,text="Basic    $200",font=('HP Simplified',27)).place(x=300,y=100)
+    CTkLabel(fr_single,text="WiFi       +$50",font=('HP Simplified',27)).place(x=300,y=130)
+    CTkLabel(fr_single,text="TV          +$50",font=('HP Simplified',27)).place(x=300,y=160)
+    CTkLabel(fr_single,text="AC          +$50",font=('HP Simplified',27)).place(x=300,y=185)
+    CTkButton(fr_single,text='Book',height=50,width=80, command=lambda:price_book('Single')).place(relx=0.92,rely=0.85,anchor=CENTER)
 
 
     fr_double = CTkFrame(pricing,height=275,width=680,corner_radius=15)
@@ -471,10 +483,12 @@ def mainapp():
     double._image = double_pic
     double.place(x=137.5,rely=0.5,anchor = CENTER)
 
-    CTkLabel(fr_double,text="Customer Service",font=('HP Simplified',47,'bold')).place(x=290,y=60)
-    CTkLabel(fr_double,text="Mr. Sam",font=('HP Simplified',32,'bold')).place(x=290,y=109)
-    CTkLabel(fr_double,text="Extention : 225",font=('HP Simplified',27)).place(x=290,y=150)
-    CTkLabel(fr_double,text="Mail : customerservice@mavrik.com",font=('HP Simplified',27)).place(x=290,y=185)
+    CTkLabel(fr_double,text="Double Room",font=('HP Simplified',47,'bold')).place(x=290,y=45)
+    CTkLabel(fr_double,text="Basic    $250",font=('HP Simplified',27)).place(x=300,y=100)
+    CTkLabel(fr_double,text="WiFi       +$50",font=('HP Simplified',27)).place(x=300,y=130)
+    CTkLabel(fr_double,text="TV          +$50",font=('HP Simplified',27)).place(x=300,y=160)
+    CTkLabel(fr_double,text="AC          +$50",font=('HP Simplified',27)).place(x=300,y=185)
+    CTkButton(fr_double,text='Book',height=50,width=80, command=lambda:price_book('Double')).place(relx=0.92,rely=0.85,anchor=CENTER)
     
 
     fr_triple = CTkFrame(pricing,height=275,width=680,corner_radius=15)
@@ -485,10 +499,12 @@ def mainapp():
     triple._image = triple_pic
     triple.place(x=137.5,rely=0.5,anchor = CENTER)
 
-    CTkLabel(fr_triple,text="Room Service",font=('HP Simplified',47,'bold')).place(x=290,y=60)
-    CTkLabel(fr_triple,text="Ms. Anya",font=('HP Simplified',32,'bold')).place(x=290,y=109)
-    CTkLabel(fr_triple,text="Extention : 147",font=('HP Simplified',27)).place(x=290,y=150)
-    CTkLabel(fr_triple,text="Mail : roomservice@mavrik.com",font=('HP Simplified',27)).place(x=290,y=185)
+    CTkLabel(fr_triple,text="Triple Room",font=('HP Simplified',47,'bold')).place(x=290,y=45)
+    CTkLabel(fr_triple,text="Basic    $300",font=('HP Simplified',27)).place(x=300,y=100)
+    CTkLabel(fr_triple,text="WiFi       +$50",font=('HP Simplified',27)).place(x=300,y=130)
+    CTkLabel(fr_triple,text="TV          +$50",font=('HP Simplified',27)).place(x=300,y=160)
+    CTkLabel(fr_triple,text="AC          +$50",font=('HP Simplified',27)).place(x=300,y=185)
+    CTkButton(fr_triple,text='Book',height=50,width=80, command=lambda:price_book('Triple')).place(relx=0.92,rely=0.85,anchor=CENTER)
 
 
     fr_quad = CTkFrame(pricing,height=275,width=680,corner_radius=15)
@@ -499,17 +515,23 @@ def mainapp():
     quad._image = quad_pic
     quad.place(x=137.5,rely=0.5,anchor = CENTER)
 
-    CTkLabel(fr_quad,text="Restaurant",font=('HP Simplified',47,'bold')).place(x=290,y=60)
-    CTkLabel(fr_quad,text="Mr. Kim",font=('HP Simplified',32,'bold')).place(x=290,y=109)
-    CTkLabel(fr_quad,text="Extention : 125",font=('HP Simplified',27)).place(x=290,y=150)
-    CTkLabel(fr_quad,text="Mail : dining@mavrik.com",font=('HP Simplified',27)).place(x=290,y=185)
+    CTkLabel(fr_quad,text="Quad Room",font=('HP Simplified',47,'bold')).place(x=290,y=45)
+    CTkLabel(fr_quad,text="Basic    $350",font=('HP Simplified',27)).place(x=300,y=100)
+    CTkLabel(fr_quad,text="WiFi       +$50",font=('HP Simplified',27)).place(x=300,y=130)
+    CTkLabel(fr_quad,text="TV          +$50",font=('HP Simplified',27)).place(x=300,y=160)
+    CTkLabel(fr_quad,text="AC          +$50",font=('HP Simplified',27)).place(x=300,y=185)
+    CTkButton(fr_quad,text='Book',height=50,width=80, command=lambda:price_book('Quad')).place(relx=0.92,rely=0.85,anchor=CENTER)
 
     #booking tab
     book = tabview.add("Book a Room")
-    books = CTkFrame(book,height=600,width=1440,corner_radius=15)
-    books.place(relx = 0.5,rely = 0.58, anchor=CENTER)
+    dates = CTkFrame(book,height=100,width=1420)
+    dates.pack()
     
-    CTkLabel(books,text='book').place(relx = 0.5,rely = 0.5, anchor=CENTER)
+    date_checkin = CTkEntry(dates,placeholder_text = 'Check In Date',height=45,width=300)
+    date_checkin.pack(padx=20,pady=20)#place(relx=0.5,rely=0.85,anchor=CENTER)
+    
+    date_checkout = CTkEntry(dates,placeholder_text = 'Check Out Date',height=45,width=300)
+    date_checkout.pack(padx=20,pady=20)#place(relx=0.5,rely=0.85,anchor=CENTER)
 
 
 
@@ -527,7 +549,7 @@ def call_mainapp(main):
 
 if __name__ == '__main__':
     set_appearance_mode('system')
-    set_default_color_theme('assets/color theme.json')
+    set_default_color_theme('green')
 
     loggedin = [False]
     login_details = []
