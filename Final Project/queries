@@ -2,22 +2,6 @@ DROP DATABASE hotel;
 CREATE DATABASE hotel;
 USE hotel;
 
-CREATE TABLE credentials(
-  cust_id INT AUTO_INCREMENT PRIMARY KEY,
-  cust_name VARCHAR(50),
-  cust_email VARCHAR(50),
-  cust_pass VARCHAR(16)
-);
-
-ALTER TABLE credentials AUTO_INCREMENT=1000;
-
-INSERT IGNORE INTO credentials(cust_name,cust_email,cust_pass) VALUES
-	('samyog','samyog@gmail.com','samyog@gmail.com'),
-	('idris','idris@gmail.com','idris'),
-	('hussain','hussain@gmail.com','hussain'),
-	('test','1','1')
-;
-
 CREATE TABLE customers(
    slno    INT  AUTO_INCREMENT UNIQUE
   ,cust_id INT  NOT NULL PRIMARY KEY
@@ -29,11 +13,12 @@ CREATE TABLE customers(
   ,email   VARCHAR(50) NOT NULL
   ,pass    VARCHAR(50) NOT NULL
 );
-INSERT INTO customers VALUES
- (1,1001,'samyog',16,'2006-10-07','sarooj',54702457,'samyog@gmail.com','samyog')
-,(2,1002,'idris',17,'2006-07-01','sarooj',6543245,'idris@gmail.com','idris')
-,(3,1003,'hussain',17,'2006-03-29','muaji',8765443,'hussain@gmail.com','hussain')
-,(111,1111,'test',11,'2011-11-11','111111',11111111,'1','1')
+
+INSERT INTO customers(slno,cust_id,name,age,dob,address,mobile,email,pass) VALUES
+ (1,1000,'test',11,'2011-11-11','111111',11111111,'1','1')
+,(2,1001,'samyog',16,'2006-10-07','sarooj',54702457,'samyog@gmail.com','samyog')
+,(3,1002,'idris',17,'2006-07-01','sarooj',6543245,'idris@gmail.com','idris')
+,(4,1003,'hussain',17,'2006-03-29','muaji',8765443,'hussain@gmail.com','hussain')
 ;
 
 CREATE TABLE rooms(
@@ -121,16 +106,16 @@ CREATE TABLE bookings
   room_no       INT  NOT NULL,
   checkin_date  DATE NOT NULL,
   checkout_date DATE,
-  FOREIGN KEY (cust_id)  REFERENCES credentials (cust_id),
-  FOREIGN KEY (room_no)  REFERENCES rooms       (room_no)
+  FOREIGN KEY (cust_id)  REFERENCES customers (cust_id),
+  FOREIGN KEY (room_no)  REFERENCES rooms     (room_no)
 );
 
 CREATE TABLE payments(
-  slno            INT   NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  cust_id         INT   NOT NULL,
-  booking_id         INT   NOT NULL,
-  price           INT   NOT NULL,
+  slno            INT     NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  cust_id         INT     NOT NULL,
+  booking_id      INT     NOT NULL,
+  price           INT     NOT NULL,
   paid            CHAR(1) NOT NULL,
-  FOREIGN KEY (cust_id)  REFERENCES credentials (cust_id),
-  FOREIGN KEY (booking_id)  REFERENCES bookings (booking_id)
+  FOREIGN KEY (cust_id)     REFERENCES customers (cust_id),
+  FOREIGN KEY (booking_id)  REFERENCES bookings  (booking_id)
 );

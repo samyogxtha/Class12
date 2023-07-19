@@ -62,7 +62,7 @@ def mainapp():
     def loggin():
         cur0 = sqlcon.cursor()
 
-        cur0.execute('select cust_email from credentials')
+        cur0.execute('select email from customers')
         edata = cur0.fetchall()
         emails = []
         for i in edata:
@@ -125,14 +125,13 @@ def mainapp():
                 misc.configure(text='Enter Name.!',width = 500)
             
             if misc._text == '':
-                cur0.execute('insert into credentials(cust_name,cust_email,cust_pass) values("%s","%s","%s")'%(name,email,passw))
+                cur0.execute('insert into customers(name,email,pass) values("%s","%s","%s")'%(name,email,passw))
                 sqlcon.commit()
-                cur0.execute('select cust_id from credentials where cust_email = "%s"'%(email))
-                custid = cur0.fetchall()[0]
+                cur0.execute('select * from customers where email = "%s"'%(email))
+                data = cur0.fetchall()[0]
                 loggedin[0] = True
-                login_details.insert(0,email)
-                login_details.insert(0,name)
-                login_details.insert(0,custid)
+                login_details.clear()
+                login_details.insert(0,list(data))
 
                 signin_ = CTkFrame(frame_login,height=620,width=540,corner_radius=20)
                 signin_.place(relx = 0.5,rely = 0.5, anchor=CENTER)
@@ -148,34 +147,35 @@ def mainapp():
             def logged_in(progress):
                 progress.stop()
                 cur0.close()
-                CTkLabel(logoin_,height=620,width=540,corner_radius=20,text='Logged In Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
+                CTkLabel(logoin_,height=200,corner_radius=20,text='Logged In Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
                 update_logbutton()
                 root.after(2000,lambda:frame_login.destroy())
 
             lmisc = CTkLabel(login,text='',text_color='red',width=500)
             lmisc.place(relx = 0.5,y = 444,anchor = CENTER)
 
-            password = ''
+            password = []
             email = enter_email.get()
             if email == '':
                 lmisc.configure(text='Enter Email.!',width = 500)
             else:
-                cur0.execute('select cust_pass from credentials where cust_email = "%s"'%(email,))
-                password = cur0.fetchall()
-                if password == []:
+                cur0.execute('select pass from customers where email = "%s"'%(email,))
+                password.insert(0,cur0.fetchall())
+                if password[0] == []:
                     lmisc.configure(text='Incorrect Email or Password',width = 500)
 
             passw = enter_passw.get()
             if passw == '':
                 lmisc.configure(text='Enter Password.!',width = 500)
+            elif password[0] == []:
+                lmisc.configure(text='Incorrect Email or Password',width = 500)
             else:
-                if passw == password[0][0]:
-                    cur0.execute('select * from credentials where cust_email = "%s"'%(email))
+                if passw == password[0][0][0]:
+                    cur0.execute('select * from customers where email = "%s"'%(email))
                     data = cur0.fetchall()[0]
                     loggedin[0] = True
-                    login_details.insert(0,email)
-                    login_details.insert(0,data[1])
-                    login_details.insert(0,data[0])
+                    login_details.clear()
+                    login_details.insert(0,list(data))
 
                     logoin_ = CTkFrame(frame_login,height=620,width=540,corner_radius=20)
                     logoin_.place(relx = 0.5,rely = 0.5, anchor=CENTER)
@@ -639,7 +639,7 @@ if __name__ == '__main__':
     set_appearance_mode('system')
     set_default_color_theme('green')
 
-    loggedin = [True,False]
+    loggedin = [False]
     login_details = []
     roomno = []
     room_details = []
