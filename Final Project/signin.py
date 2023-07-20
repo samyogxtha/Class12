@@ -34,13 +34,13 @@ def mainapp():
     def logout():
         def logged_out():
             progressbar.stop()
-            CTkLabel(logout_,height=620,width=540,corner_radius=20,text='Logged Out Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
+            CTkLabel(logout_,height=200,text='Logged Out Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
             tabview.set("About")
             root.after(2000,lambda:frame_logout.destroy())
 
         loggedin[0] = False
         login_details.clear()
-        button_login.configure(text='Log In',image=None)
+        button_login.configure(text='Log In',image=None ,command=lambda:loggin())
         frame_logout = CTkFrame(root,height=720,width=1440)
         frame_logout.place(relx = 0.5,rely = 0.5,anchor = CENTER)
 
@@ -74,6 +74,7 @@ def mainapp():
                 cur0.close()
                 CTkLabel(signin_,height=620,width=540,corner_radius=20,text='Signed In Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
                 update_logbutton()
+                print(login_details)#================================================
                 root.after(2000,lambda:frame_login.destroy())
 
             misc = CTkLabel(signup,text='',text_color='red',width=500)
@@ -439,6 +440,12 @@ def mainapp():
 
             def recload_stop():
                 progressbar.stop()
+
+                cur = sqlcon.cursor()
+                cur.execute('insert into bookings(cust_id,room_no,checkin_date,checkout_date) values(%s,%s,"%s","%s")'%(login_details[0]))
+
+
+
                 CTkLabel(rec_,height=200,text='Room Booked Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
                 root.after(2000,lambda:print_recipt())
 
@@ -641,7 +648,6 @@ if __name__ == '__main__':
 
     loggedin = [False]
     login_details = []
-    roomno = []
     room_details = []
     
     sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'root', database = 'hotel')

@@ -3,8 +3,7 @@ CREATE DATABASE hotel;
 USE hotel;
 
 CREATE TABLE customers(
-   slno    INT  AUTO_INCREMENT UNIQUE
-  ,cust_id INT  NOT NULL PRIMARY KEY
+  cust_id INT  AUTO_INCREMENT NOT NULL PRIMARY KEY
   ,name    VARCHAR(50) NOT NULL
   ,age     INT
   ,dob     DATE 
@@ -14,11 +13,13 @@ CREATE TABLE customers(
   ,pass    VARCHAR(50) NOT NULL
 );
 
-INSERT INTO customers(slno,cust_id,name,age,dob,address,mobile,email,pass) VALUES
- (1,1000,'test',11,'2011-11-11','111111',11111111,'1','1')
-,(2,1001,'samyog',16,'2006-10-07','sarooj',54702457,'samyog@gmail.com','samyog')
-,(3,1002,'idris',17,'2006-07-01','sarooj',6543245,'idris@gmail.com','idris')
-,(4,1003,'hussain',17,'2006-03-29','muaji',8765443,'hussain@gmail.com','hussain')
+ALTER TABLE customers AUTO_INCREMENT=1000;
+
+INSERT INTO customers VALUES
+ (1000,'test',11,'2011-11-11','111111',11111111,'1','1')
+,(1001,'samyog',16,'2006-10-07','sarooj',54702457,'samyog@gmail.com','samyog')
+,(1002,'idris',17,'2006-07-01','sarooj',6543245,'idris@gmail.com','idris')
+,(1003,'hussain',17,'2006-03-29','muaji',8765443,'hussain@gmail.com','hussain')
 ;
 
 CREATE TABLE rooms(
@@ -109,6 +110,8 @@ CREATE TABLE bookings
   FOREIGN KEY (cust_id)  REFERENCES customers (cust_id),
   FOREIGN KEY (room_no)  REFERENCES rooms     (room_no)
 );
+
+ALTER TABLE bookings AUTO_INCREMENT=10001;
 
 CREATE TABLE payments(
   slno            INT     NOT NULL PRIMARY KEY AUTO_INCREMENT,
