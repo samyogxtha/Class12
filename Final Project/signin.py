@@ -457,34 +457,42 @@ def mainapp():
                 login_details.append(cur.fetchall()[0])
 
                 #-------------------ADD-RECIPT-PDF------------------
-                def insert_text(pdf_file, text, location): 
-                    """Inserts text into a PDF document. 
-                
-                    Args: 
-                        pdf_file (str): The path to the PDF file. 
-                        text (str): The text to insert. 
-                        location (tuple): The location of the text, in the format (x, y). 
-                
-                    Returns: 
-                        str: The path to the new PDF file. 
-                    """ 
-                
-                    pdf = open(pdf_file, "rb")
-                    writer = PyPDF2.PdfFileWriter() 
-                    for page in pdf.pages: 
-                        new_page = page.clone() 
-                        new_page.insertText(location, text) 
-                        writer.addPage(new_page) 
-                    new_file = "new.pdf" 
-                    with open(new_file, "wb") as f: 
-                        writer.write(f) 
-                    return new_file 
-                
-                pdf_file = "assets/rec.pdf" 
-                text = f"Customer Id: {login_details[0][0]} Name: {login_details[0][1]}" 
-                location = (100, 100) 
-                new_file = insert_text(pdf_file, text, location) 
-                print(new_file) 
+                from PyPDF2 import PdfWriter, PdfReader
+                import io
+                from reportlab.pdfgen import canvas
+                from reportlab.lib.pagesizes import letter
+
+                packet = io.BytesIO()
+                can = canvas.Canvas(packet, pagesize=letter)
+                can.drawString(70, 700, f'Booking Id: {booking_details[0][0]}' )
+                can.drawString(350, 700, f'Customer Id: {login_details[0][0]}' )
+                can.drawString(70, 670, f'Customer Name: {login_details[0][1]}') 
+                can.drawString(350, 670, f'Checkin Date: {booking_details[0][3]}' )
+                can.drawString(70, 640, f'No of days staying: {booking_details[0][5]}')
+                can.drawString(350, 640, f'Checkout Date: {booking_details[0][4]}' )
+                can.drawString(70, 610, f'Room No: {booking_details[0][2]}')
+                can.drawString(350, 610, f'WiFi: {room_details[0][3]}' )
+                can.drawString(70, 580, f'Type: {room_details[0][2]}')
+                can.drawString(350, 580, f'TV: {room_details[0][4]}' )
+                can.drawString(70, 550, f'Price: {room_details[0][6]}')
+                can.drawString(350, 550,  f'AC: {booking_details[0][5]}')
+                can.drawString(200, 15,  'Please show this at the Reception.')
+                can.save()
+
+                packet.seek(0)
+
+                new_pdf = PdfReader(packet)
+
+                existing_pdf = PdfReader(open('assets/rec.pdf', 'rb'))
+                output = PdfWriter()
+
+                page = existing_pdf.pages[0]
+                page.merge_page(new_pdf.pages[0])
+                output.add_page(page)
+
+                output_stream = open(f'{booking_details[0][0]} Recipt.pdf', 'wb')
+                output.write(output_stream)
+                output_stream.close() 
 
                 CTkLabel(rec_,text='Please show the recipt at the Reception',font=('HP Simplified',25),height=200,corner_radius=30).place(relx=0.5,rely=0.45,anchor = CENTER)
                 CTkLabel(rec_,text='Thank You.!',font=('HP Simplified',20,'bold')).place(relx=0.5,rely=0.59,anchor = CENTER)
@@ -497,12 +505,14 @@ def mainapp():
                     if login_details[0][2] is None:
                         cur.execute('update customers set address = "%s",mobile = "%s" where cust_id = %s'%(address.get(),mobile.get(),login_details[0][0]))
                     dif = (dt.strptime(checkout_date.get(), "%Y-%m-%d") - dt.strptime(checkin_date.get(), "%Y-%m-%d")).days
+                    cur.execute(f'update rooms set availability = "no" where room_no = {booking_details[0][2]}')
                     cur.execute('insert into bookings(cust_id,room_no,checkin_date,checkout_date,no_stay,price) values(%s,%s,"%s","%s",%s,%s)'%(login_details[0][0],room_details[0][0],checkin_date.get(),checkout_date.get(),dif,room_details[0][6]))
                     CTkLabel(rec_,height=200,text='Room Booked Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
                     cur.execute('select * from bookings order by booking_id desc limit 1')
-                    det = cur.fetchall()
+                    det = cur.fetchall()[0]
                     booking_details.clear()
                     booking_details.append(det)
+                    print(booking_details[0])
                     root.after(2000,lambda:print_recipt())
                     cur.close()
                 except:
