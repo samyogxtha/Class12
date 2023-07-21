@@ -1,6 +1,7 @@
 from CTkTable import CTkTable
 from customtkinter import CTkButton,CTk,CTkProgressBar,CTkImage,CTkEntry,CTkLabel,CTkFrame,StringVar,CTkCheckBox,CTkTabview,CTkScrollableFrame,CTkComboBox,CENTER,DISABLED,set_default_color_theme,set_appearance_mode
 from PIL import Image
+import PyPDF2
 import mysql.connector as msconn
 
 def main():
@@ -31,6 +32,7 @@ def mainapp():
     root.title("Mavrik Hotel Booking")
     root.minsize(height=720,width=1440)
 
+    #------------------FUNCTION-FOR-LOGGING-OUT------------------
     def logout():
         def logged_out():
             progressbar.stop()
@@ -41,6 +43,7 @@ def mainapp():
         loggedin[0] = False
         login_details.clear()
         button_login.configure(text='Log In',image=None ,command=lambda:loggin())
+
         frame_logout = CTkFrame(root,height=720,width=1440)
         frame_logout.place(relx = 0.5,rely = 0.5,anchor = CENTER)
 
@@ -59,6 +62,7 @@ def mainapp():
 
         root.after(3000,lambda:logged_out())
 
+    #------------------FUNCTION-FOR-LOGGING-AND-SIGNING-IN------------------
     def loggin():
         cur0 = sqlcon.cursor()
 
@@ -72,9 +76,9 @@ def mainapp():
             def logged_in(progress):
                 progress.stop()
                 cur0.close()
+                sqlcon.commit()
                 CTkLabel(signin_,height=620,width=540,corner_radius=20,text='Signed In Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
                 update_logbutton()
-                print(login_details)#================================================
                 root.after(2000,lambda:frame_login.destroy())
 
             misc = CTkLabel(signup,text='',text_color='red',width=500)
@@ -118,7 +122,7 @@ def mainapp():
                     misc.configure(text='Your Password must have atleast one Number.',width = 500)
                 if up == False:
                     misc.configure(text='Your Password must have atleast one Upper case character.',width = 500)
-                if len(passw)<=8:
+                if len(passw)<8:
                     misc.configure(text='The Password must have atleast 8 Characters.',width = 500)
 
             name = entry_name.get()
@@ -207,7 +211,7 @@ def mainapp():
         login_pic._image = main_pic
         login_pic.place(relx=0.5,rely=0.21,anchor = CENTER)
         
-
+        CTkButton(signup,text='←',height=50,width=50,corner_radius=30,fg_color='transparent', hover_color='#333333', command=lambda:frame_login.destroy()).place(x=1,y=1)
         entry_name = CTkEntry(signup,placeholder_text = 'Name',height=45,width=300)
         entry_name.place(relx = 0.5,y = 290, anchor=CENTER)
         entry_email = CTkEntry(signup,placeholder_text = 'Email',height=45,width=300)
@@ -229,6 +233,7 @@ def mainapp():
         signin_pic._image = main_pic
         signin_pic.place(relx=0.5,rely=0.21,anchor = CENTER)
         
+        CTkButton(login,text='←',height=50,width=50,corner_radius=30,fg_color='transparent', hover_color='#333333', command=lambda:frame_login.destroy()).place(x=1,y=1)
         enter_email = CTkEntry(login,placeholder_text = 'Email',height=45,width=300)
         enter_email.place(relx = 0.5,y = 332,anchor = CENTER)
         enter_passw = CTkEntry(login,placeholder_text = 'Password',height=45,width=300)
@@ -251,6 +256,7 @@ def mainapp():
     frame = CTkFrame(root,height=720,width=1440,corner_radius=15)
     frame.place(relx = 0.5,rely = 0.5, anchor=CENTER)
 
+    #------------------TOP-BANNER------------------
     banner_pic = CTkImage(Image.open('assets/banner2.png'),size = (1440,120))
     topbanner = CTkLabel(frame,text = '', image = banner_pic)
     topbanner._image = banner_pic
@@ -259,11 +265,11 @@ def mainapp():
     button_login = CTkButton(frame,width=70,height=70,text='Log In',command=lambda:loggin())
     button_login.place(relx=0.97,rely=0.065,anchor=CENTER)
     
-    #tabs
+    #------------------CREATE-TABS------------------
     tabview = CTkTabview(frame,width=1440,height=630)
     tabview.place(relx=0.5,rely=0.56,anchor=CENTER)
 
-    #about tab
+    #------------------ABOUT-TAB------------------
     about = tabview.add("About")
     
     pic = CTkFrame(about,height=630,width=1440,corner_radius=15)
@@ -291,7 +297,7 @@ def mainapp():
     load_images()
     next_image(0)
 
-    #contacs tab
+    #------------------CONTACS-TAB------------------
     contact = tabview.add("Contact")
 
     fr_mgr = CTkFrame(contact,height=275,width=680,corner_radius=15)
@@ -307,7 +313,6 @@ def mainapp():
     CTkLabel(fr_mgr,text="Extention : 117",font=('HP Simplified',27)).place(x=290,y=150)
     CTkLabel(fr_mgr,text="Mail : manager@mavrik.com",font=('HP Simplified',27)).place(x=290,y=185)
 
-
     fr_rec = CTkFrame(contact,height=275,width=680,corner_radius=15)
     fr_rec.place(relx = 0.75,rely = 0.25, anchor=CENTER)
 
@@ -321,7 +326,6 @@ def mainapp():
     CTkLabel(fr_rec,text="Extention : 225",font=('HP Simplified',27)).place(x=290,y=150)
     CTkLabel(fr_rec,text="Mail : customerservice@mavrik.com",font=('HP Simplified',27)).place(x=290,y=185)
     
-
     fr_serv = CTkFrame(contact,height=275,width=680,corner_radius=15)
     fr_serv.place(relx = 0.25,rely = 0.75, anchor=CENTER)
 
@@ -334,7 +338,6 @@ def mainapp():
     CTkLabel(fr_serv,text="Ms. Anya",font=('HP Simplified',32,'bold')).place(x=290,y=109)
     CTkLabel(fr_serv,text="Extention : 147",font=('HP Simplified',27)).place(x=290,y=150)
     CTkLabel(fr_serv,text="Mail : roomservice@mavrik.com",font=('HP Simplified',27)).place(x=290,y=185)
-
 
     fr_cook = CTkFrame(contact,height=275,width=680,corner_radius=15)
     fr_cook.place(relx = 0.75,rely = 0.75, anchor=CENTER)
@@ -349,11 +352,16 @@ def mainapp():
     CTkLabel(fr_cook,text="Extention : 125",font=('HP Simplified',27)).place(x=290,y=150)
     CTkLabel(fr_cook,text="Mail : dining@mavrik.com",font=('HP Simplified',27)).place(x=290,y=185)
 
-    #pricing tab
+    #------------------PRICING-TAB------------------
     pricing = tabview.add("Rooms & Pricings")
 
     def price_book(type):
-        print(type)
+        cur2 = sqlcon.cursor()
+        cur2.execute('select * from rooms where type = "%s"'%(type))
+        fil_data = cur2.fetchall()
+        table.configure(row=len(fil_data), column=7, values=fil_data)
+        cur2.close()
+        tabview.set('Book a Room')
 
     fr_single = CTkFrame(pricing,height=275,width=680,corner_radius=15)
     fr_single.place(relx = 0.25,rely = 0.25, anchor=CENTER)
@@ -370,7 +378,6 @@ def mainapp():
     CTkLabel(fr_single,text="AC          +$50",font=('HP Simplified',27)).place(x=300,y=185)
     CTkButton(fr_single,text='Book',height=50,width=80, command=lambda:price_book('Single')).place(relx=0.92,rely=0.85,anchor=CENTER)
 
-
     fr_double = CTkFrame(pricing,height=275,width=680,corner_radius=15)
     fr_double.place(relx = 0.75,rely = 0.25, anchor=CENTER)
 
@@ -386,7 +393,6 @@ def mainapp():
     CTkLabel(fr_double,text="AC          +$50",font=('HP Simplified',27)).place(x=300,y=185)
     CTkButton(fr_double,text='Book',height=50,width=80, command=lambda:price_book('Double')).place(relx=0.92,rely=0.85,anchor=CENTER)
     
-
     fr_triple = CTkFrame(pricing,height=275,width=680,corner_radius=15)
     fr_triple.place(relx = 0.25,rely = 0.75, anchor=CENTER)
 
@@ -401,7 +407,6 @@ def mainapp():
     CTkLabel(fr_triple,text="TV          +$50",font=('HP Simplified',27)).place(x=300,y=160)
     CTkLabel(fr_triple,text="AC          +$50",font=('HP Simplified',27)).place(x=300,y=185)
     CTkButton(fr_triple,text='Book',height=50,width=80, command=lambda:price_book('Triple')).place(relx=0.92,rely=0.85,anchor=CENTER)
-
 
     fr_quad = CTkFrame(pricing,height=275,width=680,corner_radius=15)
     fr_quad.place(relx = 0.75,rely = 0.75, anchor=CENTER)
@@ -418,36 +423,89 @@ def mainapp():
     CTkLabel(fr_quad,text="AC          +$50",font=('HP Simplified',27)).place(x=300,y=185)
     CTkButton(fr_quad,text='Book',height=50,width=80, command=lambda:price_book('Quad')).place(relx=0.92,rely=0.85,anchor=CENTER)
 
-    #booking tab
+    #------------------BOOKING-TAB------------------
     book = tabview.add("Book a Room")
     
     cur.execute('select * from rooms')
     room_data = cur.fetchall()
 
+    #------------------ENTER-CUSTOMER-DETAILS------------------
     def show_details():
+        def check_entrys():
+            if checkin_date.get() == '' or checkout_date.get() == '':
+                miscs.configure(width=500,text='*Please fill all the Information*')
+            elif address.get() == '' and login_details[0][2] is None:
+                miscs.configure(width=500,text='*Please fill all the Information*')
+            elif mobile.get() == '' and login_details[0][3] is None:
+                miscs.configure(width=500,text='*Please fill all the Information*')
+            else:
+                proceed()
+
         def proceed():
+            #------------------PRINT-RECIPT------------------
             def print_recipt():
                 def closeall():
                     tabview.set('About')
                     details.destroy()
                     rec.destroy()
 
-                print(room_details,loggedin,login_details)
-                ####################################################################
+                sqlcon.commit()
+                cur = sqlcon.cursor()
+                cur.execute(f'select * from customers where cust_id = {login_details[0][0]}')
+                login_details.clear()
+                login_details.append(cur.fetchall()[0])
+
+                #-------------------ADD-RECIPT-PDF------------------
+                def insert_text(pdf_file, text, location): 
+                    """Inserts text into a PDF document. 
+                
+                    Args: 
+                        pdf_file (str): The path to the PDF file. 
+                        text (str): The text to insert. 
+                        location (tuple): The location of the text, in the format (x, y). 
+                
+                    Returns: 
+                        str: The path to the new PDF file. 
+                    """ 
+                
+                    pdf = open(pdf_file, "rb")
+                    writer = PyPDF2.PdfFileWriter() 
+                    for page in pdf.pages: 
+                        new_page = page.clone() 
+                        new_page.insertText(location, text) 
+                        writer.addPage(new_page) 
+                    new_file = "new.pdf" 
+                    with open(new_file, "wb") as f: 
+                        writer.write(f) 
+                    return new_file 
+                
+                pdf_file = "assets/rec.pdf" 
+                text = f"Customer Id: {login_details[0][0]} Name: {login_details[0][1]}" 
+                location = (100, 100) 
+                new_file = insert_text(pdf_file, text, location) 
+                print(new_file) 
+
                 CTkLabel(rec_,text='Please show the recipt at the Reception',font=('HP Simplified',25),height=200,corner_radius=30).place(relx=0.5,rely=0.45,anchor = CENTER)
                 CTkLabel(rec_,text='Thank You.!',font=('HP Simplified',20,'bold')).place(relx=0.5,rely=0.59,anchor = CENTER)
                 CTkButton(rec_,text='Done',height=50,width=100, command=lambda:closeall()).place(relx=0.5,rely=0.75,anchor=CENTER)
 
             def recload_stop():
                 progressbar.stop()
-
-                cur = sqlcon.cursor()
-                cur.execute('insert into bookings(cust_id,room_no,checkin_date,checkout_date) values(%s,%s,"%s","%s")'%(login_details[0]))
-
-
-
-                CTkLabel(rec_,height=200,text='Room Booked Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
-                root.after(2000,lambda:print_recipt())
+                try:
+                    cur = sqlcon.cursor()
+                    cur.execute('update customers set address = "%s",mobile = "%s" where cust_id = %s'%(login_details[0][2],login_details[0][3],login_details[0][0]))
+                    cur.execute('insert into bookings(cust_id,room_no,checkin_date,checkout_date) values(%s,%s,"%s","%s")'%(login_details[0][0],room_details[0][0],checkin_date.get(),checkout_date.get()))
+                    CTkLabel(rec_,height=200,text='Room Booked Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
+                    cur.execute('select * from bookings order by booking_id desc limit 1')
+                    det = cur.fetchall()
+                    booking_details.clear()
+                    booking_details.append(det)
+                    root.after(2000,lambda:print_recipt())
+                    cur.close()
+                except:
+                    CTkLabel(rec_,height=200,text='Booking Failed', width=200,font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
+                    miscs.configure(width=500,text='*Please fill Correct the Information*')
+                    root.after(2000,lambda:rec.destroy())
 
             rec = CTkFrame(book,height=590,width=1422,corner_radius=30)
             rec.place(relx = 0.5,rely = 0.5, anchor=CENTER)
@@ -470,36 +528,46 @@ def mainapp():
         details = CTkFrame(book,height=590,width=1422,corner_radius=30)
         details.place(relx = 0.5,rely = 0.5, anchor=CENTER)
 
-        print(room_details)
         CTkButton(details,text='←',height=50,width=50,corner_radius=30,fg_color='transparent', hover_color='#333333', command=lambda:details.destroy()).place(x=1,y=1)
 
-        CTkLabel(details,text="Checkin Date",font=('HP Simplified',17)).place(relx = 0.15,rely = 0.17, anchor=CENTER)
-        checkin_date = CTkEntry(details,placeholder_text = 'Checkin Date',height=45,width=300)
-        checkin_date.place(relx = 0.15,rely = 0.25, anchor=CENTER)
-        CTkLabel(details,text="Checkout Date",font=('HP Simplified',17)).place(relx = 0.45,rely = 0.17, anchor=CENTER)
-        checkout_date = CTkEntry(details,placeholder_text = 'Checkout Date',height=45,width=300)
-        checkout_date.place(relx = 0.45,rely = 0.25, anchor=CENTER)
+        CTkLabel(details,text="Checkin Date*",font=('HP Simplified',17)).place(relx = 0.15,rely = 0.17, anchor=CENTER)
+        checkin_date = CTkEntry(details,placeholder_text = 'Checkin Date*',height=45,width=300)
+        checkin_date.place(relx = 0.15,rely = 0.3, anchor=CENTER)
 
-        CTkLabel(details,text="Checkin Date",font=('HP Simplified',17)).place(relx = 0.15,rely = 0.37, anchor=CENTER)
-        checkin_date = CTkEntry(details,placeholder_text = 'Checkin Date',height=45,width=300)
-        checkin_date.place(relx = 0.15,rely = 0.45, anchor=CENTER)
-        CTkLabel(details,text="Checkout Date",font=('HP Simplified',17)).place(relx = 0.45,rely = 0.37, anchor=CENTER)
-        checkout_date = CTkEntry(details,placeholder_text = 'Checkout Date',height=45,width=300)
-        checkout_date.place(relx = 0.45,rely = 0.45, anchor=CENTER)
+        CTkLabel(details,text="Checkout Date*",font=('HP Simplified',17)).place(relx = 0.45,rely = 0.17, anchor=CENTER)
+        checkout_date = CTkEntry(details,placeholder_text = 'Checkout Date*',height=45,width=300)
+        checkout_date.place(relx = 0.45,rely = 0.3, anchor=CENTER)
 
-        CTkLabel(details,text="Checkin Date",font=('HP Simplified',17)).place(relx = 0.15,rely = 0.57, anchor=CENTER)
-        checkin_date = CTkEntry(details,placeholder_text = 'Checkin Date',height=45,width=300)
-        checkin_date.place(relx = 0.15,rely = 0.65, anchor=CENTER)
-        CTkLabel(details,text="Checkout Date",font=('HP Simplified',17)).place(relx = 0.45,rely = 0.57, anchor=CENTER)
-        checkout_date = CTkEntry(details,placeholder_text = 'Checkout Date',height=45,width=300)
-        checkout_date.place(relx = 0.45,rely = 0.65, anchor=CENTER)
+        CTkLabel(details,text="Name*",font=('HP Simplified',17)).place(relx = 0.15,rely = 0.37, anchor=CENTER)
+        name = CTkEntry(details, placeholder_text = login_details[0][1], height=45,width=300)
+        name.place(relx = 0.15,rely = 0.5, anchor=CENTER)
+        name.configure(state=DISABLED)
 
-        CTkLabel(details,text="Checkin Date",font=('HP Simplified',17)).place(relx = 0.15,rely = 0.77, anchor=CENTER)
-        checkin_date = CTkEntry(details,placeholder_text = 'Checkin Date',height=45,width=300)
-        checkin_date.place(relx = 0.15,rely = 0.85, anchor=CENTER)
-        CTkLabel(details,text="Checkout Date",font=('HP Simplified',17)).place(relx = 0.45,rely = 0.77, anchor=CENTER)
-        checkout_date = CTkEntry(details,placeholder_text = 'Checkout Date',height=45,width=300)
-        checkout_date.place(relx = 0.45,rely = 0.85, anchor=CENTER)
+        CTkLabel(details,text="Address*",font=('HP Simplified',17)).place(relx = 0.45,rely = 0.37, anchor=CENTER)
+        address = CTkEntry(details,placeholder_text = login_details[0][2],height=45,width=300)
+        address.place(relx = 0.45,rely = 0.5, anchor=CENTER)
+
+        if login_details[0][2] == None:
+            address.configure(placeholder_text = 'Enter your Address')
+        else:
+            address.configure(state=DISABLED)
+
+        CTkLabel(details,text="Phone Number*",font=('HP Simplified',17)).place(relx = 0.15,rely = 0.57, anchor=CENTER)
+        mobile = CTkEntry(details,placeholder_text = login_details[0][3],height=45,width=300)
+        mobile.place(relx = 0.15,rely = 0.7, anchor=CENTER)
+
+        if login_details[0][3] == None:
+            mobile.configure(placeholder_text = 'Enter Phone Number')
+        else:
+            mobile.configure(state=DISABLED)
+
+        CTkLabel(details,text="Email*",font=('HP Simplified',17)).place(relx = 0.45,rely = 0.57, anchor=CENTER)
+        email = CTkEntry(details, placeholder_text = login_details[0][5], height=45, width=300)
+        email.place(relx = 0.45,rely = 0.7, anchor=CENTER)
+        email.configure(state=DISABLED)
+
+        miscs = CTkLabel(details,text='', text_color='red')
+        miscs.place(relx = 0.35,rely = 0.85, anchor=CENTER)
 
         fr = CTkFrame(details,height=560,width=540,corner_radius=30)
         fr.place(relx=0.8,rely=0.5,anchor=CENTER)
@@ -511,26 +579,24 @@ def mainapp():
         CTkLabel(fr,font=('HP Simplified',15),text='AC : %s'%(room_details[0][5])).place(relx=0.5,rely=0.65,anchor=CENTER)
         CTkLabel(fr,font=('HP Simplified',15),text='Price : %s$'%(room_details[0][6])).place(relx=0.5,rely=0.75,anchor=CENTER)
         
-        CTkButton(fr,text='Proceed',height=50,width=100, command=lambda:proceed()).place(relx=0.5,rely=0.85,anchor=CENTER)
+        CTkButton(fr,text='Proceed',height=50,width=100, command=lambda:check_entrys()).place(relx=0.5,rely=0.85,anchor=CENTER)
 
+    #------------------FILTERS-FOR-ROOMS------------------
     filters = CTkFrame(book,height=100,width=1420)
     filters.pack()
 
-    fil = ['All','no','no','no','no']
+    fil = ['All','yes','yes','yes','yes']
 
     def filter_all():
         cur2 = sqlcon.cursor()
-        #pb = CTkProgressBar(filters,mode='indeterminate',width=140,height=28)
-        #pb.place(relx = 0.775,rely = 0.25, anchor=CENTER)
-        #pb.start()
+        
         if fil[0] == 'All':
-            cur2.execute('select * from rooms where  availability = "%s" and wifi = "%s" and tv = "%s" and ac = "%s"'%(fil[1],fil[2],fil[3],fil[4]))
+            cur2.execute('select * from rooms where availability = "%s" and wifi = "%s" and tv = "%s" and ac = "%s"'%(fil[1],fil[2],fil[3],fil[4]))
             fil_data = cur2.fetchall()
         else:
             cur2.execute('select * from rooms where type = "%s" and availability = "%s" and wifi = "%s" and tv = "%s" and ac = "%s"'%(fil[0],fil[1],fil[2],fil[3],fil[4]))
             fil_data = cur2.fetchall()
-        
-        #filters.after(2000,pb.destroy())
+    
         table.configure(row=len(fil_data), column=7, values=fil_data)
         cur2.close()
 
@@ -611,27 +677,19 @@ def mainapp():
     button_clear = CTkButton(filters, font=('HP Simplified',13),text='Clear Filters',command=lambda:filter_clear())
     button_clear.place(relx = 0.915,rely = 0.25, anchor=CENTER)
 
-    button0 = CTkButton(filters,text='Sl.No.', font=('HP Simplified',13),width=250,corner_radius=0,state=DISABLED,text_color_disabled='white')
-    button0.place(relx = 0.08,rely = 0.75, anchor=CENTER)
-    button1 = CTkButton(filters,text='Availability', font=('HP Simplified',13),width=250,corner_radius=0,state=DISABLED,text_color_disabled='white')
-    button1.place(relx = 0.15,rely = 0.75, anchor=CENTER)
-    button2 = CTkButton(filters,text='Type', font=('HP Simplified',13),width=250,corner_radius=0,state=DISABLED,text_color_disabled='white')
-    button2.place(relx = 0.31,rely = 0.75, anchor=CENTER)
-    button3 = CTkButton(filters,text='WiFi', font=('HP Simplified',13),width=250,corner_radius=0,state=DISABLED,text_color_disabled='white')
-    button3.place(relx = 0.435,rely = 0.75, anchor=CENTER)
-    button4 = CTkButton(filters,text='TV', font=('HP Simplified',13),width=250,corner_radius=0,state=DISABLED,text_color_disabled='white')
-    button4.place(relx = 0.555,rely = 0.75, anchor=CENTER)
-    button5 = CTkButton(filters,text='AC', font=('HP Simplified',13),width=250,corner_radius=0,state=DISABLED,text_color_disabled='white')
-    button5.place(relx = 0.675,rely = 0.75, anchor=CENTER)
-    button6 = CTkButton(filters,text='Price', font=('HP Simplified',13),width=250,corner_radius=0,state=DISABLED,text_color_disabled='white')
-    button6.place(relx = 0.79,rely = 0.75, anchor=CENTER)
-    button7 = CTkButton(filters,text='Book', font=('HP Simplified',13),width=250,corner_radius=0,state=DISABLED,text_color_disabled='white')
-    button7.place(relx = 0.915,rely = 0.75, anchor=CENTER)
+    CTkLabel(filters,text='Sl.No.', font=('HP Simplified',13),width=250,corner_radius=0, fg_color = "#2FA572").place(relx = 0.08,rely = 0.75, anchor=CENTER)
+    CTkLabel(filters,text='Availability', font=('HP Simplified',13),width=250,corner_radius=0, fg_color = "#2FA572").place(relx = 0.2,rely = 0.75, anchor=CENTER)
+    CTkLabel(filters,text='Type', font=('HP Simplified',13),width=250,corner_radius=0, fg_color = "#2FA572").place(relx = 0.31,rely = 0.75, anchor=CENTER)
+    CTkLabel(filters,text='WiFi', font=('HP Simplified',13),width=250,corner_radius=0, fg_color = "#2FA572").place(relx = 0.435,rely = 0.75, anchor=CENTER)
+    CTkLabel(filters,text='TV', font=('HP Simplified',13),width=250,corner_radius=0, fg_color = "#2FA572").place(relx = 0.555,rely = 0.75, anchor=CENTER)
+    CTkLabel(filters,text='AC', font=('HP Simplified',13),width=250,corner_radius=0, fg_color = "#2FA572").place(relx = 0.675,rely = 0.75, anchor=CENTER)
+    CTkLabel(filters,text='Price', font=('HP Simplified',13),width=250,corner_radius=0, fg_color = "#2FA572").place(relx = 0.79,rely = 0.75, anchor=CENTER)
+    CTkLabel(filters,text='Book', font=('HP Simplified',13),width=250,corner_radius=0, fg_color = "#2FA572").place(relx = 0.915,rely = 0.75, anchor=CENTER)
 
     room_scrollframe = CTkScrollableFrame(book, width=1400, height=470)
     room_scrollframe.pack()
 
-    table = CTkTable(room_scrollframe, font=('HP Simplified',13),height=40, row=64, column=8, hover_color= '#575757', values=room_data,command=tableclick)
+    table = CTkTable(room_scrollframe, font=('HP Simplified',13),height=40, row=len(room_data), column=8, hover_color= '#575757', values=room_data,command=tableclick)
     table.pack(expand=False, fill='both', padx=20)
 
     tabview.set("Book a Room")
@@ -649,8 +707,9 @@ if __name__ == '__main__':
     loggedin = [False]
     login_details = []
     room_details = []
+    booking_details = []
     
-    sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'root', database = 'hotel')
+    sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'samy', database = 'hotel')
     #main()
     mainapp()
     sqlcon.close()
