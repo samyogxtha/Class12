@@ -474,8 +474,8 @@ def mainapp():
                 can.drawString(350, 610, f'WiFi: {room_details[0][3]}' )
                 can.drawString(70, 580, f'Type: {room_details[0][2]}')
                 can.drawString(350, 580, f'TV: {room_details[0][4]}' )
-                can.drawString(70, 550, f'Price: {room_details[0][6]}')
-                can.drawString(350, 550,  f'AC: {booking_details[0][5]}')
+                can.drawString(70, 550, f'Price: {room_details[0][6]}$')
+                can.drawString(350, 550,  f'AC: {room_details[0][5]}')
                 can.drawString(200, 15,  'Please show this at the Reception.')
                 can.save()
 
