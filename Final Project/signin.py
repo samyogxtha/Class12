@@ -2,6 +2,7 @@ from CTkTable import CTkTable
 from customtkinter import CTkButton,CTk,CTkProgressBar,CTkImage,CTkEntry,CTkLabel,CTkFrame,StringVar,CTkCheckBox,CTkTabview,CTkScrollableFrame,CTkComboBox,CENTER,DISABLED,set_default_color_theme,set_appearance_mode
 from PIL import Image
 import PyPDF2
+from datetime import datetime as dt
 import mysql.connector as msconn
 
 def main():
@@ -493,8 +494,10 @@ def mainapp():
                 progressbar.stop()
                 try:
                     cur = sqlcon.cursor()
-                    cur.execute('update customers set address = "%s",mobile = "%s" where cust_id = %s'%(login_details[0][2],login_details[0][3],login_details[0][0]))
-                    cur.execute('insert into bookings(cust_id,room_no,checkin_date,checkout_date) values(%s,%s,"%s","%s")'%(login_details[0][0],room_details[0][0],checkin_date.get(),checkout_date.get()))
+                    if login_details[0][2] is None:
+                        cur.execute('update customers set address = "%s",mobile = "%s" where cust_id = %s'%(address.get(),mobile.get(),login_details[0][0]))
+                    dif = (dt.strptime(checkout_date.get(), "%Y-%m-%d") - dt.strptime(checkin_date.get(), "%Y-%m-%d")).days
+                    cur.execute('insert into bookings(cust_id,room_no,checkin_date,checkout_date,no_stay,price) values(%s,%s,"%s","%s",%s,%s)'%(login_details[0][0],room_details[0][0],checkin_date.get(),checkout_date.get(),dif,room_details[0][6]))
                     CTkLabel(rec_,height=200,text='Room Booked Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
                     cur.execute('select * from bookings order by booking_id desc limit 1')
                     det = cur.fetchall()
@@ -530,20 +533,20 @@ def mainapp():
 
         CTkButton(details,text='←',height=50,width=50,corner_radius=30,fg_color='transparent', hover_color='#333333', command=lambda:details.destroy()).place(x=1,y=1)
 
-        CTkLabel(details,text="Checkin Date*",font=('HP Simplified',17)).place(relx = 0.15,rely = 0.17, anchor=CENTER)
+        CTkLabel(details,text="Checkin Date (yyyy-mm-dd)*",font=('HP Simplified',17)).place(relx = 0.15,rely = 0.2, anchor=CENTER)
         checkin_date = CTkEntry(details,placeholder_text = 'Checkin Date*',height=45,width=300)
         checkin_date.place(relx = 0.15,rely = 0.3, anchor=CENTER)
 
-        CTkLabel(details,text="Checkout Date*",font=('HP Simplified',17)).place(relx = 0.45,rely = 0.17, anchor=CENTER)
+        CTkLabel(details,text="Checkout Date (yyyy-mm-dd)*",font=('HP Simplified',17)).place(relx = 0.45,rely = 0.2, anchor=CENTER)
         checkout_date = CTkEntry(details,placeholder_text = 'Checkout Date*',height=45,width=300)
         checkout_date.place(relx = 0.45,rely = 0.3, anchor=CENTER)
 
-        CTkLabel(details,text="Name*",font=('HP Simplified',17)).place(relx = 0.15,rely = 0.37, anchor=CENTER)
+        CTkLabel(details,text="Name*",font=('HP Simplified',17)).place(relx = 0.15,rely = 0.4, anchor=CENTER)
         name = CTkEntry(details, placeholder_text = login_details[0][1], height=45,width=300)
         name.place(relx = 0.15,rely = 0.5, anchor=CENTER)
         name.configure(state=DISABLED)
 
-        CTkLabel(details,text="Address*",font=('HP Simplified',17)).place(relx = 0.45,rely = 0.37, anchor=CENTER)
+        CTkLabel(details,text="Address*",font=('HP Simplified',17)).place(relx = 0.45,rely = 0.4, anchor=CENTER)
         address = CTkEntry(details,placeholder_text = login_details[0][2],height=45,width=300)
         address.place(relx = 0.45,rely = 0.5, anchor=CENTER)
 
@@ -552,7 +555,7 @@ def mainapp():
         else:
             address.configure(state=DISABLED)
 
-        CTkLabel(details,text="Phone Number*",font=('HP Simplified',17)).place(relx = 0.15,rely = 0.57, anchor=CENTER)
+        CTkLabel(details,text="Phone Number*",font=('HP Simplified',17)).place(relx = 0.15,rely = 0.6, anchor=CENTER)
         mobile = CTkEntry(details,placeholder_text = login_details[0][3],height=45,width=300)
         mobile.place(relx = 0.15,rely = 0.7, anchor=CENTER)
 
@@ -561,7 +564,7 @@ def mainapp():
         else:
             mobile.configure(state=DISABLED)
 
-        CTkLabel(details,text="Email*",font=('HP Simplified',17)).place(relx = 0.45,rely = 0.57, anchor=CENTER)
+        CTkLabel(details,text="Email*",font=('HP Simplified',17)).place(relx = 0.45,rely = 0.6, anchor=CENTER)
         email = CTkEntry(details, placeholder_text = login_details[0][5], height=45, width=300)
         email.place(relx = 0.45,rely = 0.7, anchor=CENTER)
         email.configure(state=DISABLED)
@@ -692,7 +695,7 @@ def mainapp():
     table = CTkTable(room_scrollframe, font=('HP Simplified',13),height=40, row=len(room_data), column=8, hover_color= '#575757', values=room_data,command=tableclick)
     table.pack(expand=False, fill='both', padx=20)
 
-    tabview.set("Book a Room")
+    tabview.set("About")
     cur.close()
     root.mainloop()
 

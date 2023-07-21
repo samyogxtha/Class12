@@ -104,11 +104,12 @@ CREATE TABLE bookings
   cust_id       INT  NOT NULL,
   room_no       INT  NOT NULL,
   checkin_date  DATE NOT NULL,
-  checkout_date DATE,
+  checkout_date DATE NOT NULL,
+  no_stay       INT NOT NULL,
   price         INT     NOT NULL,
-  paid          CHAR(1) NOT NULL,
+  paid          CHAR(1) NOT NULL Default 'n',
   FOREIGN KEY (cust_id)  REFERENCES customers (cust_id),
   FOREIGN KEY (room_no)  REFERENCES rooms     (room_no)
 );
 
-ALTER TABLE bookings AUTO_INCREMENT=10001;
+ALTER TABLE bookings AUTO_INCREMENT=10000;
