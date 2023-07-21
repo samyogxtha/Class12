@@ -505,14 +505,13 @@ def mainapp():
                     if login_details[0][2] is None:
                         cur.execute('update customers set address = "%s",mobile = "%s" where cust_id = %s'%(address.get(),mobile.get(),login_details[0][0]))
                     dif = (dt.strptime(checkout_date.get(), "%Y-%m-%d") - dt.strptime(checkin_date.get(), "%Y-%m-%d")).days
-                    cur.execute(f'update rooms set availability = "no" where room_no = {booking_details[0][2]}')
+                    cur.execute(f'update rooms set availability = "no" where room_no = {room_details[0][0]}')
                     cur.execute('insert into bookings(cust_id,room_no,checkin_date,checkout_date,no_stay,price) values(%s,%s,"%s","%s",%s,%s)'%(login_details[0][0],room_details[0][0],checkin_date.get(),checkout_date.get(),dif,room_details[0][6]))
                     CTkLabel(rec_,height=200,text='Room Booked Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
                     cur.execute('select * from bookings order by booking_id desc limit 1')
                     det = cur.fetchall()[0]
                     booking_details.clear()
                     booking_details.append(det)
-                    print(booking_details[0])
                     root.after(2000,lambda:print_recipt())
                     cur.close()
                 except:
