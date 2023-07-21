@@ -1,7 +1,6 @@
 from CTkTable import CTkTable
 from customtkinter import CTkButton,CTk,CTkProgressBar,CTkImage,CTkEntry,CTkLabel,CTkFrame,StringVar,CTkCheckBox,CTkTabview,CTkScrollableFrame,CTkComboBox,CENTER,DISABLED,set_default_color_theme,set_appearance_mode
 from PIL import Image
-import PyPDF2
 from datetime import datetime as dt
 import mysql.connector as msconn
 
