@@ -38,6 +38,7 @@ def mainapp():
             progressbar.stop()
             CTkLabel(logout_,height=200,text='Logged Out Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
             tabview.set("About")
+            tabview.delete('Check Out')
             root.after(2000,lambda:frame_logout.destroy())
 
         loggedin[0] = False
@@ -79,6 +80,7 @@ def mainapp():
                 sqlcon.commit()
                 CTkLabel(signin_,height=620,width=540,corner_radius=20,text='Signed In Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
                 update_logbutton()
+                update_checkout()
                 root.after(2000,lambda:frame_login.destroy())
 
             misc = CTkLabel(signup,text='',text_color='red',width=500)
@@ -97,7 +99,7 @@ def mainapp():
                 if '.' in email:
                     dot = True
                 if at is False or dot is False:
-                    misc.configure(text='Enter Correct Email Id.',width = 500)
+                    misc.configure(text='Enter Valid Email Id.',width = 500)
 
             passw = entry_passw.get()
             if passw == '':
@@ -154,6 +156,7 @@ def mainapp():
                 cur0.close()
                 CTkLabel(logoin_,height=200,corner_radius=20,text='Logged In Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
                 update_logbutton()
+                update_checkout()
                 root.after(2000,lambda:frame_login.destroy())
 
             lmisc = CTkLabel(login,text='',text_color='red',width=500)
@@ -249,7 +252,78 @@ def mainapp():
         #profile_pic = CTkImage(Image.open('assets/profile.png'),size = (58,58))
         button_login.configure(text='Log Out',command=lambda:logout())#text='',image=profile_pic
         #button_login._image = profile_pic
+        
+    def update_checkout():
+        chk_out = tabview.add("Check Out")
 
+        if loggedin[0] == True:
+            req0 = CTkFrame(chk_out, width=1440, height=720)
+            req0.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+            bottompic2 = CTkImage(Image.open('assets/loginbg.png'),size = (1440,720))
+            bpic2 = CTkLabel(req0,text = '', image = bottompic2)
+            bpic2._image = bottompic2
+            bpic2.place(relx=0.5,rely=0.5,anchor = CENTER)
+
+            req0_ = CTkFrame(req0,height=520,width=500,corner_radius=20)
+            req0_.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+            CTkLabel(req0_,corner_radius=20,text='Please Log In',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
+        else:
+            try:
+                cur = sqlcon.cursor()
+                cur.execute(f'select * from bookings where cust_id = {login_details[0][0]} order by booking_id desc limit 1')
+                det = cur.fetchall()[0]
+                booking_details.clear()
+                booking_details.append(det)
+
+                def checkout():
+                    def checkout_():
+
+                        def closeall():
+                            out.destroy()
+
+                        CTkLabel(fr_chkout,height=200,text='Checked Out Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
+                        
+                        root.after(2000,lambda:closeall())
+                        cur.close()
+                    out = CTkFrame(chk_out,height=590,width=1422,corner_radius=30)
+                    out.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+                    outp = CTkImage(Image.open('assets/loginbg.png'),size = (1440,720))
+                    outpic = CTkLabel(out,text = '', image = outp)
+                    outpic._image = outp
+                    outpic.place(relx=0.5,rely=0.5,anchor = CENTER)
+
+                    out_ = CTkFrame(out,height=520,width=540,corner_radius=30)
+                    out_.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+                    progressbar = CTkProgressBar(out_,height=50,mode="indeterminate")
+                    progressbar.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+                    CTkLabel(out_,text='Checking Out...',font=('HP Simplified',20,'bold')).place(relx=0.5,rely=0.6,anchor = CENTER)
+                    progressbar.start()
+
+                    root.after(3000,lambda:checkout_())
+
+                fr_chkout = CTkFrame(chk_out, width=1440, height=720)
+                fr_chkout.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+                
+                CTkButton(fr_chkout,text='Check Out',command=lambda:checkout()).place(relx = 0.5,rely = 0.5, anchor=CENTER)
+            except:
+                req1 = CTkFrame(chk_out, width=1440, height=720)
+                req1.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+                bottompic3 = CTkImage(Image.open('assets/loginbg.png'),size = (1440,720))
+                bpic2 = CTkLabel(req1,text = '', image = bottompic3)
+                bpic2._image = bottompic3
+                bpic2.place(relx=0.5,rely=0.5,anchor = CENTER)
+
+                req1_ = CTkFrame(req1,height=520,width=500,corner_radius=20)
+                req1_.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+                CTkLabel(req1_,corner_radius=20,text='Room not Booked',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
+                CTkButton(req1_,text='Book a Room Now',width=300,height=45,command=lambda:tabview.set('Book a Room')).place(relx=0.5,rely=0.6,anchor = CENTER)
+        
     #main app
     cur = sqlcon.cursor()
 
@@ -615,8 +689,6 @@ def mainapp():
         table.configure(row=64, column=7, values=room_data)
     
     def showsignin():
-        def reqdestroy(req):
-            req.destroy()
         req = CTkFrame(root, width=1440, height=720)
         req.place(relx = 0.5,rely = 0.5, anchor=CENTER)
 
@@ -630,15 +702,15 @@ def mainapp():
 
         CTkLabel(signupreq,corner_radius=20,text='Please Log In',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
 
-        root.after(2000,lambda:reqdestroy(req))
+        root.after(2000,lambda:req.destroy())
 
     def tableclick(cell):
         column = cell['column']
         if column == 7:
             row = cell['row']
-            room_details.clear()
-            room_details.insert(0,table.get()[row])
             if loggedin[0] is True:
+                room_details.clear()
+                room_details.insert(0,table.get()[row])
                 show_details()
             else:
                 showsignin()
