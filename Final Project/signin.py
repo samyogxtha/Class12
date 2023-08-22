@@ -1,6 +1,6 @@
 from CTkTable import CTkTable
-from customtkinter import CTkButton,CTk,CTkProgressBar,CTkImage,CTkEntry,CTkLabel,CTkFrame,StringVar,CTkCheckBox,CTkTabview,CTkScrollableFrame,CTkComboBox,CENTER,DISABLED,set_default_color_theme,set_appearance_mode
-from PIL import Image
+from customtkinter import CTk,CTkButton,CTkProgressBar,CTkImage,CTkEntry,CTkLabel,CTkFrame,StringVar,CTkCheckBox,CTkTabview,CTkRadioButton,CTkScrollableFrame,CTkComboBox,CENTER,DISABLED,IntVar,set_default_color_theme,set_appearance_mode
+from PIL import Image,ImageTk
 from datetime import datetime as dt
 import mysql.connector as msconn
 
@@ -254,79 +254,50 @@ def mainapp():
         #button_login._image = profile_pic
         
     def update_checkout():
-        chk_out = tabview.add("Check Out")
+        try:
+            cur = sqlcon.cursor()
+            cur.execute(f'select * from bookings where cust_id = {login_details[0][0]} order by booking_id desc limit 1')
+            det = cur.fetchall()[0]
+            booking_details.clear()
+            booking_details.append(det)
+            
+            def checkout():
+                def checkout_():
 
-        if loggedin[0] == True:
-            req0 = CTkFrame(chk_out, width=1440, height=720)
-            req0.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+                    def closeall():
+                        out.destroy()
 
-            bottompic2 = CTkImage(Image.open('assets/loginbg.png'),size = (1440,720))
-            bpic2 = CTkLabel(req0,text = '', image = bottompic2)
-            bpic2._image = bottompic2
-            bpic2.place(relx=0.5,rely=0.5,anchor = CENTER)
+                    CTkLabel(fr_chkout,height=200,text='Checked Out Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
+                    
+                    root.after(2000,lambda:closeall())
+                    cur.close()
+                out = CTkFrame(chk_out,height=590,width=1422,corner_radius=30)
+                out.place(relx = 0.5,rely = 0.5, anchor=CENTER)
 
-            req0_ = CTkFrame(req0,height=520,width=500,corner_radius=20)
-            req0_.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+                outp = CTkImage(Image.open('assets/loginbg.png'),size = (1440,720))
+                outpic = CTkLabel(out,text = '', image = outp)
+                outpic._image = outp
+                outpic.place(relx=0.5,rely=0.5,anchor = CENTER)
 
-            CTkLabel(req0_,corner_radius=20,text='Please Log In',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
-        else:
-            try:
-                cur = sqlcon.cursor()
-                cur.execute(f'select * from bookings where cust_id = {login_details[0][0]} order by booking_id desc limit 1')
-                det = cur.fetchall()[0]
-                booking_details.clear()
-                booking_details.append(det)
+                out_ = CTkFrame(out,height=520,width=540,corner_radius=30)
+                out_.place(relx = 0.5,rely = 0.5, anchor=CENTER)
 
-                def checkout():
-                    def checkout_():
+                progressbar = CTkProgressBar(out_,height=50,mode="indeterminate")
+                progressbar.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+                CTkLabel(out_,text='Checking Out...',font=('HP Simplified',20,'bold')).place(relx=0.5,rely=0.6,anchor = CENTER)
+                progressbar.start()
 
-                        def closeall():
-                            out.destroy()
+                root.after(3000,lambda:checkout_())
 
-                        CTkLabel(fr_chkout,height=200,text='Checked Out Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
-                        
-                        root.after(2000,lambda:closeall())
-                        cur.close()
-                    out = CTkFrame(chk_out,height=590,width=1422,corner_radius=30)
-                    out.place(relx = 0.5,rely = 0.5, anchor=CENTER)
-
-                    outp = CTkImage(Image.open('assets/loginbg.png'),size = (1440,720))
-                    outpic = CTkLabel(out,text = '', image = outp)
-                    outpic._image = outp
-                    outpic.place(relx=0.5,rely=0.5,anchor = CENTER)
-
-                    out_ = CTkFrame(out,height=520,width=540,corner_radius=30)
-                    out_.place(relx = 0.5,rely = 0.5, anchor=CENTER)
-
-                    progressbar = CTkProgressBar(out_,height=50,mode="indeterminate")
-                    progressbar.place(relx = 0.5,rely = 0.5, anchor=CENTER)
-                    CTkLabel(out_,text='Checking Out...',font=('HP Simplified',20,'bold')).place(relx=0.5,rely=0.6,anchor = CENTER)
-                    progressbar.start()
-
-                    root.after(3000,lambda:checkout_())
-
-                fr_chkout = CTkFrame(chk_out, width=1440, height=720)
-                fr_chkout.place(relx = 0.5,rely = 0.5, anchor=CENTER)
-                
-                CTkButton(fr_chkout,text='Check Out',command=lambda:checkout()).place(relx = 0.5,rely = 0.5, anchor=CENTER)
-            except:
-                req1 = CTkFrame(chk_out, width=1440, height=720)
-                req1.place(relx = 0.5,rely = 0.5, anchor=CENTER)
-
-                bottompic3 = CTkImage(Image.open('assets/loginbg.png'),size = (1440,720))
-                bpic2 = CTkLabel(req1,text = '', image = bottompic3)
-                bpic2._image = bottompic3
-                bpic2.place(relx=0.5,rely=0.5,anchor = CENTER)
-
-                req1_ = CTkFrame(req1,height=520,width=500,corner_radius=20)
-                req1_.place(relx = 0.5,rely = 0.5, anchor=CENTER)
-
-                CTkLabel(req1_,corner_radius=20,text='Room not Booked',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
-                CTkButton(req1_,text='Book a Room Now',width=300,height=45,command=lambda:tabview.set('Book a Room')).place(relx=0.5,rely=0.6,anchor = CENTER)
+            chk_out = tabview.add("Check Out")
+            fr_chkout = CTkFrame(chk_out, width=1440, height=720)
+            fr_chkout.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+            
+            CTkButton(fr_chkout,text='Check Out',command=lambda:checkout()).place(relx = 0.5,rely = 0.5, anchor=CENTER)
+        except:
+            pass
         
     #main app
-    cur = sqlcon.cursor()
-
     frame = CTkFrame(root,height=720,width=1440,corner_radius=15)
     frame.place(relx = 0.5,rely = 0.5, anchor=CENTER)
 
@@ -431,7 +402,7 @@ def mainapp():
 
     def price_book(type):
         cur2 = sqlcon.cursor()
-        cur2.execute('select * from rooms where type = "%s"'%(type))
+        cur2.execute(f'select * from rooms where type = "{type}" and availability = "yes"')
         fil_data = cur2.fetchall()
         table.configure(row=len(fil_data), column=7, values=fil_data)
         cur2.close()
@@ -499,7 +470,8 @@ def mainapp():
 
     #------------------BOOKING-TAB------------------
     book = tabview.add("Book a Room")
-    
+
+    cur = sqlcon.cursor()
     cur.execute('select * from rooms')
     room_data = cur.fetchall()
 
@@ -520,6 +492,7 @@ def mainapp():
             def print_recipt():
                 def closeall():
                     tabview.set('About')
+                    update_checkout()
                     details.destroy()
                     rec.destroy()
 
@@ -585,6 +558,8 @@ def mainapp():
                     det = cur.fetchall()[0]
                     booking_details.clear()
                     booking_details.append(det)
+                    tabview.delete('Check Out')
+                    update_checkout()
                     root.after(2000,lambda:print_recipt())
                     cur.close()
                 except:
@@ -688,30 +663,49 @@ def mainapp():
     def filter_clear():
         table.configure(row=64, column=7, values=room_data)
     
-    def showsignin():
-        req = CTkFrame(root, width=1440, height=720)
-        req.place(relx = 0.5,rely = 0.5, anchor=CENTER)
-
-        bottompic2 = CTkImage(Image.open('assets/loginbg.png'),size = (1440,720))
-        bpic2 = CTkLabel(req,text = '', image = bottompic2)
-        bpic2._image = bottompic2
-        bpic2.place(relx=0.5,rely=0.5,anchor = CENTER)
-
-        signupreq = CTkFrame(req,height=620,width=540,corner_radius=20)
-        signupreq.place(relx = 0.5,rely = 0.5, anchor=CENTER)
-
-        CTkLabel(signupreq,corner_radius=20,text='Please Log In',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
-
-        root.after(2000,lambda:req.destroy())
-
     def tableclick(cell):
+        def showsignin():
+            req = CTkFrame(root, width=1440, height=720)
+            req.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+            bottompic2 = CTkImage(Image.open('assets/loginbg.png'),size = (1440,720))
+            bpic2 = CTkLabel(req,text = '', image = bottompic2)
+            bpic2._image = bottompic2
+            bpic2.place(relx=0.5,rely=0.5,anchor = CENTER)
+
+            signupreq = CTkFrame(req,height=620,width=540,corner_radius=20)
+            signupreq.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+            CTkLabel(signupreq,corner_radius=20,text='Please Log In',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
+
+            root.after(2000,lambda:req.destroy())
+
+        def room_unavailable():
+            req = CTkFrame(root, width=1440, height=720)
+            req.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+            bottompic2 = CTkImage(Image.open('assets/loginbg.png'),size = (1440,720))
+            bpic2 = CTkLabel(req,text = '', image = bottompic2)
+            bpic2._image = bottompic2
+            bpic2.place(relx=0.5,rely=0.5,anchor = CENTER)
+
+            signupreq = CTkFrame(req,height=620,width=540,corner_radius=20)
+            signupreq.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+            CTkLabel(signupreq,corner_radius=20,text='Room Unavailable',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
+
+            root.after(2000,lambda:req.destroy())
+
         column = cell['column']
         if column == 7:
             row = cell['row']
             if loggedin[0] is True:
-                room_details.clear()
-                room_details.insert(0,table.get()[row])
-                show_details()
+                if table.get()[row][1] == 'yes':
+                    room_details.clear()
+                    room_details.insert(0,table.get()[row])
+                    show_details()
+                else:
+                    room_unavailable()
             else:
                 showsignin()
             
@@ -775,7 +769,98 @@ def mainapp():
     table = CTkTable(room_scrollframe, font=('HP Simplified',13),height=40, row=len(room_data), column=8, hover_color= '#575757', values=room_data,command=tableclick)
     table.pack(expand=False, fill='both', padx=20)
 
-    tabview.set("About")
+    #-----------------------------NEW-BOOKING-TAB---------------------------------
+    booking_ = tabview.add("Book")
+
+    booking_bg = CTkImage(Image.open('utbg0.png'),size = (1440,720))
+    bookingbg = CTkLabel(booking_,text='', image=booking_bg)
+    bookingbg._image = booking_bg
+    bookingbg.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+    select_type = CTkFrame(booking_,height=540,width=540,corner_radius=20)
+    select_type.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+    CTkLabel(select_type,corner_radius=20,text='Please choose the type of room',font=('HP Simplified',25,'bold')).place(relx=0.5,y=45,anchor = CENTER)
+
+    radio_var = IntVar()
+
+    def radiobutton_event():
+        print("radiobutton toggled, current value:", radio_var.get())
+
+    radiobutton_1 = CTkRadioButton(select_type, text="Single", font=('HP Simplified',13), variable= radio_var, value=1)
+    radiobutton_2 = CTkRadioButton(select_type, text="Double", font=('HP Simplified',13), variable= radio_var, value=2)
+    radiobutton_3 = CTkRadioButton(select_type, text="Triple", font=('HP Simplified',13), variable= radio_var, value=3)
+    radiobutton_4 = CTkRadioButton(select_type, text="Quad", font=('HP Simplified',13), variable= radio_var, value=4)
+
+    radiobutton_1.place(relx=0.25,rely=0.5,anchor = CENTER)
+    radiobutton_2.place(relx=0.75,rely=0.5,anchor = CENTER)
+    radiobutton_3.place(relx=0.25,rely=0.9,anchor = CENTER)
+    radiobutton_4.place(relx=0.75,rely=0.9,anchor = CENTER)
+
+    pic1 = CTkImage(Image.open('assets/single.jpg'),size = (175,175))
+    pic_1 = CTkLabel(select_type,corner_radius=10,text = '', image = pic1)
+    pic_1._image = pic1
+    pic_1.place(relx=0.25,rely=0.3,anchor = CENTER)
+    pic_1.bind("<Button-1>", lambda x:radiobutton_1.invoke())
+
+    pic2 = CTkImage(Image.open('assets/double.jpg'),size = (175,175))
+    pic_2 = CTkLabel(select_type,text = '', image = pic2)
+    pic_2._image = pic2
+    pic_2.place(relx=0.75,rely=0.3,anchor = CENTER)
+    pic_2.bind("<Button-1>", lambda x:radiobutton_2.invoke())
+
+    pic3 = CTkImage(Image.open('assets/triple.jpg'),size = (175,175))
+    pic_3 = CTkLabel(select_type,text = '', image = pic3)
+    pic_3._image = pic3
+    pic_3.place(relx=0.25,rely=0.7,anchor = CENTER)
+    pic_3.bind("<Button-1>", lambda x:radiobutton_3.invoke())
+
+    pic4 = CTkImage(Image.open('assets/quad.jpg'),size = (175,175))
+    pic_4 = CTkLabel(select_type,text = '', image = pic4)
+    pic_4._image = pic4
+    pic_4.place(relx=0.75,rely=0.7,anchor = CENTER)
+    pic_4.bind("<Button-1>", lambda x:radiobutton_4.invoke())
+
+    CTkButton(booking_,height=100,width=100,text='Next →', font=('HP Simplified',17),command=lambda:select_misc()).place(relx=0.85,rely=0.5,anchor = CENTER)
+
+    def select_misc():
+        def back_sel():
+            select_misc_fr.destroy()
+            misc_back.destroy()
+            misc_next.destroy()
+
+        select_misc_fr = CTkFrame(booking_,height=540,width=540,corner_radius=20)
+        select_misc_fr.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+        misc_back = CTkButton(booking_,height=100,width=100,text='← Back',command=lambda:back_sel())
+        misc_back.place(relx=0.15,rely=0.5,anchor = CENTER)
+
+        misc_next = CTkButton(booking_,height=100,width=100,text='Next →',command=lambda:select_checkdate())
+        misc_next.place(relx=0.85,rely=0.5,anchor = CENTER)
+
+        def select_checkdate():
+            def back_misc():
+                select_checkdate_fr.destroy()
+                checkdate_next.destroy()
+                checkdate_back.destroy()
+
+            select_checkdate_fr = CTkFrame(booking_,height=540,width=540,corner_radius=20)
+            select_checkdate_fr.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+            checkdate_back = CTkButton(booking_,height=100,width=100,text='← Back',command=lambda:back_misc())
+            checkdate_back.place(relx=0.15,rely=0.5,anchor = CENTER)
+
+            checkdate_next = CTkButton(booking_,height=100,width=100,text='Next →',command=lambda:show_details())
+            checkdate_next.place(relx=0.85,rely=0.5,anchor = CENTER)
+            
+
+
+
+
+
+
+
+    tabview.set("Book")
     cur.close()
     root.mainloop()
 
@@ -784,6 +869,7 @@ def call_mainapp(main):
 	mainapp()
 
 if __name__ == '__main__':
+    #set_appearance_mode('light')
     set_appearance_mode('system')
     set_default_color_theme('green')
 
