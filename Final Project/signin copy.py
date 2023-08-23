@@ -1,6 +1,6 @@
-from CTkTable import CTkTable
 from customtkinter import CTk,CTkButton,CTkProgressBar,CTkImage,CTkEntry,CTkLabel,CTkFrame,StringVar,CTkCheckBox,CTkTabview,CTkRadioButton,CTkScrollableFrame,CTkComboBox,CENTER,DISABLED,IntVar,set_default_color_theme,set_appearance_mode
-from PIL import Image,ImageTk
+from tkcalendar import Calendar
+from PIL import Image
 from datetime import datetime as dt
 import mysql.connector as msconn
 
@@ -476,87 +476,245 @@ def mainapp():
     bookingbg._image = booking_bg
     bookingbg.place(relx = 0.5,rely = 0.5, anchor=CENTER)
 
-    select_type = CTkFrame(booking_,height=540,width=540,corner_radius=20)
-    select_type.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+    select_date_ = CTkFrame(booking_,height=540,width=540,corner_radius=20)
+    select_date_.place(relx = 0.5,rely = 0.5, anchor=CENTER)
 
-    CTkLabel(select_type,corner_radius=20,text='Please choose the type of room',font=('HP Simplified',25,'bold')).place(relx=0.5,y=45,anchor = CENTER)
+    def select_datein():
+        fr_indate = CTkFrame(booking_,height=250,width=200)
+        fr_indate.place(relx = 0.7,rely = 0.3, anchor=CENTER)
 
-    radio_var = IntVar()
+        tkc1 = Calendar(fr_indate,selectmode = "day",year=int(today[0:4]),month=int(today[6:7]),date=int(today[9:]))
+        tkc1.pack(padx=10,pady=10)
 
-    def radiobutton_event():
-        print("radiobutton toggled, current value:", radio_var.get())
+        def fetch_date():
+            checkin_date.configure(state='normal')
+            fr_indate.destroy()
+            checkin_date.delete(0,10)
+            checkin_date.insert(0,tkc1.selection_get().strftime('%Y-%m-%d'))
+            checkin_date.configure(state=DISABLED)
 
-    radiobutton_1 = CTkRadioButton(select_type, text="Single", font=('HP Simplified',13), variable= radio_var, value=1)
-    radiobutton_2 = CTkRadioButton(select_type, text="Double", font=('HP Simplified',13), variable= radio_var, value=2)
-    radiobutton_3 = CTkRadioButton(select_type, text="Triple", font=('HP Simplified',13), variable= radio_var, value=3)
-    radiobutton_4 = CTkRadioButton(select_type, text="Quad", font=('HP Simplified',13), variable= radio_var, value=4)
+        button = CTkButton(fr_indate,text="Select Date",command=fetch_date)
+        button.pack(padx=10,pady=10)
+        
+    CTkLabel(select_date_,text="Checkin Date (yyyy-mm-dd)*",font=('HP Simplified',17)).place(relx = 0.5,rely = 0.4, anchor=CENTER)
+    checkin_date = CTkEntry(select_date_,placeholder_text = 'Checkin Date*',height=45,width=300)
+    checkin_date.place(relx = 0.5,rely = 0.3, anchor=CENTER)
+    checkin_date.bind("<Button-1>", lambda x:select_datein())
 
-    radiobutton_1.place(relx=0.25,rely=0.5,anchor = CENTER)
-    radiobutton_2.place(relx=0.75,rely=0.5,anchor = CENTER)
-    radiobutton_3.place(relx=0.25,rely=0.9,anchor = CENTER)
-    radiobutton_4.place(relx=0.75,rely=0.9,anchor = CENTER)
+    def select_dateout():
+        fr_outdate = CTkFrame(booking_,height=250,width=200)
+        fr_outdate.place(relx = 0.7,rely = 0.6, anchor=CENTER)
 
-    pic1 = CTkImage(Image.open('assets/single.jpg'),size = (175,175))
-    pic_1 = CTkLabel(select_type,corner_radius=10,text = '', image = pic1)
-    pic_1._image = pic1
-    pic_1.place(relx=0.25,rely=0.3,anchor = CENTER)
-    pic_1.bind("<Button-1>", lambda x:radiobutton_1.invoke())
+        tkc1 = Calendar(fr_outdate,selectmode = "day",year=int(today[0:4]),month=int(today[6:7]),date=int(today[9:]))
+        tkc1.pack(padx=10,pady=10)
 
-    pic2 = CTkImage(Image.open('assets/double.jpg'),size = (175,175))
-    pic_2 = CTkLabel(select_type,text = '', image = pic2)
-    pic_2._image = pic2
-    pic_2.place(relx=0.75,rely=0.3,anchor = CENTER)
-    pic_2.bind("<Button-1>", lambda x:radiobutton_2.invoke())
+        def fetch_date():
+            checkout_date.configure(state='normal')
+            fr_outdate.destroy()
+            checkout_date.delete(0,10)
+            checkout_date.insert(0,tkc1.selection_get().strftime('%Y-%m-%d'))
 
-    pic3 = CTkImage(Image.open('assets/triple.jpg'),size = (175,175))
-    pic_3 = CTkLabel(select_type,text = '', image = pic3)
-    pic_3._image = pic3
-    pic_3.place(relx=0.25,rely=0.7,anchor = CENTER)
-    pic_3.bind("<Button-1>", lambda x:radiobutton_3.invoke())
+        button = CTkButton(fr_outdate,text="Select Date",command=fetch_date)
+        button.pack(padx=10,pady=10)
 
-    pic4 = CTkImage(Image.open('assets/quad.jpg'),size = (175,175))
-    pic_4 = CTkLabel(select_type,text = '', image = pic4)
-    pic_4._image = pic4
-    pic_4.place(relx=0.75,rely=0.7,anchor = CENTER)
-    pic_4.bind("<Button-1>", lambda x:radiobutton_4.invoke())
+    CTkLabel(select_date_,text="Checkout Date (yyyy-mm-dd)*",font=('HP Simplified',17)).place(relx = 0.5,rely = 0.7, anchor=CENTER)
+    checkout_date = CTkEntry(select_date_,placeholder_text = 'Checkout Date*',height=45,width=300)
+    checkout_date.place(relx = 0.5,rely = 0.6, anchor=CENTER)
+    checkout_date.bind("<Button-1>", lambda x:select_dateout())
 
-    CTkButton(booking_,height=100,width=100,text='Next →', font=('HP Simplified',17), command=lambda:select_misc()).place(relx=0.85,rely=0.5,anchor = CENTER)
+    err_msg0 = CTkLabel(select_date_,text='',text_color='red')
+    err_msg0.place(relx=0.5,rely=0.95,anchor=CENTER)
 
-    def select_misc():
-        def back_sel():
-            select_misc_fr.destroy()
-            misc_back.destroy()
-            misc_next.destroy()
+    CTkButton(booking_,height=100,width=100,text='Next →', font=('HP Simplified',17), command=lambda:select_type() if checkin_date.get() != '' and checkout_date.get() != '' else err_msg0.configure(text='*Please enter a Date*')).place(relx=0.85,rely=0.5,anchor = CENTER)
 
-        select_misc_fr = CTkFrame(booking_,height=540,width=540,corner_radius=20)
-        select_misc_fr.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+    def select_type():
+        select_type_ = CTkFrame(booking_,height=540,width=540,corner_radius=20)
+        select_type_.place(relx = 0.5,rely = 0.5, anchor=CENTER)
 
-        misc_back = CTkButton(booking_,height=100,width=100,text='← Back', font=('HP Simplified',17), command=lambda:back_sel())
-        misc_back.place(relx=0.15,rely=0.5,anchor = CENTER)
+        CTkLabel(select_type_,corner_radius=20,text='Please choose the type of room',font=('HP Simplified',25,'bold')).place(relx=0.5,y=45,anchor = CENTER)
 
-        misc_next = CTkButton(booking_,height=100,width=100,text='Next →', font=('HP Simplified',17), command=lambda:select_checkdate())
-        misc_next.place(relx=0.85,rely=0.5,anchor = CENTER)
+        radio_var = StringVar()
 
-        def select_checkdate():
-            def back_misc():
-                select_checkdate_fr.destroy()
-                checkdate_next.destroy()
-                checkdate_back.destroy()
+        radiobutton_1 = CTkRadioButton(select_type_, text="Single", font=('HP Simplified',13), variable= radio_var, value='Single')
+        radiobutton_2 = CTkRadioButton(select_type_, text="Double", font=('HP Simplified',13), variable= radio_var, value='Double')
+        radiobutton_3 = CTkRadioButton(select_type_, text="Triple", font=('HP Simplified',13), variable= radio_var, value='Triple')
+        radiobutton_4 = CTkRadioButton(select_type_, text="Quad", font=('HP Simplified',13), variable= radio_var, value='Quad')
 
-            select_checkdate_fr = CTkFrame(booking_,height=540,width=540,corner_radius=20)
-            select_checkdate_fr.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+        radiobutton_1.place(relx=0.25,rely=0.5,anchor = CENTER)
+        radiobutton_2.place(relx=0.75,rely=0.5,anchor = CENTER)
+        radiobutton_3.place(relx=0.25,rely=0.9,anchor = CENTER)
+        radiobutton_4.place(relx=0.75,rely=0.9,anchor = CENTER)
 
-            checkdate_back = CTkButton(booking_,height=100,width=100,text='← Back', font=('HP Simplified',17), command=lambda:back_misc())
-            checkdate_back.place(relx=0.15,rely=0.5,anchor = CENTER)
+        pic1 = CTkImage(Image.open('assets/single.jpg'),size = (175,175))
+        pic_1 = CTkLabel(select_type_,corner_radius=10,text = '', image = pic1)
+        pic_1._image = pic1
+        pic_1.place(relx=0.25,rely=0.3,anchor = CENTER)
+        pic_1.bind("<Button-1>", lambda x:radiobutton_1.invoke())
 
-            checkdate_next = CTkButton(booking_,height=100,width=100,text='Next →', font=('HP Simplified',17), command=lambda:show_details())
-            checkdate_next.place(relx=0.85,rely=0.5,anchor = CENTER)
+        pic2 = CTkImage(Image.open('assets/double.jpg'),size = (175,175))
+        pic_2 = CTkLabel(select_type_,text = '', image = pic2)
+        pic_2._image = pic2
+        pic_2.place(relx=0.75,rely=0.3,anchor = CENTER)
+        pic_2.bind("<Button-1>", lambda x:radiobutton_2.invoke())
+
+        pic3 = CTkImage(Image.open('assets/triple.jpg'),size = (175,175))
+        pic_3 = CTkLabel(select_type_,text = '', image = pic3)
+        pic_3._image = pic3
+        pic_3.place(relx=0.25,rely=0.7,anchor = CENTER)
+        pic_3.bind("<Button-1>", lambda x:radiobutton_3.invoke())
+
+        pic4 = CTkImage(Image.open('assets/quad.jpg'),size = (175,175))
+        pic_4 = CTkLabel(select_type_,text = '', image = pic4)
+        pic_4._image = pic4
+        pic_4.place(relx=0.75,rely=0.7,anchor = CENTER)
+        pic_4.bind("<Button-1>", lambda x:radiobutton_4.invoke())
+
+        err_msg1 = CTkLabel(select_type_,text='',text_color='red')
+        err_msg1.place(relx=0.5,rely=0.95,anchor=CENTER)
+
+        def back_date():
+            next_misc_.destroy()
+            back_date_.destroy()
+            select_type_.destroy()
+
+        back_date_ = CTkButton(booking_,height=100,width=100,text='← Back', font=('HP Simplified',17), command=lambda:back_date())
+        back_date_.place(relx=0.15,rely=0.5,anchor = CENTER)
+
+        next_misc_ = CTkButton(booking_,height=100,width=100,text='Next →', font=('HP Simplified',17), command=lambda:select_misc() if radio_var.get() != '' else err_msg1.configure(text='*Please select an Option!*'))
+        next_misc_.place(relx=0.85,rely=0.5,anchor = CENTER)
+        
+        def select_misc():
+            select_misc_ = CTkFrame(booking_,height=540,width=540,corner_radius=20)
+            select_misc_.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+            CTkLabel(select_misc_,corner_radius=20,text='Enhance your stay. Select add-ons and extras:',font=('Dubai',25,'bold')).place(relx=0.5,rely=0.05,anchor = CENTER)
+            
+            fr_transfer = CTkFrame(select_misc_,corner_radius=20,height=150,width=520)
+            fr_transfer.place(relx=0.5,rely = 0.24,anchor = CENTER)
+            transfer_img = CTkImage(Image.open('assets/car.jpg'),size = (150,150))
+            transfer_img_ = CTkLabel(fr_transfer,text = '', image = transfer_img)
+            transfer_img_._image = transfer_img
+            transfer_img_.place(x=75,rely=0.5,anchor = CENTER)
+            CTkLabel(fr_transfer,text='Airport Transfer', font=('HP Simplified',30)).place(x=265,rely=0.4,anchor = CENTER)
+            CTkLabel(fr_transfer,text='$50 per unit', font=('HP Simplified',15)).place(x=210,rely=0.6,anchor = CENTER)
+            transfer_var = StringVar()
+            checkbox_transfer = CTkCheckBox(fr_transfer,text='',variable=transfer_var, onvalue='yes', offvalue='no')
+            checkbox_transfer.place(relx = 0.95,rely = 0.5, anchor=CENTER)
+            transfer_img_.bind("<Button-1>", lambda x:checkbox_transfer.toggle())
+            fr_transfer.bind("<Button-1>", lambda x:checkbox_transfer.toggle())
+
+            fr_tour = CTkFrame(select_misc_,corner_radius=20,height=150,width=520)
+            fr_tour.place(relx=0.5,rely = 0.54,anchor = CENTER)
+            tour_img = CTkImage(Image.open('assets/tour.jpg'),size = (150,150))
+            tour_img_ = CTkLabel(fr_tour,text = '', image = tour_img)
+            tour_img_._image = tour_img
+            tour_img_.place(x=75,rely=0.5,anchor = CENTER)
+            CTkLabel(fr_tour,text='City Tour', font=('HP Simplified',30)).place(x=220,rely=0.4,anchor = CENTER)
+            CTkLabel(fr_tour,text='$170 per night', font=('HP Simplified',15)).place(x=220,rely=0.6,anchor = CENTER)
+            tour_var = StringVar()
+            checkbox_tour = CTkCheckBox(fr_tour,text='',variable=tour_var, onvalue='yes', offvalue='no')
+            checkbox_tour.place(relx = 0.95,rely = 0.5, anchor=CENTER)
+            tour_img_.bind("<Button-1>", lambda x:checkbox_tour.toggle())
+            fr_tour.bind("<Button-1>", lambda x:checkbox_tour.toggle())
+
+            fr_feast = CTkFrame(select_misc_,corner_radius=20,height=150,width=520)
+            fr_feast.place(relx=0.5,rely = 0.84,anchor = CENTER)
+            feast_img = CTkImage(Image.open('assets/feast.jpg'),size = (150,150))
+            feast_img_ = CTkLabel(fr_feast,text = '', image = feast_img)
+            feast_img_._image = feast_img
+            feast_img_.place(x=75,rely=0.5,anchor = CENTER)
+            CTkLabel(fr_feast,text='Breakfast and Lunch', font=('HP Simplified',30)).place(x=290,rely=0.4,anchor = CENTER)
+            CTkLabel(fr_feast,text='$100 per night', font=('HP Simplified',15)).place(x=220,rely=0.6,anchor = CENTER)
+            feast_var = StringVar()
+            checkbox_feast = CTkCheckBox(fr_feast,text='',variable=feast_var, onvalue='yes', offvalue='no')
+            checkbox_feast.place(relx = 0.95,rely = 0.5, anchor=CENTER)
+            feast_img_.bind("<Button-1>", lambda x:checkbox_feast.toggle())
+            fr_feast.bind("<Button-1>", lambda x:checkbox_feast.toggle())
+
+            def back_sel():
+                select_misc_.destroy()
+                misc_back.destroy()
+                misc_next.destroy()
+
+            misc_back = CTkButton(booking_,height=100,width=100,text='← Back', font=('HP Simplified',17), command=lambda:back_sel())
+            misc_back.place(relx=0.15,rely=0.5,anchor = CENTER)
 
             def show_details():
-                pass
-            
+                show_details_ = CTkFrame(booking_,height=540,width=540,corner_radius=20)
+                show_details_.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+                CTkLabel(show_details_,corner_radius=20,text='Booking Summary:',font=('Dubai',25,'bold')).place(relx=0.5,rely=0.05,anchor = CENTER)
+
+                CTkLabel(show_details_,text=f"Checkin Date: {checkin_date.get()}",font=('HP Simplified',17)).place(relx = 0.5,rely = 0.3, anchor=CENTER)
+                CTkLabel(show_details_,text=f"Checkout Date: {checkout_date.get()}",font=('HP Simplified',17)).place(relx = 0.5,rely = 0.4, anchor=CENTER)
+                diff = (dt.strptime(checkout_date.get(), "%Y-%m-%d") - dt.strptime(checkin_date.get(), "%Y-%m-%d")).days
+                CTkLabel(show_details_,text=f"Number of Days: {diff}",font=('HP Simplified',17)).place(relx = 0.5,rely = 0.5, anchor=CENTER)
+                CTkLabel(show_details_,text=f"Type: {radio_var.get()}",font=('HP Simplified',17)).place(relx = 0.5,rely = 0.6, anchor=CENTER)
+                
+                addons = CTkFrame(show_details_)
+                addons.place(relx = 0.5,rely = 0.8, anchor=CENTER)
+                if transfer_var.get() == 'yes':
+                    CTkLabel(addons,text='Airport Transfer',font=('HP Simplified',17)).pack()
 
 
+
+
+
+
+
+
+
+
+
+
+                def back_misc():
+                    show_details_.destroy()
+                    details_back.destroy()
+                    proceed.destroy()
+
+                details_back = CTkButton(booking_,height=100,width=100,text='← Back', font=('HP Simplified',17), command=lambda:back_misc())
+                details_back.place(relx=0.15,rely=0.5,anchor = CENTER)
+
+                def book():
+                    pass
+
+                proceed = CTkButton(booking_,height=100,width=100,text='Book', font=('HP Simplified',17), command=lambda:book())
+                proceed.place(relx=0.85,rely=0.5,anchor = CENTER)
+
+            misc_next = CTkButton(booking_,height=100,width=100,text='Done →', font=('HP Simplified',17), command=lambda:show_details())
+            misc_next.place(relx=0.85,rely=0.5,anchor = CENTER)
+        
+    def room_unavailable():
+        req = CTkFrame(root, width=1440, height=720)
+        req.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+        bottompic2 = CTkImage(Image.open('assets/loginbg.png'),size = (1440,720))
+        bpic2 = CTkLabel(req,text = '', image = bottompic2)
+        bpic2._image = bottompic2
+        bpic2.place(relx=0.5,rely=0.5,anchor = CENTER)
+
+        signupreq = CTkFrame(req,height=620,width=540,corner_radius=20)
+        signupreq.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+        CTkLabel(signupreq,corner_radius=20,text='Room Unavailable',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
+
+        root.after(2000,lambda:req.destroy())
+
+    def showsignin():
+        req = CTkFrame(root, width=1440, height=720)
+        req.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+        bottompic2 = CTkImage(Image.open('assets/loginbg.png'),size = (1440,720))
+        bpic2 = CTkLabel(req,text = '', image = bottompic2)
+        bpic2._image = bottompic2
+        bpic2.place(relx=0.5,rely=0.5,anchor = CENTER)
+
+        signupreq = CTkFrame(req,height=620,width=540,corner_radius=20)
+        signupreq.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+        CTkLabel(signupreq,corner_radius=20,text='Please Log In',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
+
+        root.after(2000,lambda:req.destroy())        
 
     tabview.set("Book")
     root.mainloop()
@@ -567,13 +725,14 @@ def call_mainapp(main):
 
 if __name__ == '__main__':
     #set_appearance_mode('light')
-    set_appearance_mode('system')
     set_default_color_theme('green')
 
     loggedin = [False]
     login_details = []
     room_details = []
     booking_details = []
+
+    today = dt.today().strftime('%Y-%m-%d')
     
     sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'samy', database = 'hotel')
     #main()

@@ -1,0 +1,67 @@
+DROP DATABASE hotel0;
+CREATE DATABASE hotel0;
+USE hotel0;
+
+CREATE TABLE customers(
+  cust_id INT  AUTO_INCREMENT NOT NULL PRIMARY KEY
+  ,name    VARCHAR(50) NOT NULL
+  ,address VARCHAR(50)
+  ,mobile  INT
+  ,email   VARCHAR(50) NOT NULL
+  ,pass    VARCHAR(50) NOT NULL
+);
+
+ALTER TABLE customers AUTO_INCREMENT=1000;
+
+INSERT INTO customers VALUES
+ (1000,'test','111111',11111111,'1','1')
+,(1001,'samyog','sarooj',54702457,'samyog@gmail.com','samyog')
+,(1002,'idris','sarooj',6543245,'idris@gmail.com','idris')
+,(1003,'hussain','muaji',8765443,'hussain@gmail.com','hussain')
+,(1004,'2','2222222222',2222222,'2','2')
+;
+
+CREATE TABLE rooms(
+   room_no      INT        NOT NULL PRIMARY KEY 
+  ,availability CHAR(3)    NOT NULL
+  ,type         VARCHAR(6) NOT NULL
+  ,price        INT        NOT NULL
+);
+INSERT INTO rooms(room_no,availability,type,price) VALUES
+ (1,'yes','Single',200)
+,(2,'yes','Single',200)
+,(3,'yes','Single',200)
+,(4,'yes','Single',200)
+,(5,'yes','Single',200)
+,(6,'yes','Double',250)
+,(7,'yes','Double',250)
+,(8,'yes','Double',250)
+,(9,'yes','Double',250)
+,(10,'yes','Double',250)
+,(11,'yes','Triple',300)
+,(12,'yes','Triple',300)
+,(13,'yes','Triple',300)
+,(14,'yes','Triple',300)
+,(15,'yes','Triple',300)
+,(16,'yes','Quad',350)
+,(17,'yes','Quad',350)
+,(18,'yes','Quad',350)
+,(19,'yes','Quad',350)
+,(20,'yes','Quad',350);
+
+
+CREATE TABLE bookings
+(
+  booking_id    INT  PRIMARY KEY AUTO_INCREMENT,
+  cust_id       INT  NOT NULL,
+  room_no       INT  NOT NULL,
+  checkin_date  DATE NOT NULL,
+  checkout_date DATE NOT NULL,
+  no_stay       INT NOT NULL,
+  price         INT     NOT NULL,
+  paid          CHAR(1) NOT NULL Default 'n',
+  FOREIGN KEY (cust_id)  REFERENCES customers (cust_id),
+  FOREIGN KEY (room_no)  REFERENCES rooms     (room_no)
+);
+
+ALTER TABLE bookings AUTO_INCREMENT=10000;

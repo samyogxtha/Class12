@@ -784,9 +784,7 @@ def mainapp():
 
     radio_var = IntVar()
 
-    def radiobutton_event():
-        print("radiobutton toggled, current value:", radio_var.get())
-
+   
     radiobutton_1 = CTkRadioButton(select_type, text="Single", font=('HP Simplified',13), variable= radio_var, value=1)
     radiobutton_2 = CTkRadioButton(select_type, text="Double", font=('HP Simplified',13), variable= radio_var, value=2)
     radiobutton_3 = CTkRadioButton(select_type, text="Triple", font=('HP Simplified',13), variable= radio_var, value=3)
