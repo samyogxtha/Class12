@@ -544,6 +544,11 @@ def mainapp():
         select_type_ = CTkFrame(booking_,height=540,width=540,corner_radius=20)
         select_type_.place(relx = 0.5,rely = 0.5, anchor=CENTER)
 
+        cur = sqlcon.cursor()
+        cur.execute('select distinct type from rooms where availability = "no"')
+        room_avai = cur.fetchall()
+        cur.close()  
+
         CTkLabel(select_type_,corner_radius=20,text='Please choose the type of room',font=('HP Simplified',25,'bold')).place(relx=0.5,y=45,anchor = CENTER)
 
         radio_var = StringVar()
@@ -581,6 +586,24 @@ def mainapp():
         pic_4._image = pic4
         pic_4.place(relx=0.75,rely=0.7,anchor = CENTER)
         pic_4.bind("<Button-1>", lambda x:radiobutton_4.invoke())
+
+        for r in room_avai:
+            if r[0] == 'Single':
+                radiobutton_1.configure(state=DISABLED)
+                pic1_ = CTkImage(Image.open('assets/singlebooked.jpg'),size = (175,175))
+                pic_1.configure(image = pic1_)
+            if r[0] == 'Double':
+                radiobutton_2.configure(state=DISABLED)
+                pic2_ = CTkImage(Image.open('assets/doublebooked.jpg'),size = (175,175))
+                pic_2.configure(image = pic2_)
+            if r[0] == 'Triple':
+                radiobutton_3.configure(state=DISABLED)
+                pic3_ = CTkImage(Image.open('assets/triplebooked.jpg'),size = (175,175))
+                pic_3.configure(image = pic3_)
+            if r[0] == 'Quad':
+                radiobutton_4.configure(state=DISABLED)
+                pic4_ = CTkImage(Image.open('assets/quadbooked.jpg'),size = (175,175))
+                pic_4.configure(image = pic4_)
 
         err_msg1 = CTkLabel(select_type_,text='',text_color='red')
         err_msg1.place(relx=0.5,rely=0.95,anchor=CENTER)
@@ -655,17 +678,17 @@ def mainapp():
             def show_details():
                 show_details_ = CTkFrame(booking_,height=540,width=540,corner_radius=20)
                 show_details_.place(relx = 0.5,rely = 0.5, anchor=CENTER)
-
+                #--------------------show-details-of-booking--------------------
                 CTkLabel(show_details_,corner_radius=20,text='Booking Summary:',font=('Dubai',25,'bold')).place(relx=0.5,rely=0.05,anchor = CENTER)
-                #             #show details of selected booking
                 CTkLabel(show_details_,text=f"Checkin Date: {checkin_date.get()}",font=('HP Simplified',17)).place(relx = 0.25,rely = 0.2, anchor=CENTER)
                 CTkLabel(show_details_,text=f"Checkout Date: {checkout_date.get()}",font=('HP Simplified',17)).place(relx = 0.25,rely = 0.3, anchor=CENTER)
                 CTkLabel(show_details_,text=f"Number of Days: {diff}",font=('HP Simplified',17)).place(relx = 0.25,rely = 0.4, anchor=CENTER)
                 CTkLabel(show_details_,text=f"Type: {radio_var.get()}",font=('HP Simplified',17)).place(relx = 0.75,rely = 0.2, anchor=CENTER)
                 cur = sqlcon.cursor()
                 cur.execute(f'select * from rooms where type = "{radio_var.get()}"')
-                cur_room = cur.fetchall()[0]
-                CTkLabel(show_details_,text=f"Room No: {cur_room[0]}",font=('HP Simplified',17)).place(relx = 0.75,rely = 0.3, anchor=CENTER)
+                current_room = cur.fetchall()
+                cur.close()  
+                CTkLabel(show_details_,text=f"Room No: {current_room[0][0]}",font=('HP Simplified',17)).place(relx = 0.75,rely = 0.3, anchor=CENTER)
                 CTkLabel(show_details_,text="Addons",font=('HP Simplified',17,'bold')).place(relx = 0.3,rely = 0.55, anchor=CENTER)
                 CTkLabel(show_details_,text="Total",font=('HP Simplified',17,'bold')).place(relx = 0.79,rely = 0.55, anchor=CENTER)
                 
@@ -677,37 +700,37 @@ def mainapp():
                 add1.place(relx=0.5,rely=0.5,anchor = CENTER)
                 add2 = CTkLabel(addons,text='',font=('HP Simplified',17))
                 add2.place(relx=0.5,rely=0.75,anchor = CENTER)
+                
+                total = int(current_room[0][3])
 
                 if transfer_var.get() == 'yes':
                     add0.configure(text='Airport Transfer')
+                    total += 50
                     if tour_var.get() == 'yes':
                         add1.configure(text="City Tour")
+                        total += 170
                         if feast_var.get() == 'yes':
                             add2.configure(text='Breakfast and Lunch')
+                            total += 100
                     elif feast_var.get() == 'yes':
                         add1.configure(text='Breakfast and Lunch')
                 elif tour_var.get() == 'yes':
                     add0.configure(text='City Tour')
+                    total += 170
                     if feast_var.get() == 'yes':
                         add1.configure(text='Breakfast and Lunch')
+                        total += 100
                 elif feast_var.get() == 'yes':
                     add0.configure(text='Breakfast and Lunch')
+                    total += 100
                 else:
                     add1.configure(text='None')
 
-                total = CTkFrame(show_details_,corner_radius=20)
-                total.place(relx = 0.79,rely = 0.77, anchor=CENTER)
-                titl = CTkLabel(total,text ='Total:',font=('HP Simplified',19,'bold'))
+            
+                total_ = CTkFrame(show_details_,corner_radius=20)
+                total_.place(relx = 0.79,rely = 0.77, anchor=CENTER)
+                titl = CTkLabel(total_,text ='Total:',font=('HP Simplified',19,'bold'))
                 titl.place(relx=0.5,rely=0.5,anchor = CENTER)
-
-
-
-
-
-
-
-
-
 
                 def back_misc():
                     show_details_.destroy()
@@ -719,44 +742,28 @@ def mainapp():
 
                 def book():
                     pass
+                
+                def showsignin():
+                    req = CTkFrame(root, width=1440, height=720)
+                    req.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+                    bottompic2 = CTkImage(Image.open('assets/loginbg.png'),size = (1440,720))
+                    bpic2 = CTkLabel(req,text = '', image = bottompic2)
+                    bpic2._image = bottompic2
+                    bpic2.place(relx=0.5,rely=0.5,anchor = CENTER)
+
+                    signupreq = CTkFrame(req,height=620,width=540,corner_radius=20)
+                    signupreq.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+                    CTkLabel(signupreq,corner_radius=20,text='Please Log In',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
+
+                    root.after(2000,lambda:req.destroy())   
 
                 proceed = CTkButton(booking_,height=100,width=100,text='Book', font=('HP Simplified',17), command=lambda:book() if loggedin[0] is True else showsignin())
                 proceed.place(relx=0.85,rely=0.5,anchor = CENTER)
 
             misc_next = CTkButton(booking_,height=100,width=100,text='Done →', font=('HP Simplified',17), command=lambda:show_details())
-            misc_next.place(relx=0.85,rely=0.5,anchor = CENTER)
-        
-    def room_unavailable():
-        req = CTkFrame(root, width=1440, height=720)
-        req.place(relx = 0.5,rely = 0.5, anchor=CENTER)
-
-        bottompic2 = CTkImage(Image.open('assets/loginbg.png'),size = (1440,720))
-        bpic2 = CTkLabel(req,text = '', image = bottompic2)
-        bpic2._image = bottompic2
-        bpic2.place(relx=0.5,rely=0.5,anchor = CENTER)
-
-        signupreq = CTkFrame(req,height=620,width=540,corner_radius=20)
-        signupreq.place(relx = 0.5,rely = 0.5, anchor=CENTER)
-
-        CTkLabel(signupreq,corner_radius=20,text='Room Unavailable',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
-
-        root.after(2000,lambda:req.destroy())
-
-    def showsignin():
-        req = CTkFrame(root, width=1440, height=720)
-        req.place(relx = 0.5,rely = 0.5, anchor=CENTER)
-
-        bottompic2 = CTkImage(Image.open('assets/loginbg.png'),size = (1440,720))
-        bpic2 = CTkLabel(req,text = '', image = bottompic2)
-        bpic2._image = bottompic2
-        bpic2.place(relx=0.5,rely=0.5,anchor = CENTER)
-
-        signupreq = CTkFrame(req,height=620,width=540,corner_radius=20)
-        signupreq.place(relx = 0.5,rely = 0.5, anchor=CENTER)
-
-        CTkLabel(signupreq,corner_radius=20,text='Please Log In',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
-
-        root.after(2000,lambda:req.destroy())        
+            misc_next.place(relx=0.85,rely=0.5,anchor = CENTER)     
 
     tabview.set("Book")
     root.mainloop()
