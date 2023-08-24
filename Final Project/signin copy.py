@@ -513,6 +513,7 @@ def mainapp():
             fr_outdate.destroy()
             checkout_date.delete(0,10)
             checkout_date.insert(0,tkc1.selection_get().strftime('%Y-%m-%d'))
+            checkout_date.configure(state=DISABLED)
 
         button = CTkButton(fr_outdate,text="Select Date",command=fetch_date)
         button.pack(padx=10,pady=10)
@@ -525,7 +526,19 @@ def mainapp():
     err_msg0 = CTkLabel(select_date_,text='',text_color='red')
     err_msg0.place(relx=0.5,rely=0.95,anchor=CENTER)
 
-    CTkButton(booking_,height=100,width=100,text='Next →', font=('HP Simplified',17), command=lambda:select_type() if checkin_date.get() != '' and checkout_date.get() != '' else err_msg0.configure(text='*Please enter a Date*')).place(relx=0.85,rely=0.5,anchor = CENTER)
+    def next_sel():
+        global diff
+        now_diff = (dt.strptime(checkin_date.get(), "%Y-%m-%d") - dt.strptime(today, "%Y-%m-%d")).days
+        if now_diff > -1:
+            diff = (dt.strptime(checkout_date.get(), "%Y-%m-%d") - dt.strptime(checkin_date.get(), "%Y-%m-%d")).days
+            if diff > 0:
+                select_type()
+            else:
+                err_msg0.configure(text='Please Select a valid date range!')
+        else:
+            err_msg0.configure(text='Checkin date cannot be in the past')
+
+    CTkButton(booking_,height=100,width=100,text='Next →', font=('HP Simplified',17), command=lambda:next_sel() if checkin_date.get() != '' and checkout_date.get() != '' else err_msg0.configure(text='*Please enter Date*')).place(relx=0.85,rely=0.5,anchor = CENTER)
 
     def select_type():
         select_type_ = CTkFrame(booking_,height=540,width=540,corner_radius=20)
@@ -644,19 +657,48 @@ def mainapp():
                 show_details_.place(relx = 0.5,rely = 0.5, anchor=CENTER)
 
                 CTkLabel(show_details_,corner_radius=20,text='Booking Summary:',font=('Dubai',25,'bold')).place(relx=0.5,rely=0.05,anchor = CENTER)
-
-                CTkLabel(show_details_,text=f"Checkin Date: {checkin_date.get()}",font=('HP Simplified',17)).place(relx = 0.5,rely = 0.3, anchor=CENTER)
-                CTkLabel(show_details_,text=f"Checkout Date: {checkout_date.get()}",font=('HP Simplified',17)).place(relx = 0.5,rely = 0.4, anchor=CENTER)
-                diff = (dt.strptime(checkout_date.get(), "%Y-%m-%d") - dt.strptime(checkin_date.get(), "%Y-%m-%d")).days
-                CTkLabel(show_details_,text=f"Number of Days: {diff}",font=('HP Simplified',17)).place(relx = 0.5,rely = 0.5, anchor=CENTER)
-                CTkLabel(show_details_,text=f"Type: {radio_var.get()}",font=('HP Simplified',17)).place(relx = 0.5,rely = 0.6, anchor=CENTER)
+                #             #show details of selected booking
+                CTkLabel(show_details_,text=f"Checkin Date: {checkin_date.get()}",font=('HP Simplified',17)).place(relx = 0.25,rely = 0.2, anchor=CENTER)
+                CTkLabel(show_details_,text=f"Checkout Date: {checkout_date.get()}",font=('HP Simplified',17)).place(relx = 0.25,rely = 0.3, anchor=CENTER)
+                CTkLabel(show_details_,text=f"Number of Days: {diff}",font=('HP Simplified',17)).place(relx = 0.25,rely = 0.4, anchor=CENTER)
+                CTkLabel(show_details_,text=f"Type: {radio_var.get()}",font=('HP Simplified',17)).place(relx = 0.75,rely = 0.2, anchor=CENTER)
+                cur = sqlcon.cursor()
+                cur.execute(f'select * from rooms where type = "{radio_var.get()}"')
+                cur_room = cur.fetchall()[0]
+                CTkLabel(show_details_,text=f"Room No: {cur_room[0]}",font=('HP Simplified',17)).place(relx = 0.75,rely = 0.3, anchor=CENTER)
+                CTkLabel(show_details_,text="Addons",font=('HP Simplified',17,'bold')).place(relx = 0.3,rely = 0.55, anchor=CENTER)
+                CTkLabel(show_details_,text="Total",font=('HP Simplified',17,'bold')).place(relx = 0.79,rely = 0.55, anchor=CENTER)
                 
-                addons = CTkFrame(show_details_)
-                addons.place(relx = 0.5,rely = 0.8, anchor=CENTER)
+                addons = CTkFrame(show_details_,corner_radius=20,width=300)
+                addons.place(relx = 0.3,rely = 0.77, anchor=CENTER)
+                add0 = CTkLabel(addons,text='',font=('HP Simplified',17))
+                add0.place(relx=0.5,rely=0.25,anchor = CENTER)
+                add1 = CTkLabel(addons,text='',font=('HP Simplified',17))
+                add1.place(relx=0.5,rely=0.5,anchor = CENTER)
+                add2 = CTkLabel(addons,text='',font=('HP Simplified',17))
+                add2.place(relx=0.5,rely=0.75,anchor = CENTER)
+
                 if transfer_var.get() == 'yes':
-                    CTkLabel(addons,text='Airport Transfer',font=('HP Simplified',17)).pack()
+                    add0.configure(text='Airport Transfer')
+                    if tour_var.get() == 'yes':
+                        add1.configure(text="City Tour")
+                        if feast_var.get() == 'yes':
+                            add2.configure(text='Breakfast and Lunch')
+                    elif feast_var.get() == 'yes':
+                        add1.configure(text='Breakfast and Lunch')
+                elif tour_var.get() == 'yes':
+                    add0.configure(text='City Tour')
+                    if feast_var.get() == 'yes':
+                        add1.configure(text='Breakfast and Lunch')
+                elif feast_var.get() == 'yes':
+                    add0.configure(text='Breakfast and Lunch')
+                else:
+                    add1.configure(text='None')
 
-
+                total = CTkFrame(show_details_,corner_radius=20)
+                total.place(relx = 0.79,rely = 0.77, anchor=CENTER)
+                titl = CTkLabel(total,text ='Total:',font=('HP Simplified',19,'bold'))
+                titl.place(relx=0.5,rely=0.5,anchor = CENTER)
 
 
 
@@ -678,7 +720,7 @@ def mainapp():
                 def book():
                     pass
 
-                proceed = CTkButton(booking_,height=100,width=100,text='Book', font=('HP Simplified',17), command=lambda:book())
+                proceed = CTkButton(booking_,height=100,width=100,text='Book', font=('HP Simplified',17), command=lambda:book() if loggedin[0] is True else showsignin())
                 proceed.place(relx=0.85,rely=0.5,anchor = CENTER)
 
             misc_next = CTkButton(booking_,height=100,width=100,text='Done →', font=('HP Simplified',17), command=lambda:show_details())
@@ -734,7 +776,7 @@ if __name__ == '__main__':
 
     today = dt.today().strftime('%Y-%m-%d')
     
-    sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'samy', database = 'hotel')
+    sqlcon = msconn.connect(host = 'localhost', user = 'root', passwd = 'samy', database = 'hotel0')
     #main()
     mainapp()
     sqlcon.close()
