@@ -400,13 +400,15 @@ def mainapp():
     #------------------PRICING-TAB------------------
     pricing = tabview.add("Rooms & Pricings")
 
+    cur = sqlcon.cursor()
+    cur.execute('select distinct type from rooms where availability = "no"')
+    room_unavai = cur.fetchall()
+    cur.close()
+    
+    price_type = ['None']
     def price_book(type):
-        cur2 = sqlcon.cursor()
-        cur2.execute(f'select * from rooms where type = "{type}" and availability = "yes"')
-        fil_data = cur2.fetchall()
-        table.configure(row=len(fil_data), column=7, values=fil_data)
-        cur2.close()
-        tabview.set('Book a Room')
+        price_type[0] = type
+        tabview.set('Book')
 
     fr_single = CTkFrame(pricing,height=275,width=680,corner_radius=15)
     fr_single.place(relx = 0.25,rely = 0.25, anchor=CENTER)
@@ -417,11 +419,12 @@ def mainapp():
     single.place(x=137.5,rely=0.5,anchor = CENTER)
 
     CTkLabel(fr_single,text="Single Room",font=('HP Simplified',47,'bold')).place(x=290,y=45)
-    CTkLabel(fr_single,text="Basic    $200",font=('HP Simplified',27)).place(x=300,y=100)
-    CTkLabel(fr_single,text="WiFi       +$50",font=('HP Simplified',27)).place(x=300,y=130)
-    CTkLabel(fr_single,text="TV          +$50",font=('HP Simplified',27)).place(x=300,y=160)
-    CTkLabel(fr_single,text="AC          +$50",font=('HP Simplified',27)).place(x=300,y=185)
-    CTkButton(fr_single,text='Book',height=50,width=80, command=lambda:price_book('Single')).place(relx=0.92,rely=0.85,anchor=CENTER)
+    CTkLabel(fr_single,text="$40 per night",font=('HP Simplified',27)).place(x=300,y=100)
+    CTkLabel(fr_single,text="Luxurious hotel room with a king-size bed,",font=('HP Simplified',20)).place(x=300,y=135)
+    CTkLabel(fr_single,text="modern amenities, city view, plush decor,",font=('HP Simplified',20)).place(x=300,y=160)
+    CTkLabel(fr_single,text="and a spacious marble bathroom.",font=('HP Simplified',20)).place(x=300,y=185)
+    button1 = CTkButton(fr_single,text='Book',height=50,width=80, command=lambda:price_book('Single'))
+    button1.place(relx=0.92,rely=0.85,anchor=CENTER)
 
     fr_double = CTkFrame(pricing,height=275,width=680,corner_radius=15)
     fr_double.place(relx = 0.75,rely = 0.25, anchor=CENTER)
@@ -432,11 +435,12 @@ def mainapp():
     double.place(x=137.5,rely=0.5,anchor = CENTER)
 
     CTkLabel(fr_double,text="Double Room",font=('HP Simplified',47,'bold')).place(x=290,y=45)
-    CTkLabel(fr_double,text="Basic    $250",font=('HP Simplified',27)).place(x=300,y=100)
-    CTkLabel(fr_double,text="WiFi       +$50",font=('HP Simplified',27)).place(x=300,y=130)
-    CTkLabel(fr_double,text="TV          +$50",font=('HP Simplified',27)).place(x=300,y=160)
-    CTkLabel(fr_double,text="AC          +$50",font=('HP Simplified',27)).place(x=300,y=185)
-    CTkButton(fr_double,text='Book',height=50,width=80, command=lambda:price_book('Double')).place(relx=0.92,rely=0.85,anchor=CENTER)
+    CTkLabel(fr_double,text="$50 per night",font=('HP Simplified',27)).place(x=300,y=100)
+    CTkLabel(fr_double,text="Elegant double room with twin beds,",font=('HP Simplified',20)).place(x=300,y=135)
+    CTkLabel(fr_double,text="furnishings, en-suite bathroom, and serene",font=('HP Simplified',20)).place(x=300,y=160)
+    CTkLabel(fr_double,text="ambiance for a comfortable experience.",font=('HP Simplified',20)).place(x=300,y=185)
+    button2 = CTkButton(fr_double,text='Book',height=50,width=80, command=lambda:price_book('Double'))
+    button2.place(relx=0.92,rely=0.85,anchor=CENTER)
     
     fr_triple = CTkFrame(pricing,height=275,width=680,corner_radius=15)
     fr_triple.place(relx = 0.25,rely = 0.75, anchor=CENTER)
@@ -447,11 +451,12 @@ def mainapp():
     triple.place(x=137.5,rely=0.5,anchor = CENTER)
 
     CTkLabel(fr_triple,text="Triple Room",font=('HP Simplified',47,'bold')).place(x=290,y=45)
-    CTkLabel(fr_triple,text="Basic    $300",font=('HP Simplified',27)).place(x=300,y=100)
-    CTkLabel(fr_triple,text="WiFi       +$50",font=('HP Simplified',27)).place(x=300,y=130)
-    CTkLabel(fr_triple,text="TV          +$50",font=('HP Simplified',27)).place(x=300,y=160)
-    CTkLabel(fr_triple,text="AC          +$50",font=('HP Simplified',27)).place(x=300,y=185)
-    CTkButton(fr_triple,text='Book',height=50,width=80, command=lambda:price_book('Triple')).place(relx=0.92,rely=0.85,anchor=CENTER)
+    CTkLabel(fr_triple,text="$60 per night",font=('HP Simplified',27)).place(x=300,y=100)
+    CTkLabel(fr_triple,text="Spacious triple room, three cozy beds,",font=('HP Simplified',20)).place(x=300,y=135)
+    CTkLabel(fr_triple,text="contemporary, design, ample storage, ideal",font=('HP Simplified',20)).place(x=300,y=160)
+    CTkLabel(fr_triple,text="for friends or small families.",font=('HP Simplified',20)).place(x=300,y=185)
+    button3 = CTkButton(fr_triple,text='Book',height=50,width=80, command=lambda:price_book('Triple'))
+    button3.place(relx=0.92,rely=0.85,anchor=CENTER)
 
     fr_quad = CTkFrame(pricing,height=275,width=680,corner_radius=15)
     fr_quad.place(relx = 0.75,rely = 0.75, anchor=CENTER)
@@ -462,11 +467,22 @@ def mainapp():
     quad.place(x=137.5,rely=0.5,anchor = CENTER)
 
     CTkLabel(fr_quad,text="Quad Room",font=('HP Simplified',47,'bold')).place(x=290,y=45)
-    CTkLabel(fr_quad,text="Basic    $350",font=('HP Simplified',27)).place(x=300,y=100)
-    CTkLabel(fr_quad,text="WiFi       +$50",font=('HP Simplified',27)).place(x=300,y=130)
-    CTkLabel(fr_quad,text="TV          +$50",font=('HP Simplified',27)).place(x=300,y=160)
-    CTkLabel(fr_quad,text="AC          +$50",font=('HP Simplified',27)).place(x=300,y=185)
-    CTkButton(fr_quad,text='Book',height=50,width=80, command=lambda:price_book('Quad')).place(relx=0.92,rely=0.85,anchor=CENTER)
+    CTkLabel(fr_quad,text="$70 per night",font=('HP Simplified',27)).place(x=300,y=100)
+    CTkLabel(fr_quad,text="Modern quad room designed for groups,",font=('Dubai',20)).place(x=300,y=135)
+    CTkLabel(fr_quad,text="offering four beds, stylish decor and homelike",font=('HP Simplified',20)).place(x=300,y=160)
+    CTkLabel(fr_quad,text="atmosphere for shared experiences.",font=('HP Simplified',20)).place(x=300,y=185)
+    button4 = CTkButton(fr_quad,text='Book',height=50,width=80, command=lambda:price_book('Quad'))
+    button4.place(relx=0.92,rely=0.85,anchor=CENTER)
+
+    for r in room_unavai:
+        if r[0] == 'Single':
+            button1.configure(text='Booked', state = DISABLED)
+        if r[0] == 'Double':
+            button2.configure(text='Booked', state = DISABLED)
+        if r[0] == 'Triple':
+            button3.configure(text='Booked', state = DISABLED)
+        if r[0] == 'Quad':
+            button4.configure(text='Booked', state = DISABLED)
 
     #-----------------------------NEW-BOOKING-TAB---------------------------------
     booking_ = tabview.add("Book")
@@ -544,11 +560,6 @@ def mainapp():
         select_type_ = CTkFrame(booking_,height=540,width=540,corner_radius=20)
         select_type_.place(relx = 0.5,rely = 0.5, anchor=CENTER)
 
-        cur = sqlcon.cursor()
-        cur.execute('select distinct type from rooms where availability = "no"')
-        room_avai = cur.fetchall()
-        cur.close()  
-
         CTkLabel(select_type_,corner_radius=20,text='Please choose the type of room',font=('HP Simplified',25,'bold')).place(relx=0.5,y=45,anchor = CENTER)
 
         radio_var = StringVar()
@@ -587,7 +598,7 @@ def mainapp():
         pic_4.place(relx=0.75,rely=0.7,anchor = CENTER)
         pic_4.bind("<Button-1>", lambda x:radiobutton_4.invoke())
 
-        for r in room_avai:
+        for r in room_unavai:
             if r[0] == 'Single':
                 radiobutton_1.configure(state=DISABLED)
                 pic1_ = CTkImage(Image.open('assets/singlebooked.jpg'),size = (175,175))
@@ -615,6 +626,17 @@ def mainapp():
 
         back_date_ = CTkButton(booking_,height=100,width=100,text='← Back', font=('HP Simplified',17), command=lambda:back_date())
         back_date_.place(relx=0.15,rely=0.5,anchor = CENTER)
+
+        if price_type[0] == 'None':
+            pass
+        elif price_type[0] == 'Single':
+            radiobutton_1.invoke()
+        elif price_type[0] == 'Double':
+            radiobutton_2.invoke()
+        elif price_type[0] == 'Triple':
+            radiobutton_3.invoke()
+        elif price_type[0] == 'Quad':
+            radiobutton_4.invoke()
 
         next_misc_ = CTkButton(booking_,height=100,width=100,text='Next →', font=('HP Simplified',17), command=lambda:select_misc() if radio_var.get() != '' else err_msg1.configure(text='*Please select an Option!*'))
         next_misc_.place(relx=0.85,rely=0.5,anchor = CENTER)
@@ -679,16 +701,18 @@ def mainapp():
                 show_details_ = CTkFrame(booking_,height=540,width=540,corner_radius=20)
                 show_details_.place(relx = 0.5,rely = 0.5, anchor=CENTER)
                 #--------------------show-details-of-booking--------------------
-                CTkLabel(show_details_,corner_radius=20,text='Booking Summary:',font=('Dubai',25,'bold')).place(relx=0.5,rely=0.05,anchor = CENTER)
-                CTkLabel(show_details_,text=f"Checkin Date: {checkin_date.get()}",font=('HP Simplified',17)).place(relx = 0.25,rely = 0.2, anchor=CENTER)
-                CTkLabel(show_details_,text=f"Checkout Date: {checkout_date.get()}",font=('HP Simplified',17)).place(relx = 0.25,rely = 0.3, anchor=CENTER)
-                CTkLabel(show_details_,text=f"Number of Days: {diff}",font=('HP Simplified',17)).place(relx = 0.25,rely = 0.4, anchor=CENTER)
+                CTkLabel(show_details_,corner_radius=20,text='Booking Summary:',font=('Dubai',25,'bold')).place(relx=0.5,rely=0.1,anchor = CENTER)
+                CTkLabel(show_details_,text=f"Checkin Date: {checkin_date.get()}",font=('HP Simplified',17)).place(relx = 0.3,rely = 0.2, anchor=CENTER)
+                CTkLabel(show_details_,text=f"Checkout Date: {checkout_date.get()}",font=('HP Simplified',17)).place(relx = 0.3,rely = 0.3, anchor=CENTER)
+                CTkLabel(show_details_,text=f"Number of Days: {diff}",font=('HP Simplified',17)).place(relx = 0.3,rely = 0.4, anchor=CENTER)
                 CTkLabel(show_details_,text=f"Type: {radio_var.get()}",font=('HP Simplified',17)).place(relx = 0.75,rely = 0.2, anchor=CENTER)
                 cur = sqlcon.cursor()
                 cur.execute(f'select * from rooms where type = "{radio_var.get()}"')
                 current_room = cur.fetchall()
                 cur.close()  
                 CTkLabel(show_details_,text=f"Room No: {current_room[0][0]}",font=('HP Simplified',17)).place(relx = 0.75,rely = 0.3, anchor=CENTER)
+                CTkLabel(show_details_,text=f"Price: {current_room[0][3]}",font=('HP Simplified',17)).place(relx = 0.75,rely = 0.4, anchor=CENTER)
+                
                 CTkLabel(show_details_,text="Addons",font=('HP Simplified',17,'bold')).place(relx = 0.3,rely = 0.55, anchor=CENTER)
                 CTkLabel(show_details_,text="Total",font=('HP Simplified',17,'bold')).place(relx = 0.79,rely = 0.55, anchor=CENTER)
                 
@@ -701,7 +725,7 @@ def mainapp():
                 add2 = CTkLabel(addons,text='',font=('HP Simplified',17))
                 add2.place(relx=0.5,rely=0.75,anchor = CENTER)
                 
-                total = int(current_room[0][3])
+                total = int(current_room[0][3])*diff
 
                 if transfer_var.get() == 'yes':
                     add0.configure(text='Airport Transfer')
@@ -714,6 +738,7 @@ def mainapp():
                             total += 100
                     elif feast_var.get() == 'yes':
                         add1.configure(text='Breakfast and Lunch')
+                        total += 100
                 elif tour_var.get() == 'yes':
                     add0.configure(text='City Tour')
                     total += 170
@@ -726,10 +751,9 @@ def mainapp():
                 else:
                     add1.configure(text='None')
 
-            
                 total_ = CTkFrame(show_details_,corner_radius=20)
                 total_.place(relx = 0.79,rely = 0.77, anchor=CENTER)
-                titl = CTkLabel(total_,text ='Total:',font=('HP Simplified',19,'bold'))
+                titl = CTkLabel(total_,text =f'${total}',font=('HP Simplified',19,'bold'))
                 titl.place(relx=0.5,rely=0.5,anchor = CENTER)
 
                 def back_misc():

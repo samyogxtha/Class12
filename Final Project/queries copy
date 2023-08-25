@@ -28,26 +28,26 @@ CREATE TABLE rooms(
   ,price        INT        NOT NULL
 );
 INSERT INTO rooms(room_no,availability,type,price) VALUES
- (1,'yes','Single',200)
-,(2,'yes','Single',200)
-,(3,'yes','Single',200)
-,(4,'yes','Single',200)
-,(5,'yes','Single',200)
-,(6,'yes','Double',250)
-,(7,'yes','Double',250)
-,(8,'yes','Double',250)
-,(9,'yes','Double',250)
-,(10,'yes','Double',250)
-,(11,'yes','Triple',300)
-,(12,'yes','Triple',300)
-,(13,'yes','Triple',300)
-,(14,'yes','Triple',300)
-,(15,'yes','Triple',300)
-,(16,'yes','Quad',350)
-,(17,'yes','Quad',350)
-,(18,'yes','Quad',350)
-,(19,'yes','Quad',350)
-,(20,'yes','Quad',350);
+ (1,'yes','Single',40)
+,(2,'yes','Single',40)
+,(3,'yes','Single',40)
+,(4,'yes','Single',40)
+,(5,'yes','Single',40)
+,(6,'yes','Double',50)
+,(7,'yes','Double',50)
+,(8,'yes','Double',50)
+,(9,'yes','Double',50)
+,(10,'yes','Double',50)
+,(11,'yes','Triple',60)
+,(12,'yes','Triple',60)
+,(13,'yes','Triple',60)
+,(14,'yes','Triple',60)
+,(15,'yes','Triple',60)
+,(16,'yes','Quad',70)
+,(17,'yes','Quad',70)
+,(18,'yes','Quad',70)
+,(19,'yes','Quad',70)
+,(20,'yes','Quad',70);
 
 
 CREATE TABLE bookings
