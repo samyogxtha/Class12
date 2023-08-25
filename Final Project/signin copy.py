@@ -38,12 +38,13 @@ def mainapp():
             progressbar.stop()
             CTkLabel(logout_,height=200,text='Logged Out Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
             tabview.set("About")
-            tabview.delete('Check Out')
+            update_checkout()
+            update_logbutton()
             root.after(2000,lambda:frame_logout.destroy())
 
         loggedin[0] = False
         login_details.clear()
-        button_login.configure(text='Log In',image=None ,command=lambda:loggin())
+        #button_login.configure(text='Log In',image=None ,command=lambda:loggin())
 
         frame_logout = CTkFrame(root,height=720,width=1440)
         frame_logout.place(relx = 0.5,rely = 0.5,anchor = CENTER)
@@ -248,8 +249,11 @@ def mainapp():
         button_login.place(relx=0.5,y=518,anchor = CENTER)
 
     def update_logbutton():
-        profile_pic = CTkImage(Image.open('assets/logout.png'),size = (58,58))
-        button_login.configure(text='',command=lambda:logout(),image=profile_pic)
+        if loggedin[0] is True:
+            profile_pic = CTkImage(Image.open('assets/logout.png'),size = (58,58))
+            button_login.configure(text='',command=lambda:logout(),image=profile_pic)
+        elif loggedin[0] is False:
+            button_login.configure(text='',command=lambda:loggin(),image=profile_pic0)
               
     def update_checkout():
         try:
@@ -260,15 +264,6 @@ def mainapp():
             booking_details.append(det)
             
             def checkout():
-                def checkout_():
-
-                    def closeall():
-                        out.destroy()
-
-                    CTkLabel(fr_chkout,height=200,text='Checked Out Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
-                    
-                    root.after(2000,lambda:closeall())
-                    cur.close()
                 out = CTkFrame(chk_out,height=590,width=1422,corner_radius=30)
                 out.place(relx = 0.5,rely = 0.5, anchor=CENTER)
 
@@ -285,9 +280,23 @@ def mainapp():
                 CTkLabel(out_,text='Checking Out...',font=('HP Simplified',20,'bold')).place(relx=0.5,rely=0.6,anchor = CENTER)
                 progressbar.start()
 
+                def checkout_():
+                    CTkLabel(fr_chkout,height=200,text='Checked Out Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
+                    
+                    def closeall():
+                        out.destroy()
+
+                    root.after(2000,lambda:closeall())
+                    cur.close()
+
                 root.after(3000,lambda:checkout_())
 
             chk_out = tabview.add("Check Out")
+
+            outbg = CTkLabel(chk_out,text='', image=booking_bg)
+            outbg._image = booking_bg
+            outbg.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
             fr_chkout = CTkFrame(chk_out, width=1440, height=720)
             fr_chkout.place(relx = 0.5,rely = 0.5, anchor=CENTER)
             
