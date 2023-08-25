@@ -66,7 +66,6 @@ def mainapp():
     #------------------FUNCTION-FOR-LOGGING-AND-SIGNING-IN------------------
     def loggin():
         cur0 = sqlcon.cursor()
-
         cur0.execute('select email from customers')
         edata = cur0.fetchall()
         emails = []
@@ -249,10 +248,9 @@ def mainapp():
         button_login.place(relx=0.5,y=518,anchor = CENTER)
 
     def update_logbutton():
-        #profile_pic = CTkImage(Image.open('assets/profile.png'),size = (58,58))
-        button_login.configure(text='Log Out',command=lambda:logout())#text='',image=profile_pic
-        #button_login._image = profile_pic
-        
+        profile_pic = CTkImage(Image.open('assets/logout.png'),size = (58,58))
+        button_login.configure(text='',command=lambda:logout(),image=profile_pic)
+              
     def update_checkout():
         try:
             cur = sqlcon.cursor()
@@ -307,7 +305,9 @@ def mainapp():
     topbanner._image = banner_pic
     topbanner.place(relx=0.5,rely=0.086,anchor = CENTER)
 
-    button_login = CTkButton(frame,width=70,height=70,text='Log In',command=lambda:loggin())
+    profile_pic0 = CTkImage(Image.open('assets/login.png'),size = (58,58))
+    button_login = CTkButton(frame,width=70,height=70,text='',image=profile_pic0,command=lambda:loggin())
+    button_login._image = profile_pic0
     button_login.place(relx=0.97,rely=0.065,anchor=CENTER)
     
     #------------------CREATE-TABS------------------
@@ -402,10 +402,17 @@ def mainapp():
     pricing = tabview.add("Rooms & Pricings")
 
     cur = sqlcon.cursor()
-    cur.execute('select distinct type from rooms where availability = "no"')
-    room_unavai = cur.fetchall()
+    cur.execute('select distinct type from rooms where availability = "yes"')
+    rooms_avai_ = cur.fetchall()
+    rooms_avai = []
+    for i in rooms_avai_:
+        rooms_avai.append(i[0])
     cur.close()
-    
+    rooms_unavai = ['Single','Double','Triple','Quad']
+    for i in rooms_avai:
+        if i in rooms_unavai:
+            rooms_unavai.remove(i)
+
     price_type = ['None']
     def price_book(type):
         price_type[0] = type
@@ -475,14 +482,14 @@ def mainapp():
     button4 = CTkButton(fr_quad,text='Book',height=50,width=80, command=lambda:price_book('Quad'))
     button4.place(relx=0.92,rely=0.85,anchor=CENTER)
 
-    for r in room_unavai:
-        if r[0] == 'Single':
+    for r in rooms_unavai:
+        if r == 'Single':
             button1.configure(text='Booked', state = DISABLED)
-        if r[0] == 'Double':
+        if r == 'Double':
             button2.configure(text='Booked', state = DISABLED)
-        if r[0] == 'Triple':
+        if r == 'Triple':
             button3.configure(text='Booked', state = DISABLED)
-        if r[0] == 'Quad':
+        if r == 'Quad':
             button4.configure(text='Booked', state = DISABLED)
 
     #-----------------------------NEW-BOOKING-TAB---------------------------------
@@ -599,20 +606,20 @@ def mainapp():
         pic_4.place(relx=0.75,rely=0.7,anchor = CENTER)
         pic_4.bind("<Button-1>", lambda x:radiobutton_4.invoke())
 
-        for r in room_unavai:
-            if r[0] == 'Single':
+        for r in rooms_unavai:
+            if r == 'Single':
                 radiobutton_1.configure(state=DISABLED)
                 pic1_ = CTkImage(Image.open('assets/singlebooked.jpg'),size = (175,175))
                 pic_1.configure(image = pic1_)
-            if r[0] == 'Double':
+            if r == 'Double':
                 radiobutton_2.configure(state=DISABLED)
                 pic2_ = CTkImage(Image.open('assets/doublebooked.jpg'),size = (175,175))
                 pic_2.configure(image = pic2_)
-            if r[0] == 'Triple':
+            if r == 'Triple':
                 radiobutton_3.configure(state=DISABLED)
                 pic3_ = CTkImage(Image.open('assets/triplebooked.jpg'),size = (175,175))
                 pic_3.configure(image = pic3_)
-            if r[0] == 'Quad':
+            if r == 'Quad':
                 radiobutton_4.configure(state=DISABLED)
                 pic4_ = CTkImage(Image.open('assets/quadbooked.jpg'),size = (175,175))
                 pic_4.configure(image = pic4_)
@@ -638,10 +645,7 @@ def mainapp():
             radiobutton_3.invoke()
         elif price_type[0] == 'Quad':
             radiobutton_4.invoke()
-
-        next_misc_ = CTkButton(booking_,height=100,width=100,text='Next →', font=('HP Simplified',17), command=lambda:select_misc() if radio_var.get() != '' else err_msg1.configure(text='*Please select an Option!*'))
-        next_misc_.place(relx=0.85,rely=0.5,anchor = CENTER)
-        
+      
         def select_misc():
             select_misc_ = CTkFrame(booking_,height=540,width=540,corner_radius=20)
             select_misc_.place(relx = 0.5,rely = 0.5, anchor=CENTER)
@@ -708,47 +712,54 @@ def mainapp():
                 CTkLabel(show_details_,text=f"Number of Days: {diff}",font=('HP Simplified',17)).place(relx = 0.3,rely = 0.4, anchor=CENTER)
                 CTkLabel(show_details_,text=f"Type: {radio_var.get()}",font=('HP Simplified',17)).place(relx = 0.75,rely = 0.2, anchor=CENTER)
                 cur = sqlcon.cursor()
-                cur.execute(f'select * from rooms where type = "{radio_var.get()}"')
+                cur.execute(f'select * from rooms where type = "{radio_var.get()}" and availability = "yes"')
                 current_room = cur.fetchall()
                 cur.close()  
                 CTkLabel(show_details_,text=f"Room No: {current_room[0][0]}",font=('HP Simplified',17)).place(relx = 0.75,rely = 0.3, anchor=CENTER)
-                CTkLabel(show_details_,text=f"Price: {current_room[0][3]}",font=('HP Simplified',17)).place(relx = 0.75,rely = 0.4, anchor=CENTER)
+                CTkLabel(show_details_,text=f"Price: ${current_room[0][3]}",font=('HP Simplified',17)).place(relx = 0.75,rely = 0.4, anchor=CENTER)
                 
                 CTkLabel(show_details_,text="Addons",font=('HP Simplified',17,'bold')).place(relx = 0.3,rely = 0.55, anchor=CENTER)
                 CTkLabel(show_details_,text="Total",font=('HP Simplified',17,'bold')).place(relx = 0.79,rely = 0.55, anchor=CENTER)
                 
-                addons = CTkFrame(show_details_,corner_radius=20,width=300)
-                addons.place(relx = 0.3,rely = 0.77, anchor=CENTER)
-                add0 = CTkLabel(addons,text='',font=('HP Simplified',17))
+                addons_ = CTkFrame(show_details_,corner_radius=20,width=300)
+                addons_.place(relx = 0.3,rely = 0.77, anchor=CENTER)
+                add0 = CTkLabel(addons_,text='',font=('HP Simplified',17))
                 add0.place(relx=0.5,rely=0.25,anchor = CENTER)
-                add1 = CTkLabel(addons,text='',font=('HP Simplified',17))
+                add1 = CTkLabel(addons_,text='',font=('HP Simplified',17))
                 add1.place(relx=0.5,rely=0.5,anchor = CENTER)
-                add2 = CTkLabel(addons,text='',font=('HP Simplified',17))
+                add2 = CTkLabel(addons_,text='',font=('HP Simplified',17))
                 add2.place(relx=0.5,rely=0.75,anchor = CENTER)
                 
                 total = int(current_room[0][3])*diff
-
+                addons = ['no','no','no']
                 if transfer_var.get() == 'yes':
                     add0.configure(text='Airport Transfer')
                     total += 50
+                    addons[0] = 'yes'
                     if tour_var.get() == 'yes':
                         add1.configure(text="City Tour")
                         total += 170
+                        addons[1] = 'yes'
                         if feast_var.get() == 'yes':
                             add2.configure(text='Breakfast and Lunch')
                             total += 100
+                            addons[2] = 'yes'
                     elif feast_var.get() == 'yes':
                         add1.configure(text='Breakfast and Lunch')
                         total += 100
+                        addons[2] = 'yes'
                 elif tour_var.get() == 'yes':
                     add0.configure(text='City Tour')
                     total += 170
+                    addons[1] = 'yes'
                     if feast_var.get() == 'yes':
                         add1.configure(text='Breakfast and Lunch')
                         total += 100
+                        addons[2] = 'yes'
                 elif feast_var.get() == 'yes':
                     add0.configure(text='Breakfast and Lunch')
                     total += 100
+                    addons[2] = 'yes'
                 else:
                     add1.configure(text='None')
 
@@ -766,7 +777,104 @@ def mainapp():
                 details_back.place(relx=0.15,rely=0.5,anchor = CENTER)
 
                 def book():
-                    pass
+                    #------------------PRINT-RECIPT------------------
+                    def print_recipt():
+                        sqlcon.commit()
+                        cur = sqlcon.cursor()
+                        cur.execute(f'select * from customers where cust_id = {login_details[0][0]}')
+                        login_details.clear()
+                        login_details.append(cur.fetchall()[0])
+
+                        #-------------------ADD-RECIPT-PDF------------------
+                        from PyPDF2 import PdfWriter, PdfReader
+                        import io
+                        from reportlab.pdfgen import canvas
+                        from reportlab.lib.pagesizes import letter
+
+                        packet = io.BytesIO()
+                        can = canvas.Canvas(packet, pagesize=letter)
+                        can.drawString(70, 700, f'Booking Id: {booking_details[0][0]}' )
+                        can.drawString(350, 700, f'Customer Id: {booking_details[0][1]}' )
+                        can.drawString(70, 670, f'Customer Name: {login_details[0][1]}') 
+                        can.drawString(350, 670, f'Checkin Date: {booking_details[0][3]}' )
+                        can.drawString(70, 640, f'No of days staying: {booking_details[0][5]}')
+                        can.drawString(350, 640, f'Checkout Date: {booking_details[0][4]}' )
+                        can.drawString(70, 610, f'Room No: {booking_details[0][2]}')
+                        can.drawString(350, 610, f'Airport Transfer: {booking_details[0][7]}' )
+                        can.drawString(70, 580, f'Type: {booking_details[0][2]}')
+                        can.drawString(350, 580, f'City Tour: {booking_details[0][8]}' )
+                        can.drawString(70, 550, f'Total Price: {booking_details[0][6]}$')
+                        can.drawString(350, 550,  f'Breakfast and Lunch: {booking_details[0][9]}')
+                        can.drawString(200, 15,  'Please show this at the Reception.')
+                        can.save()
+
+                        packet.seek(0)
+
+                        new_pdf = PdfReader(packet)
+
+                        existing_pdf = PdfReader(open('assets/rec.pdf', 'rb'))
+                        output = PdfWriter()
+
+                        page = existing_pdf.pages[0]
+                        page.merge_page(new_pdf.pages[0])
+                        output.add_page(page)
+
+                        output_stream = open(f'{booking_details[0][0]} Recipt.pdf', 'wb')
+                        output.write(output_stream)
+                        output_stream.close() 
+
+                        CTkLabel(rec_,text='Please show the recipt at the Reception',font=('HP Simplified',25),height=200,corner_radius=30).place(relx=0.5,rely=0.45,anchor = CENTER)
+                        CTkLabel(rec_,text='Thank You.!',font=('HP Simplified',20,'bold')).place(relx=0.5,rely=0.59,anchor = CENTER)
+                        
+                        def closeall():
+                            tabview.set('About')
+                            show_details_.destroy()
+                            select_misc_.destroy()
+                            select_type_.destroy()
+                            checkin_date.configure(state='normal')
+                            checkin_date.delete(0,10)
+                            checkout_date.configure(state='normal')
+                            checkout_date.delete(0,10)
+                            rec.destroy()
+
+                        CTkButton(rec_,text='Done',height=50,width=100, command=lambda:closeall()).place(relx=0.5,rely=0.75,anchor=CENTER)
+
+                    def recload_stop():
+                        progressbar.stop()
+                        try:
+                            cur = sqlcon.cursor()
+                            cur.execute(f'update rooms set availability = "no" where room_no = {current_room[0][0]}')
+                            cur.execute(f'insert into bookings(cust_id,room_no,checkin_date,checkout_date,no_stay,transfer,tour,feast,price) values({login_details[0][0]},{current_room[0][0]},"{checkin_date.get()}","{checkout_date.get()}",{diff},"{addons[0]}","{addons[1]}","{addons[2]}",{total})')
+                            CTkLabel(rec_,height=200,text='Room Booked Successfully!',font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
+                            cur.execute('select * from bookings order by booking_id desc limit 1')
+                            det = cur.fetchall()[0]
+                            booking_details.clear()
+                            booking_details.append(det)
+                            #tabview.delete('Check Out')
+                            update_checkout()
+                            root.after(2000,lambda:print_recipt())
+                            cur.close()
+                        except:
+                            CTkLabel(rec_,height=200,text='Booking Failed', width=520,font=('HP Simplified',25,'bold')).place(relx=0.5,rely=0.5,anchor = CENTER)
+                            root.after(2000,lambda:rec.destroy())
+
+                    rec = CTkFrame(booking_,height=590,width=1422,corner_radius=30)
+                    rec.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+                    recp = CTkImage(Image.open('assets/loginbg.png'),size = (1440,720))
+                    recpic = CTkLabel(rec,text = '', image = recp)
+                    recpic._image = recp
+                    recpic.place(relx=0.5,rely=0.5,anchor = CENTER)
+
+                    rec_ = CTkFrame(rec,height=520,width=540,corner_radius=30)
+                    rec_.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+
+                    progressbar = CTkProgressBar(rec_,height=50,mode="indeterminate")
+                    progressbar.place(relx = 0.5,rely = 0.5, anchor=CENTER)
+                    CTkLabel(rec_,text='Booking...',font=('HP Simplified',20,'bold')).place(relx=0.5,rely=0.6,anchor = CENTER)
+                    progressbar.start()
+
+                    root.after(3000,lambda:recload_stop())
                 
                 def showsignin():
                     req = CTkFrame(root, width=1440, height=720)
@@ -788,7 +896,10 @@ def mainapp():
                 proceed.place(relx=0.85,rely=0.5,anchor = CENTER)
 
             misc_next = CTkButton(booking_,height=100,width=100,text='Done →', font=('HP Simplified',17), command=lambda:show_details())
-            misc_next.place(relx=0.85,rely=0.5,anchor = CENTER)     
+            misc_next.place(relx=0.85,rely=0.5,anchor = CENTER)
+
+        next_misc_ = CTkButton(booking_,height=100,width=100,text='Next →', font=('HP Simplified',17), command=lambda:select_misc() if radio_var.get() != '' else err_msg1.configure(text='*Please select an Option!*'))
+        next_misc_.place(relx=0.85,rely=0.5,anchor = CENTER)   
 
     tabview.set("Book")
     root.mainloop()
