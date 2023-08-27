@@ -760,7 +760,7 @@ def mainapp():
                         can.drawString(350, 580, f'City Tour: {booking_details[0][8]}' )
                         can.drawString(70, 550, f'Total Price: {booking_details[0][6]}$')
                         can.drawString(350, 550,  f'Breakfast and Lunch: {booking_details[0][9]}')
-                        can.drawString(200, 15,  'Please show this at the Reception.')
+                        can.drawString(270, 15,  'Thank You.!')
                         can.save()
 
                         packet.seek(0)
