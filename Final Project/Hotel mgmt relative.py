@@ -1,4 +1,4 @@
-from customtkinter import CTk,CTkButton,CTkProgressBar,CTkImage,CTkEntry,CTkLabel,CTkFrame,StringVar,CTkCheckBox,CTkTabview,CTkRadioButton,CTkScrollableFrame,CENTER,DISABLED,set_default_color_theme
+#from customtkinter import CTk,CTkButton,CTkProgressBar,CTkImage,CTkEntry,CTkLabel,CTkFrame,StringVar,CTkCheckBox,CTkTabview,CTkRadioButton,CTkScrollableFrame,CENTER,DISABLED,set_default_color_theme
 from customtkinter import *
 from tkcalendar import Calendar
 from PIL import Image
@@ -274,7 +274,7 @@ def mainapp():
 
         topbanner.configure(image = banner_pic_copy)
 
-    frame.bind('<Configure>', resize_images)
+    #frame.bind('<Configure>', resize_images)
 
     profile_pic0 = CTkImage(Image.open('assets/login.png'),size = (58,58))
     button_login = CTkButton(frame,width = 70,height = 70,text = '',image=profile_pic0,command=lambda:loggin())
@@ -891,7 +891,8 @@ def call_mainapp(main):
 	mainapp()
 
 if __name__ == '__main__':
-    set_default_color_theme('green')
+    #set_appearance_mode('light')
+    #set_default_color_theme('green')
 
     loggedin = [False]
     login_details = []
