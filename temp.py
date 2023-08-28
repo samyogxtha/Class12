@@ -1,63 +1,35 @@
-from tkcalendar import Calendar, DateEntry
-try:
-    import tkinter as tk
-    from tkinter import ttk
-except ImportError:
-    import Tkinter as tk
-    import ttk
+from tkinter import *
+
+from PIL import Image, ImageTk
+
+root = Tk()
+root.title("Title")
+root.geometry("600x600")
+root.configure(background="black")
 
 
-def example1():
-    def print_sel():
-        print(cal.selection_get(),type(cal.selection_get()))
-        cal.see(datetime.date(year=2016, month=2, day=5))
 
-    top = tk.Toplevel(root)
+def resize_image(event):
 
-    import datetime
-    today = datetime.date.today()
+    new_width = event.width
+    new_height = event.height
+    print(new_height,new_width)
 
-    mindate = datetime.date(year=2018, month=1, day=21)
-    maxdate = today + datetime.timedelta(days=5)
-    print(mindate, maxdate)
+    image = img_copy.resize((new_width, new_height))
 
-    cal = Calendar(top, font="Arial 14", selectmode='day', locale='en_US',
-                   mindate=mindate, maxdate=maxdate, disabledforeground='red',
-                   cursor="hand1", year=2018, month=2, day=5)
-    cal.pack(fill="both", expand=True)
-    ttk.Button(top, text="ok", command=print_sel).pack()
+    background_image = ImageTk.PhotoImage(image)
+    background.configure(image =  background_image)
+    
+image = Image.open("assets/loginbg.png")
+img_copy= image.copy()
 
 
-def example2():
+background_image = ImageTk.PhotoImage(image)
 
-    top = tk.Toplevel(root)
-
-    cal = Calendar(top, selectmode='none')
-    date = cal.datetime.today() + cal.timedelta(days=2)
-    cal.calevent_create(date, 'Hello World', 'message')
-    cal.calevent_create(date, 'Reminder 2', 'reminder')
-    cal.calevent_create(date + cal.timedelta(days=-2), 'Reminder 1', 'reminder')
-    cal.calevent_create(date + cal.timedelta(days=3), 'Message', 'message')
-
-    cal.tag_config('reminder', background='red', foreground='yellow')
-
-    cal.pack(fill="both", expand=True)
-    ttk.Label(top, text="Hover over the events.").pack()
+background = Label(root, image=background_image)
+background.pack(fill=BOTH, expand=YES)
+background.bind('<Configure>', resize_image)
 
 
-def example3():
-    top = tk.Toplevel(root)
-
-    ttk.Label(top, text='Choose date').pack(padx=10, pady=10)
-
-    cal = DateEntry(top, width=12, background='darkblue',
-                    foreground='white', borderwidth=2, year=2010)
-    cal.pack(padx=10, pady=10)
-
-
-root = tk.Tk()
-ttk.Button(root, text='Calendar', command=example1).pack(padx=10, pady=10)
-ttk.Button(root, text='Calendar with events', command=example2).pack(padx=10, pady=10)
-ttk.Button(root, text='DateEntry', command=example3).pack(padx=10, pady=10)
 
 root.mainloop()
