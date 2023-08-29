@@ -5,29 +5,6 @@ from PIL import Image
 from datetime import datetime as dt
 import mysql.connector as msconn
 
-def main():
-    main = CTk()
-    main.title("Mavrik Hotel Booking")
-    main.minsize(height = 520,width = 1040)
-    main.attributes('-topmost', 1)
-    main.overrideredirect(True)
-
-    main_pic = CTkImage(Image.open('assets/logo.png'),size = (520,520))
-    main_label = CTkLabel(main,text = '', image = main_pic)
-    main_label._image = main_pic
-    main_label.place(x = 0,y = 0)
-
-    details = CTkFrame(main,height = 520,width = 520)
-    details.place(x = 520)
-    CTkLabel(details,text = 'Mavrik Hotel', font = ('HP Simplified',50)).place(relx = 0.5, rely = 0.35, anchor = CENTER)
-    CTkLabel(details,text = 'Management Sytem', font = ('HP Simplified',50)).place(relx = 0.5, rely = 0.45, anchor = CENTER)
-    CTkLabel(details,text = 'Made By:', font = ('Dubai',25)).place(relx = 0.5, rely = 0.55, anchor = CENTER)
-    CTkLabel(details,text = 'Samyog 12A', font = ('Dubai',25)).place(relx = 0.5, rely = 0.65, anchor = CENTER)
-
-    main.after(3000,lambda:call_mainapp(main))
-    main.resizable(False,False)
-    main.mainloop()
-
 def mainapp():
     root = CTk()
     root.title("Mavrik Hotel Booking")
@@ -885,10 +862,6 @@ def mainapp():
         next_misc_.place(relx = 0.85,rely = 0.5,anchor = CENTER)   
 
     root.mainloop()
-
-def call_mainapp(main):
-	main.destroy()
-	mainapp()
 
 if __name__ == '__main__':
     #set_appearance_mode('light')
