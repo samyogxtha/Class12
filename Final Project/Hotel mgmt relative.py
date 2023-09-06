@@ -676,6 +676,10 @@ def mainapp():
                 CTkLabel(show_details_,text = "Addons",font = ('HP Simplified',17,'bold')).place(relx = 0.3,rely = 0.55, anchor = CENTER)
                 CTkLabel(show_details_,text = "Total",font = ('HP Simplified',17,'bold')).place(relx = 0.79,rely = 0.55, anchor = CENTER)
                 
+
+
+
+
                 addons_ = CTkFrame(show_details_,corner_radius=20,width = 300)
                 addons_.place(relx = 0.3,rely = 0.77, anchor = CENTER)
                 add0 = CTkLabel(addons_,text = '',font = ('HP Simplified',17))
@@ -778,7 +782,7 @@ def mainapp():
                         output.write(output_stream)
                         output_stream.close() 
 
-                        CTkLabel(rec_,text = 'Thank You.!',font = ('HP Simplified',27),width = 500,height = 200,corner_radius=30).place(relx = 0.5,rely = 0.5,anchor = CENTER)
+                        CTkLabel(rec_,text = 'Thank You!',font = ('HP Simplified',27),width = 500,height = 200,corner_radius=30).place(relx = 0.5,rely = 0.5,anchor = CENTER)
                         
                         def closeall():
                             tabview.set('About')
@@ -820,7 +824,7 @@ def mainapp():
                             root.after(2000,lambda:rec.destroy())
 
                     rec = CTkFrame(booking_,height = 590,width = 1422,corner_radius=30)
-                    rec.place(relx = 0.5,rely = 0.5, anchor = CENTER)
+                    rec.place(relheight = 1, relwidth = 1, relx = 0.5,rely = 0.5, anchor = CENTER)
 
                     recpic = CTkLabel(rec,text = '', image = backdrop)
                     recpic._image = backdrop
@@ -838,9 +842,9 @@ def mainapp():
                 
                 def showsignin():
                     req = CTkFrame(root, width = 1440, height = 720)
-                    req.place(relx = 0.5,rely = 0.5, anchor = CENTER)
+                    req.place(relheight = 1, relwidth = 1, relx = 0.5,rely = 0.5, anchor = CENTER)
 
-                    bottompic2 = CTkImage(Image.open('assets/loginbg.png'),size = (1440,720))
+                    bottompic2 = CTkImage(Image.open('assets/loginbg.png'),size = (1920,1080))
                     bpic2 = CTkLabel(req,text = '', image = bottompic2)
                     bpic2._image = bottompic2
                     bpic2.place(relx = 0.5,rely = 0.5,anchor = CENTER)
@@ -865,7 +869,7 @@ def mainapp():
 
 if __name__ == '__main__':
     #set_appearance_mode('light')
-    #set_default_color_theme('green')
+    set_default_color_theme('green')
 
     loggedin = [False]
     login_details = []
