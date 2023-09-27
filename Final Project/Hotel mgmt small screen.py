@@ -8,17 +8,17 @@ import mysql.connector as msconn
 def mainapp():
     root = CTk()
     root.title("Mavrik Hotel Booking")
-    root.minsize(height = 810,width = 1440)
+    root.minsize(height = 720,width = 1280)
 
     #------------------FUNCTION-FOR-LOGGING-OUT------------------
     def logout():
         loggedin[0] = False
         login_details.clear()
 
-        frame_logout = CTkFrame(root,height = 720,width = 1440)
+        frame_logout = CTkFrame(root,height = 720,width = 1280)
         frame_logout.place(relheight = 1, relwidth = 1, relx = 0.5,rely = 0.5,anchor = CENTER)
 
-        bottompic2 = CTkImage(Image.open('assets/loginbg.png'),size = (1920,1080))
+        bottompic2 = CTkImage(Image.open('assets0/loginbg.jpg'),size = (1920,1080))
         bpic2 = CTkLabel(frame_logout,text = '', image = bottompic2)
         bpic2._image = bottompic2
         bpic2.place(relx = 0.5,rely = 0.5,anchor = CENTER)
@@ -49,10 +49,10 @@ def mainapp():
         for i in edata:
             emails.append(i[0])
 
-        main_pic = CTkImage(Image.open('assets/logo.png'),size = (200,200))
-        bottompic1 = CTkImage(Image.open('assets/loginbg.png'),size = (1920,1080))
+        main_pic = CTkImage(Image.open('assets0/logo.jpg'),size = (200,200))
+        bottompic1 = CTkImage(Image.open('assets0/loginbg.jpg'),size = (1920,1080))
 
-        frame_login = CTkFrame(root,height = 720,width = 1440)
+        frame_login = CTkFrame(root,height = 720,width = 1280)
         frame_login.place(relheight = 1, relwidth = 1, relx = 0.5,rely = 0.5, anchor = CENTER)
         
         bpic1 = CTkLabel(frame_login,text = '', image = bottompic1)
@@ -223,19 +223,19 @@ def mainapp():
 
     def update_logbutton():
         if loggedin[0] is True:
-            profile_pic = CTkImage(Image.open('assets/logout.png'),size = (58,58))
+            profile_pic = CTkImage(Image.open('assets0/logout.jpg'),size = (58,58))
             button_login.configure(text = '',command=lambda:logout(),image=profile_pic)
         elif loggedin[0] is False:
             button_login.configure(text = '',command=lambda:loggin(),image=profile_pic0)
   
     #main app
-    frame = CTkFrame(root,height = 720,width = 1440,corner_radius=15)
+    frame = CTkFrame(root,height = 720,width = 1280,corner_radius=15)
     frame.place(relheight = 1, relwidth = 1, relx = 0.5,rely = 0.5, anchor = CENTER)
     
-    backdrop = CTkImage(Image.open('assets/utbg0.png'),size = (1920,1080)) 
+    backdrop = CTkImage(Image.open('assets0/utbg0.jpg'),size = (1920,1080)) 
 
     #------------------TOP-BANNER------------------
-    banner_pic = CTkImage(Image.open('assets/banner150.png'),size = (1920,150))
+    banner_pic = CTkImage(Image.open('assets0/banner150.jpg'),size = (1920,150))
     topbanner = CTkLabel(frame,text = '', image = banner_pic)
     topbanner._image = banner_pic
     topbanner.place(relx = 0.5,rely = 0.086,anchor = CENTER)
@@ -247,38 +247,38 @@ def mainapp():
         print(event.height,event.width)
         print(new_height,new_width)
 
-        banner_pic_copy = CTkImage(Image.open('assets/banner150.png'), size = (1920, 150))
+        banner_pic_copy = CTkImage(Image.open('assets0/banner150.jpg'), size = (1920, 150))
 
         topbanner.configure(image = banner_pic_copy)
 
     #frame.bind('<Configure>', resize_images)
 
-    profile_pic0 = CTkImage(Image.open('assets/login.png'),size = (58,58))
+    profile_pic0 = CTkImage(Image.open('assets0/login.jpg'),size = (58,58))
     button_login = CTkButton(frame,width = 70,height = 70,text = '',image=profile_pic0,command=lambda:loggin())
     button_login._image = profile_pic0
     button_login.place(relx = 0.97,rely = 0.058,anchor = CENTER)
     
     #------------------CREATE-TABS------------------
-    tabview = CTkTabview(frame,width = 1440,height = 630)
+    tabview = CTkTabview(frame,width = 1280,height = 630)
     tabview.place(relheight = 0.9, relwidth = 1, relx = 0.5,rely = 0.56,anchor = CENTER)
 
     #------------------ABOUT-TAB------------------
     about = tabview.add("About")
     
-    pic = CTkScrollableFrame(about,height = 630,width = 1440,corner_radius=15)
+    pic = CTkScrollableFrame(about,height = 630,width = 1280,corner_radius=15)
     pic.place(relheight = 1, relwidth = 1, x = 0,y = 0)
 
-    #image_files = ['assets/image0.jpg','assets/image1.jpg', 'assets/image2.jpg', 'assets/image3.jpg','assets/image4.jpg','assets/image5.jpg']
-    image_files = ['assets/img0.jpg','assets/img1.jpg', 'assets/img2.jpg', 'assets/img3.jpg','assets/img4.jpg','assets/img5.jpg','assets/img6.jpg']
+    #image_files = ['assets0/image0.jpg','assets0/image1.jpg', 'assets0/image2.jpg', 'assets0/image3.jpg','assets0/image4.jpg','assets0/image5.jpg']
+    image_files = ['assets0/img0.jpg','assets0/img1.jpg', 'assets0/img2.jpg', 'assets0/img3.jpg','assets0/img4.jpg','assets0/img5.jpg','assets0/img6.jpg']
     images = []
 
     def load_images():
         for file in image_files:
-            image = CTkImage(Image.open(file),size=(1440,852))
+            image = CTkImage(Image.open(file),size=(1280,852))
             images.append(image)
         canvas.configure(image=images[0])
 
-    canvas = CTkLabel(pic, text = '', width = 1440, height = 852)
+    canvas = CTkLabel(pic, text = '', width = 1280, height = 852)
     canvas.pack()
 
     def next_image(index):
@@ -301,7 +301,7 @@ def mainapp():
     fr_mgr = CTkFrame(contact,height = 275,width = 680,corner_radius=15)
     fr_mgr.place(relx = 0.25,rely = 0.25, anchor = CENTER)
 
-    mgr_pic = CTkImage(Image.open('assets/mgr.jpg'),size = (275,275))
+    mgr_pic = CTkImage(Image.open('assets0/mgr.jpg'),size = (275,275))
     mgr = CTkLabel(fr_mgr,text = '', image = mgr_pic)
     mgr._image = mgr_pic
     mgr.place(x = 137.5,rely = 0.5,anchor = CENTER)
@@ -314,7 +314,7 @@ def mainapp():
     fr_rec = CTkFrame(contact,height = 275,width = 680,corner_radius=15)
     fr_rec.place(relx = 0.75,rely = 0.25, anchor = CENTER)
 
-    rec_pic = CTkImage(Image.open('assets/rec.jpg'),size = (275,275))
+    rec_pic = CTkImage(Image.open('assets0/rec.jpg'),size = (275,275))
     rec = CTkLabel(fr_rec,text = '', image = rec_pic)
     rec._image = rec_pic
     rec.place(x = 137.5,rely = 0.5,anchor = CENTER)
@@ -327,7 +327,7 @@ def mainapp():
     fr_serv = CTkFrame(contact,height = 275,width = 680,corner_radius=15)
     fr_serv.place(relx = 0.25,rely = 0.75, anchor = CENTER)
 
-    serv_pic = CTkImage(Image.open('assets/serv.jpg'),size = (275,275))
+    serv_pic = CTkImage(Image.open('assets0/serv.jpg'),size = (275,275))
     serv = CTkLabel(fr_serv,text = '', image = serv_pic)
     serv._image = serv_pic
     serv.place(x = 137.5,rely = 0.5,anchor = CENTER)
@@ -340,7 +340,7 @@ def mainapp():
     fr_cook = CTkFrame(contact,height = 275,width = 680,corner_radius=15)
     fr_cook.place(relx = 0.75,rely = 0.75, anchor = CENTER)
 
-    cook_pic = CTkImage(Image.open('assets/cook.jpg'),size = (275,275))
+    cook_pic = CTkImage(Image.open('assets0/cook.jpg'),size = (275,275))
     cook = CTkLabel(fr_cook,text = '', image = cook_pic)
     cook._image = cook_pic
     cook.place(x = 137.5,rely = 0.5,anchor = CENTER)
@@ -377,7 +377,7 @@ def mainapp():
     fr_single = CTkFrame(pricing,height = 275,width = 680,corner_radius=15)
     fr_single.place(relx = 0.25,rely = 0.25, anchor = CENTER)
 
-    single_pic = CTkImage(Image.open('assets/single.jpg'),size = (275,275))
+    single_pic = CTkImage(Image.open('assets0/single.jpg'),size = (275,275))
     single = CTkLabel(fr_single,text = '', image = single_pic)
     single._image = single_pic
     single.place(x = 137.5,rely = 0.5,anchor = CENTER)
@@ -393,7 +393,7 @@ def mainapp():
     fr_double = CTkFrame(pricing,height = 275,width = 680,corner_radius=15)
     fr_double.place(relx = 0.75,rely = 0.25, anchor = CENTER)
 
-    double_pic = CTkImage(Image.open('assets/double.jpg'),size = (275,275))
+    double_pic = CTkImage(Image.open('assets0/double.jpg'),size = (275,275))
     double = CTkLabel(fr_double,text = '', image = double_pic)
     double._image = double_pic
     double.place(x = 137.5,rely = 0.5,anchor = CENTER)
@@ -409,7 +409,7 @@ def mainapp():
     fr_triple = CTkFrame(pricing,height = 275,width = 680,corner_radius=15)
     fr_triple.place(relx = 0.25,rely = 0.75, anchor = CENTER)
 
-    triple_pic = CTkImage(Image.open('assets/triple.jpg'),size = (275,275))
+    triple_pic = CTkImage(Image.open('assets0/triple.jpg'),size = (275,275))
     triple = CTkLabel(fr_triple,text = '', image = triple_pic)
     triple._image = triple_pic
     triple.place(x = 137.5,rely = 0.5,anchor = CENTER)
@@ -425,7 +425,7 @@ def mainapp():
     fr_quad = CTkFrame(pricing,height = 275,width = 680,corner_radius=15)
     fr_quad.place(relx = 0.75,rely = 0.75, anchor = CENTER)
 
-    quad_pic = CTkImage(Image.open('assets/quad.jpg'),size = (275,275))
+    quad_pic = CTkImage(Image.open('assets0/quad.jpg'),size = (275,275))
     quad = CTkLabel(fr_quad,text = '', image = quad_pic)
     quad._image = quad_pic
     quad.place(x = 137.5,rely = 0.5,anchor = CENTER)
@@ -537,25 +537,25 @@ def mainapp():
         radiobutton_3.place(relx = 0.25,rely = 0.9,anchor = CENTER)
         radiobutton_4.place(relx = 0.75,rely = 0.9,anchor = CENTER)
 
-        pic1 = CTkImage(Image.open('assets/single.jpg'),size = (175,175))
+        pic1 = CTkImage(Image.open('assets0/single.jpg'),size = (175,175))
         pic_1 = CTkLabel(select_type_,corner_radius=10,text = '', image = pic1)
         pic_1._image = pic1
         pic_1.place(relx = 0.25,rely = 0.3,anchor = CENTER)
         pic_1.bind("<Button-1>", lambda x:radiobutton_1.invoke())
 
-        pic2 = CTkImage(Image.open('assets/double.jpg'),size = (175,175))
+        pic2 = CTkImage(Image.open('assets0/double.jpg'),size = (175,175))
         pic_2 = CTkLabel(select_type_,text = '', image = pic2)
         pic_2._image = pic2
         pic_2.place(relx = 0.75,rely = 0.3,anchor = CENTER)
         pic_2.bind("<Button-1>", lambda x:radiobutton_2.invoke())
 
-        pic3 = CTkImage(Image.open('assets/triple.jpg'),size = (175,175))
+        pic3 = CTkImage(Image.open('assets0/triple.jpg'),size = (175,175))
         pic_3 = CTkLabel(select_type_,text = '', image = pic3)
         pic_3._image = pic3
         pic_3.place(relx = 0.25,rely = 0.7,anchor = CENTER)
         pic_3.bind("<Button-1>", lambda x:radiobutton_3.invoke())
 
-        pic4 = CTkImage(Image.open('assets/quad.jpg'),size = (175,175))
+        pic4 = CTkImage(Image.open('assets0/quad.jpg'),size = (175,175))
         pic_4 = CTkLabel(select_type_,text = '', image = pic4)
         pic_4._image = pic4
         pic_4.place(relx = 0.75,rely = 0.7,anchor = CENTER)
@@ -564,19 +564,19 @@ def mainapp():
         for r in rooms_unavai:
             if r == 'Single':
                 radiobutton_1.configure(state=DISABLED)
-                pic1_ = CTkImage(Image.open('assets/singlebooked.jpg'),size = (175,175))
+                pic1_ = CTkImage(Image.open('assets0/singlebooked.jpg'),size = (175,175))
                 pic_1.configure(image = pic1_)
             if r == 'Double':
                 radiobutton_2.configure(state=DISABLED)
-                pic2_ = CTkImage(Image.open('assets/doublebooked.jpg'),size = (175,175))
+                pic2_ = CTkImage(Image.open('assets0/doublebooked.jpg'),size = (175,175))
                 pic_2.configure(image = pic2_)
             if r == 'Triple':
                 radiobutton_3.configure(state=DISABLED)
-                pic3_ = CTkImage(Image.open('assets/triplebooked.jpg'),size = (175,175))
+                pic3_ = CTkImage(Image.open('assets0/triplebooked.jpg'),size = (175,175))
                 pic_3.configure(image = pic3_)
             if r == 'Quad':
                 radiobutton_4.configure(state=DISABLED)
-                pic4_ = CTkImage(Image.open('assets/quadbooked.jpg'),size = (175,175))
+                pic4_ = CTkImage(Image.open('assets0/quadbooked.jpg'),size = (175,175))
                 pic_4.configure(image = pic4_)
 
         err_msg1 = CTkLabel(select_type_,text = '',text_color = 'red')
@@ -609,7 +609,7 @@ def mainapp():
             
             fr_transfer = CTkFrame(select_misc_,corner_radius=20,height = 150,width = 520)
             fr_transfer.place(relx = 0.5,rely = 0.24,anchor = CENTER)
-            transfer_img = CTkImage(Image.open('assets/car.jpg'),size = (150,150))
+            transfer_img = CTkImage(Image.open('assets0/car.jpg'),size = (150,150))
             transfer_img_ = CTkLabel(fr_transfer,text = '', image = transfer_img)
             transfer_img_._image = transfer_img
             transfer_img_.place(x = 75,rely = 0.5,anchor = CENTER)
@@ -623,7 +623,7 @@ def mainapp():
 
             fr_tour = CTkFrame(select_misc_,corner_radius=20,height = 150,width = 520)
             fr_tour.place(relx = 0.5,rely = 0.54,anchor = CENTER)
-            tour_img = CTkImage(Image.open('assets/tour.jpg'),size = (150,150))
+            tour_img = CTkImage(Image.open('assets0/tour.jpg'),size = (150,150))
             tour_img_ = CTkLabel(fr_tour,text = '', image = tour_img)
             tour_img_._image = tour_img
             tour_img_.place(x = 75,rely = 0.5,anchor = CENTER)
@@ -637,7 +637,7 @@ def mainapp():
 
             fr_feast = CTkFrame(select_misc_,corner_radius=20,height = 150,width = 520)
             fr_feast.place(relx = 0.5,rely = 0.84,anchor = CENTER)
-            feast_img = CTkImage(Image.open('assets/feast.jpg'),size = (150,150))
+            feast_img = CTkImage(Image.open('assets0/feast.jpg'),size = (150,150))
             feast_img_ = CTkLabel(fr_feast,text = '', image = feast_img)
             feast_img_._image = feast_img
             feast_img_.place(x = 75,rely = 0.5,anchor = CENTER)
@@ -771,7 +771,7 @@ def mainapp():
 
                         new_pdf = PdfReader(packet)
 
-                        existing_pdf = PdfReader(open('assets/rec.pdf', 'rb'))
+                        existing_pdf = PdfReader(open('assets0/rec.pdf', 'rb'))
                         output = PdfWriter()
 
                         page = existing_pdf.pages[0]
@@ -841,10 +841,10 @@ def mainapp():
                     root.after(3000,lambda:recload_stop())
                 
                 def showsignin():
-                    req = CTkFrame(root, width = 1440, height = 720)
+                    req = CTkFrame(root, width = 1280, height = 720)
                     req.place(relheight = 1, relwidth = 1, relx = 0.5,rely = 0.5, anchor = CENTER)
 
-                    bottompic2 = CTkImage(Image.open('assets/loginbg.png'),size = (1920,1080))
+                    bottompic2 = CTkImage(Image.open('assets0/loginbg.jpg'),size = (1920,1080))
                     bpic2 = CTkLabel(req,text = '', image = bottompic2)
                     bpic2._image = bottompic2
                     bpic2.place(relx = 0.5,rely = 0.5,anchor = CENTER)
@@ -868,7 +868,7 @@ def mainapp():
     root.mainloop()
 
 if __name__ == '__main__':
-    #set_appearance_mode('light')
+    set_appearance_mode('light')
     set_default_color_theme('green')
 
     loggedin = [False]
