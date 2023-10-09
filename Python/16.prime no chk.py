@@ -1,14 +1,12 @@
 def prime_nos(list):
     primes = []
     for i in list:
-        if i == 2:
-            primes.append(i)
-            break
-        for j in (2,(i//2)+1):
-            if i%j == 0:
-                break
-        else:
-            primes.append(i)
+        if i > 1:
+            for j in (2,(i//2)+1):
+                if i%j == 0:
+                    break
+            else:
+                primes.append(i)
     return primes
 
 list = list()
