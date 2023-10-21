@@ -1,18 +1,37 @@
-mark1 = int (input ("Enter the mark for subject 1 :- "))
-mark2 = int (input ("Enter the mark for subject 2 :- "))
-mark3 = int (input ("Enter the mark for subject 3 :- "))
-print ("Average marks is :- ", (mark1 + mark2 + mark3) / 3 )
-per = ((mark1 + mark2 + mark3) / 300) * 100
-print("Percentage :-",per)
-if per >= 80 :
-    print ("Grade is 'A'")
-elif per >= 70 and per <= 79 :
-    print ("Grade is 'B'")
-elif per >= 60 and per <= 69 :
-    print ("Grade is 'C'")
-elif per >= 50 and per <= 59 :
-    print ("Grade is 'D'")
-elif per >= 40 and per <= 49 :
-    print ("Grade is 'E'")
-elif per <= 39 :
-    print ("Grade is 'R'")
+n = 5
+
+for x in range(1, (n+5) //2 + 1):
+    for y in range( (n+5) //2 - x):
+        print(" ", end = "")
+    for z in range( (x*2)-1 ):
+        print("*", end = "")
+    print()
+
+for x in range( (n+5)// 2 + 1, n + 5):
+    for y in range(x - (n+5) //2):
+        print(" ", end = "")
+    for z in range( (n+5 - x) *2 - 1):
+        print("*", end = "")
+    print()
+
+def print_diamond_pattern(n):
+    for i in range(1, n + 1):
+        for j in range(n, i, -1):
+            print(" ", end="")
+        for k in range(1, i + 1):
+            print(k, end="")
+        for l in range(i - 1, 0, -1):
+            print(l, end="")
+        print()
+
+    for i in range(n - 1, 0, -1):
+        for j in range(n, i, -1):
+            print(" ", end="")
+        for k in range(1, i + 1):
+            print(k, end="")
+        for l in range(i - 1, 0, -1):
+            print(l, end="")
+        print()
+
+n = int(input("Enter the number of rows: "))
+print_diamond_pattern(n)

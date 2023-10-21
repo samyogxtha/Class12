@@ -75,19 +75,19 @@ def mainapp():
             email = entry_email.get()
             if email == '':
                 misc.configure(text = 'Enter Email.!',width = 500)
+                root.bell()
             elif email in emails:
                 misc.configure(text = 'Email already registered',width = 500)
+                root.bell()
             else:
-                if '@' in email:
-                    at = True
-                if '.' in email:
-                    dot = True
-                if at is False or dot is False:
+                if '.' not in email or '@' not in email:
                     misc.configure(text = 'Enter Valid Email Id.',width = 500)
+                    root.bell()
 
             passw = entry_passw.get()
             if passw == '':
                 misc.configure(text = 'Enter Password.!',width = 500)
+                root.bell()
             else:
                 schar = '!@#$%^&*()_+|-=\\\'./'
                 for i in passw:
@@ -104,16 +104,21 @@ def mainapp():
                         break
                 if spl == False:
                     misc.configure(text = 'Your Password must have atleast one Special character.',width = 500)
+                    root.bell()
                 if no == False:
                     misc.configure(text = 'Your Password must have atleast one Number.',width = 500)
+                    root.bell()
                 if up == False:
                     misc.configure(text = 'Your Password must have atleast one Upper case character.',width = 500)
+                    root.bell()
                 if len(passw)<8:
                     misc.configure(text = 'The Password must have atleast 8 Characters.',width = 500)
+                    root.bell()
 
             name = entry_name.get()
             if name == '':
                 misc.configure(text = 'Enter Name.!',width = 500)
+                root.bell()
             
             if misc._text == '':
                 cur0.execute('insert into customers(name,email,pass) values("%s","%s","%s")'%(name,email,passw))
@@ -171,17 +176,21 @@ def mainapp():
             email = enter_email.get()
             if email == '':
                 lmisc.configure(text = 'Enter Email.!',width = 500)
+                root.bell()
             else:
                 cur0.execute('select pass from customers where email = "%s"'%(email,))
                 password.insert(0,cur0.fetchall())
                 if password[0] == []:
                     lmisc.configure(text = 'Incorrect Email or Password',width = 500)
+                    root.bell()
 
             passw = enter_passw.get()
             if passw == '':
                 lmisc.configure(text = 'Enter Password.!',width = 500)
+                root.bell()
             elif password[0] == []:
                 lmisc.configure(text = 'Incorrect Email or Password',width = 500)
+                root.bell()
             else:
                 if passw == password[0][0][0]:
                     cur0.execute('select * from customers where email = "%s"'%(email))
@@ -208,6 +217,7 @@ def mainapp():
                     root.after(3000,lambda:logged_in(progressbar))
                 else:
                     lmisc.configure(text = 'Incorrect Email or Password',width = 500)
+                    root.bell()
         
         CTkButton(login,text = '←',height = 50,width = 50,corner_radius=30,fg_color = 'transparent', hover_color = '#333333', command=lambda:frame_login.destroy()).place(x = 1,y = 1)
         enter_email = CTkEntry(login,placeholder_text = 'Email',height = 45,width = 300)
@@ -462,8 +472,9 @@ def mainapp():
         fr_indate = CTkFrame(booking_,height = 250,width = 200)
         fr_indate.place(relx = 0.7,rely = 0.3, anchor = CENTER)
 
-        tkc1 = Calendar(fr_indate,selectmode = "day",year = int(today[0:4]),month = int(today[6:7]),date=int(today[9:]))
+        tkc1 = Calendar(fr_indate,selectmode = "day",year = int(today[0:4]),month = int(today[5:6]),date=int(today[8:]))
         tkc1.pack(padx = 10,pady = 10)
+        
 
         def fetch_date():
             checkin_date.configure(state='normal')
@@ -484,7 +495,7 @@ def mainapp():
         fr_outdate = CTkFrame(booking_,height = 250,width = 200)
         fr_outdate.place(relx = 0.7,rely = 0.6, anchor = CENTER)
 
-        tkc1 = Calendar(fr_outdate,selectmode = "day",year = int(today[0:4]),month = int(today[6:7]),date=int(today[9:]))
+        tkc1 = Calendar(fr_outdate,selectmode = "day",year = int(today[0:4]),month = int(today[5:6]),date=int(today[8:]))
         tkc1.pack(padx = 10,pady = 10)
 
         def fetch_date():
@@ -514,8 +525,10 @@ def mainapp():
                 select_type()
             else:
                 err_msg0.configure(text = 'Please Select a valid date range!')
+                root.bell()
         else:
             err_msg0.configure(text = 'Checkin date cannot be in the past')
+            root.bell()
 
     CTkButton(booking_,height = 100,width = 100,text = 'Next →', font = ('HP Simplified',17), command=lambda:next_sel() if checkin_date.get() != '' and checkout_date.get() != '' else err_msg0.configure(text = '*Please enter Date*')).place(relx = 0.85,rely = 0.5,anchor = CENTER)
 
