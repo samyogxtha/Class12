@@ -7,7 +7,8 @@ while True:
 3. Search for a record
 4. Replace a record
 5. Delete a Record
-6. Quit''')
+6. Total records in the file
+0. Quit''')
     
     choice = int(input('\n\tEnter choice: '))
     print('\n\n')
