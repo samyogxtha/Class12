@@ -1,5 +1,4 @@
-import csv
-import tabulate
+import csv,tabulate
 
 while True:
     print('\n\n----------MENU-DRIVEN-PROGRAM-CSV----------\n')
