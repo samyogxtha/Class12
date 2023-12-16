@@ -222,7 +222,7 @@ def mainapp():
         CTkButton(login,text = '←',height = 50,width = 50,corner_radius=30,fg_color = 'transparent', hover_color = '#333333', command=lambda:frame_login.destroy()).place(x = 1,y = 1)
         enter_email = CTkEntry(login,placeholder_text = 'Email',height = 45,width = 300)
         enter_email.place(relx = 0.5,y = 332,anchor = CENTER)
-        enter_passw = CTkEntry(login,placeholder_text = 'Password',height = 45,width = 300)
+        enter_passw = CTkEntry(login,placeholder_text = 'Password',show='*',height = 45,width = 300)
         enter_passw.place(relx = 0.5,y = 409,anchor = CENTER)
         CTkLabel(login,text = 'Don\'t have an account?',).place(relx = 0.35,y = 470,anchor = CENTER)
         signup_ = CTkLabel(login,text = 'Sign Up', text_color = '#44f1a6')

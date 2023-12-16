@@ -99,8 +99,7 @@ while True:
               if i[0] == roll:
                 dat.remove(i)
                 with open('student.dat','wb') as f:
-                  for j in dat:
-                    pickle.dump(j,f)
+                  for j in dat:pickle.dump(j,f)
                   print('\nRecord Deleted')
                 break
             else:sys.stderr.write("\nStudent Not Found.\n")
