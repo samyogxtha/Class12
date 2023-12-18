@@ -1,0 +1,1 @@
+for i in range(int(input('How many numbers? '))):import random;print(random.randint(int(input('Enter Lower limit: ')),int(input('Enter Upper limit: '))))

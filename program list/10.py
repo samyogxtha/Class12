@@ -11,8 +11,7 @@ print('''1. Create a dictionary
 3. Search for a particular dictionary and print its value
 4. Modify the value of a particular key
 5. Delete a key value pair from the dictionary
-0. Quit
-''')
+0. Quit''')
 
 d = {}
 while True:
@@ -20,19 +19,33 @@ while True:
     print('\n')
     if choice == 1:
         n = input('Enter Sentence: ')
-        
-        for i in n.split():
+        for i in (n.replace('.','')).split():
             if i[0].lower() not in d:d[i[0].lower()]=[i]
             else:
                 a=d.get(i[0].lower())
                 a.append(i)
-                print(a)
                 d[i[0].lower()]=a
+                print('Dictionary Created')
     
     elif choice == 2:
         print('\nDictionary: ')
         print(d,'\n')
-    elif choice == 3:
-        for i in d:
-            print(d.values())
 
+    elif choice == 3:
+        n = input('Enter Key: ')
+        if n in d.keys():print(d[n])
+        else:print('Key not Found')
+
+    elif choice == 4:
+        n = input('Enter Key: ')
+        if n in d.keys():
+            d[n] = [i for i in (input("Enter the list elements separated by spaces: ").replace('.','')).split()]
+            print('List Updated!')
+        else:print('Key not Found')
+    
+    elif choice == 5:
+        n = input('Enter Key: ')
+        if n in d.keys():print('Key Deleted');del(d[n])
+        else:print('Key not Found')
+
+    else:break
