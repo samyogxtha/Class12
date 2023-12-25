@@ -34,6 +34,7 @@ while True:
         with open('employee.csv','a',newline='') as cs:
             writer = csv.writer(cs,delimiter=',')
             writer.writerow([int(input('Enter Empno: ')),input('Enter Name: '),input('Enter Job: '),input('Enter Department: '),int(input('Enter Salary: '))])
+            print('\nRecord Added\n')
     elif choice == 3:
         with open('employee.csv') as cs:
             content = list(csv.reader(cs,delimiter=','))

@@ -274,11 +274,11 @@ def mainapp():
 
     def load_images():
         for file in image_files:
-            image = CTkImage(Image.open(file),size=(1280,852))
+            image = CTkImage(Image.open(file),size=(1280,740))
             images.append(image)
         canvas.configure(image=images[0])
 
-    canvas = CTkLabel(pic, text = '', width = 1280, height = 852)
+    canvas = CTkLabel(pic, text = '', width = 1280, height = 740)
     canvas.pack()
 
     def next_image(index):

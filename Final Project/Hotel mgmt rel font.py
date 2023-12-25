@@ -8,7 +8,7 @@ import mysql.connector as msconn
 def mainapp():
     root = CTk()
     root.title("Mavrik Hotel Booking")
-    root.minsize(height = 810,width = 1440)
+    root.minsize(height = 720,width = 1280)
 
     #------------------FUNCTION-FOR-LOGGING-OUT------------------
     def logout():
@@ -250,7 +250,7 @@ def mainapp():
             button_login.bind('<Enter>',  onenter);button_login.bind('<Leave>',  onleave)
   
     #main app
-    frame = CTkFrame(root,height = 720,width = 1440,corner_radius=15)
+    frame = CTkFrame(root,height = 720,width = 1280,corner_radius=15)
     frame.place(relheight = 1, relwidth = 1, relx = 0.5,rely = 0.5, anchor = CENTER)
     
     backdrop = CTkImage(Image.open('0assets/utbg0.jpg'),size = (1920,1080)) 
@@ -289,7 +289,7 @@ def mainapp():
     button_login.bind('<Enter>',  onenter);button_login.bind('<Leave>',  onleave)
     
     #------------------CREATE-TABS------------------
-    tabview = CTkTabview(frame,width = 1440,height = 630)
+    tabview = CTkTabview(frame,width = 1280,height = 630)
     tabview.place(relheight = 0.9, relwidth = 1, relx = 0.5,rely = 0.56,anchor = CENTER)
 
     #------------------ABOUT-TAB------------------
@@ -298,19 +298,12 @@ def mainapp():
     pic = CTkScrollableFrame(about,height = 630,width = 1440,corner_radius=15)
     pic.place(relheight = 1, relwidth = 1, x = 0,y = 0)
 
-    #image_files = ['0assets/image0.jpg','0assets/image1.jpg', '0assets/image2.jpg', '0assets/image3.jpg','0assets/image4.jpg','0assets/image5.jpg']
     image_files = ['0assets/img0.jpg','0assets/img1.jpg', '0assets/img2.jpg', '0assets/img3.jpg','0assets/img4.jpg','0assets/img5.jpg','0assets/img6.jpg']
-    images = []
-
-    def load_images():
-        for file in image_files:
-            image = CTkImage(Image.open(file),size=(1440,852))
-            images.append(image)
-        canvas.configure(image=images[0])
-
-    canvas = CTkLabel(pic, text = '', width = 1440, height = 852)
+    images = [CTkImage(Image.open(file),size=(1280,740)) for file in image_files]
+    
+    canvas = CTkLabel(pic, text = '', width = 1280, height = 740,image=images[0])
     canvas.pack()
-
+    
     def next_image(index):
         canvas.configure(image=images[index])
         index += 1
@@ -318,7 +311,6 @@ def mainapp():
             index = 0
         root.after(5000, next_image, index)
 
-    load_images()
     next_image(0)
 
     #------------------CONTACS-TAB------------------
@@ -328,57 +320,57 @@ def mainapp():
     backdrop1._image = backdrop
     backdrop1.place(relx = 0.5,rely = 0.5, anchor = CENTER)
 
-    fr_mgr = CTkFrame(contact,height = 275,width = 680,corner_radius=15)
-    fr_mgr.place(relx = 0.25,rely = 0.25, anchor = CENTER)
+    fr_mgr = CTkFrame(contact,height = 265,width = 600,corner_radius=15)
+    fr_mgr.place(relx = 0.25,rely = 0.25,relheight = 0.43, relwidth = 0.43, anchor = CENTER)
 
-    mgr_pic = CTkImage(Image.open('0assets/mgr.jpg'),size = (275,275))
+    mgr_pic = CTkImage(Image.open('0assets/mgr.jpg'),size = (274,464))
     mgr = CTkLabel(fr_mgr,text = '', image = mgr_pic)
     mgr._image = mgr_pic
     mgr.place(x = 137.5,rely = 0.5,anchor = CENTER)
 
-    CTkLabel(fr_mgr,text = "Manager",font = ('Lexend',37,'bold')).place(x = 290,y = 60)
-    CTkLabel(fr_mgr,text = "Mr. Gru",font = ('Lexend',32,'bold')).place(x = 290,y = 109)
-    CTkLabel(fr_mgr,text = "Extention : 117",font = ('Lexend',20)).place(x = 290,y = 150)
-    CTkLabel(fr_mgr,text = "Mail : manager@mavrik.com",font = ('Lexend',20)).place(x = 290,y = 185)
+    CTkLabel(fr_mgr,text = "Manager",font = ('Lexend',35,'bold')).place(x = 290,y = 60)
+    CTkLabel(fr_mgr,text = "Mr. Gru",font = ('Lexend',27,'bold')).place(x = 290,y = 109)
+    CTkLabel(fr_mgr,text = "Extention : 117",font = ('Lexend',17)).place(x = 290,y = 150)
+    CTkLabel(fr_mgr,text = "Mail : manager@mavrik.com",font = ('Lexend',17)).place(x = 290,y = 185)
 
-    fr_rec = CTkFrame(contact,height = 275,width = 680,corner_radius=15)
-    fr_rec.place(relx = 0.75,rely = 0.25, anchor = CENTER)
+    fr_rec = CTkFrame(contact,height = 265,width = 600,corner_radius=15)
+    fr_rec.place(relx = 0.75,rely = 0.25,relheight = 0.43, relwidth = 0.43, anchor = CENTER)
 
-    rec_pic = CTkImage(Image.open('0assets/rec.jpg'),size = (275,275))
+    rec_pic = CTkImage(Image.open('0assets/rec.jpg'),size = (274,464))
     rec = CTkLabel(fr_rec,text = '', image = rec_pic)
     rec._image = rec_pic
     rec.place(x = 137.5,rely = 0.5,anchor = CENTER)
 
-    CTkLabel(fr_rec,text = "Customer Service",font = ('Lexend',37,'bold')).place(x = 290,y = 60)
-    CTkLabel(fr_rec,text = "Mr. Sam",font = ('Lexend',32,'bold')).place(x = 290,y = 109)
-    CTkLabel(fr_rec,text = "Extention : 225",font = ('Lexend',20)).place(x = 290,y = 150)
-    CTkLabel(fr_rec,text = "Mail : customerservice@mavrik.com",font = ('Lexend',20)).place(x = 290,y = 185)
+    CTkLabel(fr_rec,text = "Customer Service",font = ('Lexend',35,'bold')).place(x = 290,y = 60)
+    CTkLabel(fr_rec,text = "Mr. Sam",font = ('Lexend',27,'bold')).place(x = 290,y = 109)
+    CTkLabel(fr_rec,text = "Extention : 225",font = ('Lexend',17)).place(x = 290,y = 150)
+    CTkLabel(fr_rec,text = "Mail : customer@mavrik.com",font = ('Lexend',17)).place(x = 290,y = 185)
     
-    fr_serv = CTkFrame(contact,height = 275,width = 680,corner_radius=15)
-    fr_serv.place(relx = 0.25,rely = 0.75, anchor = CENTER)
+    fr_serv = CTkFrame(contact,height = 265,width = 600,corner_radius=15)
+    fr_serv.place(relx = 0.25,rely = 0.75,relheight = 0.43, relwidth = 0.43, anchor = CENTER)
 
-    serv_pic = CTkImage(Image.open('0assets/serv.jpg'),size = (275,275))
+    serv_pic = CTkImage(Image.open('0assets/serv.jpg'),size = (274,464))
     serv = CTkLabel(fr_serv,text = '', image = serv_pic)
     serv._image = serv_pic
     serv.place(x = 137.5,rely = 0.5,anchor = CENTER)
 
-    CTkLabel(fr_serv,text = "Room Service",font = ('Lexend',37,'bold')).place(x = 290,y = 60)
-    CTkLabel(fr_serv,text = "Ms. Anya",font = ('Lexend',32,'bold')).place(x = 290,y = 109)
-    CTkLabel(fr_serv,text = "Extention : 147",font = ('Lexend',20)).place(x = 290,y = 150)
-    CTkLabel(fr_serv,text = "Mail : roomservice@mavrik.com",font = ('Lexend',20)).place(x = 290,y = 185)
+    CTkLabel(fr_serv,text = "Room Service",font = ('Lexend',35,'bold')).place(x = 290,y = 60)
+    CTkLabel(fr_serv,text = "Ms. Anya",font = ('Lexend',27,'bold')).place(x = 290,y = 109)
+    CTkLabel(fr_serv,text = "Extention : 147",font = ('Lexend',17)).place(x = 290,y = 150)
+    CTkLabel(fr_serv,text = "Mail : room@mavrik.com",font = ('Lexend',17)).place(x = 290,y = 185)
 
-    fr_cook = CTkFrame(contact,height = 275,width = 680,corner_radius=15)
-    fr_cook.place(relx = 0.75,rely = 0.75, anchor = CENTER)
+    fr_cook = CTkFrame(contact,height = 265,width = 600,corner_radius=15)
+    fr_cook.place(relx = 0.75,rely = 0.75,relheight = 0.43, relwidth = 0.43, anchor = CENTER)
 
-    cook_pic = CTkImage(Image.open('0assets/cook.jpg'),size = (275,275))
+    cook_pic = CTkImage(Image.open('0assets/cook.jpg'),size = (274,464))
     cook = CTkLabel(fr_cook,text = '', image = cook_pic)
     cook._image = cook_pic
     cook.place(x = 137.5,rely = 0.5,anchor = CENTER)
 
-    CTkLabel(fr_cook,text = "Restaurant",font = ('Lexend',37,'bold')).place(x = 290,y = 60)
-    CTkLabel(fr_cook,text = "Mr. Kim",font = ('Lexend',32,'bold')).place(x = 290,y = 109)
-    CTkLabel(fr_cook,text = "Extention : 125",font = ('Lexend',20)).place(x = 290,y = 150)
-    CTkLabel(fr_cook,text = "Mail : dining@mavrik.com",font = ('Lexend',20)).place(x = 290,y = 185)
+    CTkLabel(fr_cook,text = "Restaurant",font = ('Lexend',35,'bold')).place(x = 290,y = 60)
+    CTkLabel(fr_cook,text = "Mr. Kim",font = ('Lexend',27,'bold')).place(x = 290,y = 109)
+    CTkLabel(fr_cook,text = "Extention : 125",font = ('Lexend',17)).place(x = 290,y = 150)
+    CTkLabel(fr_cook,text = "Mail : dining@mavrik.com",font = ('Lexend',17)).place(x = 290,y = 185)
 
     #------------------PRICING-TAB------------------
     pricing = tabview.add("Rooms & Pricings")
@@ -618,16 +610,11 @@ def mainapp():
         back_date_ = CTkButton(booking_,height = 100,width = 100,text = '← Back', font = ('Lexend',17), command=lambda:back_date())
         back_date_.place(relx = 0.15,rely = 0.5,anchor = CENTER)
 
-        if price_type[0] == 'None':
-            pass
-        elif price_type[0] == 'Single':
-            radiobutton_1.invoke()
-        elif price_type[0] == 'Double':
-            radiobutton_2.invoke()
-        elif price_type[0] == 'Triple':
-            radiobutton_3.invoke()
-        elif price_type[0] == 'Quad':
-            radiobutton_4.invoke()
+        if price_type[0] == 'None':pass
+        elif price_type[0] == 'Single':radiobutton_1.invoke()
+        elif price_type[0] == 'Double':radiobutton_2.invoke()
+        elif price_type[0] == 'Triple':radiobutton_3.invoke()
+        elif price_type[0] == 'Quad':radiobutton_4.invoke()
       
         def select_misc():
             select_misc_ = CTkFrame(booking_,height = 540,width = 540,corner_radius=20)
@@ -893,10 +880,14 @@ def mainapp():
         next_misc_ = CTkButton(booking_,height = 100,width = 100,text = 'Next →', font = ('Lexend',17), command=lambda:select_misc() if radio_var.get() != '' else err_msg1.configure(text = '*Please select an Option!*'))
         next_misc_.place(relx = 0.85,rely = 0.5,anchor = CENTER)   
 
+    tabview.set('Contact')
+
     root.mainloop()
 
 if __name__ == '__main__':
-    set_appearance_mode('dark');set_default_color_theme('0assets/color theme.json')
+    set_appearance_mode('dark')
+    set_default_color_theme('0assets/color theme.json')
+    deactivate_automatic_dpi_awareness()
 
     loggedin = [False];login_details = [];booking_details = []
 
