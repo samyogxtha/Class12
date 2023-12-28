@@ -321,7 +321,7 @@ def mainapp():
     backdrop1.place(relx = 0.5,rely = 0.5, anchor = CENTER)
 
     fr_mgr = CTkFrame(contact,height = 265,width = 600,corner_radius=15)
-    fr_mgr.place(relx = 0.25,rely = 0.25,relheight = 0.43, relwidth = 0.43, anchor = CENTER)
+    fr_mgr.place(relx = 0.25,rely = 0.25, anchor = CENTER)
 
     mgr_pic = CTkImage(Image.open('0assets/mgr.jpg'),size = (274,464))
     mgr = CTkLabel(fr_mgr,text = '', image = mgr_pic)
@@ -334,7 +334,7 @@ def mainapp():
     CTkLabel(fr_mgr,text = "Mail : manager@mavrik.com",font = ('Lexend',17)).place(x = 290,y = 185)
 
     fr_rec = CTkFrame(contact,height = 265,width = 600,corner_radius=15)
-    fr_rec.place(relx = 0.75,rely = 0.25,relheight = 0.43, relwidth = 0.43, anchor = CENTER)
+    fr_rec.place(relx = 0.75,rely = 0.25, anchor = CENTER)
 
     rec_pic = CTkImage(Image.open('0assets/rec.jpg'),size = (274,464))
     rec = CTkLabel(fr_rec,text = '', image = rec_pic)
@@ -347,7 +347,7 @@ def mainapp():
     CTkLabel(fr_rec,text = "Mail : customer@mavrik.com",font = ('Lexend',17)).place(x = 290,y = 185)
     
     fr_serv = CTkFrame(contact,height = 265,width = 600,corner_radius=15)
-    fr_serv.place(relx = 0.25,rely = 0.75,relheight = 0.43, relwidth = 0.43, anchor = CENTER)
+    fr_serv.place(relx = 0.25,rely = 0.75, anchor = CENTER)
 
     serv_pic = CTkImage(Image.open('0assets/serv.jpg'),size = (274,464))
     serv = CTkLabel(fr_serv,text = '', image = serv_pic)
@@ -360,7 +360,7 @@ def mainapp():
     CTkLabel(fr_serv,text = "Mail : room@mavrik.com",font = ('Lexend',17)).place(x = 290,y = 185)
 
     fr_cook = CTkFrame(contact,height = 265,width = 600,corner_radius=15)
-    fr_cook.place(relx = 0.75,rely = 0.75,relheight = 0.43, relwidth = 0.43, anchor = CENTER)
+    fr_cook.place(relx = 0.75,rely = 0.75, anchor = CENTER)
 
     cook_pic = CTkImage(Image.open('0assets/cook.jpg'),size = (274,464))
     cook = CTkLabel(fr_cook,text = '', image = cook_pic)
@@ -383,80 +383,78 @@ def mainapp():
     cur.execute('select distinct type from rooms where availability = "yes"')
     rooms_avai_ = cur.fetchall()
     rooms_avai = []
-    for i in rooms_avai_:
-        rooms_avai.append(i[0])
+    for i in rooms_avai_:rooms_avai.append(i[0])
     cur.close()
     rooms_unavai = ['Single','Double','Triple','Quad']
     for i in rooms_avai:
-        if i in rooms_unavai:
-            rooms_unavai.remove(i)
+        if i in rooms_unavai:rooms_unavai.remove(i)
 
     price_type = ['None']
     def price_book(type):
         price_type[0] = type
         tabview.set('Book a Room')
 
-    fr_single = CTkFrame(pricing,height = 275,width = 680,corner_radius=15)
+    fr_single = CTkFrame(pricing,height = 265,width = 600,corner_radius=15)
     fr_single.place(relx = 0.25,rely = 0.25, anchor = CENTER)
 
-    single_pic = CTkImage(Image.open('0assets/single.jpg'),size = (275,275))
+    single_pic = CTkImage(Image.open('0assets/single.jpg'),size = (237,464))
     single = CTkLabel(fr_single,text = '', image = single_pic)
     single._image = single_pic
-    single.place(x = 137.5,rely = 0.5,anchor = CENTER)
+    single.place(x = 117.5,rely = 0.5,anchor = CENTER)
 
-    CTkLabel(fr_single,text = "Single Room",font = ('Lexend',37,'bold')).place(x = 290,y = 45)
-    CTkLabel(fr_single,text = "$40 per night",font = ('Lexend',20)).place(x = 292,y = 100)
-    CTkLabel(fr_single,text = "Luxurious hotel room with a king-size bed,",font = ('Lexend',17)).place(x = 292,y = 135)
-    CTkLabel(fr_single,text = "modern amenities, city view, plush decor,",font = ('Lexend',17)).place(x = 292,y = 160)
-    CTkLabel(fr_single,text = "and a spacious marble bathroom.",font = ('Lexend',17)).place(x = 292,y = 185)
+    CTkLabel(fr_single,text = "Single Room",font = ('Lexend',37,'bold')).place(x = 255,y = 45)
+    CTkLabel(fr_single,text = "$40 per night",font = ('Lexend',20)).place(x = 255,y = 100)
+    CTkLabel(fr_single,text = "Luxurious hotel room with a king-size bed,",font = ('Lexend',17)).place(x = 255,y = 135)
+    CTkLabel(fr_single,text = "modern amenities, city view, plush decor,",font = ('Lexend',17)).place(x = 255,y = 160)
+    CTkLabel(fr_single,text = "and a spacious marble bathroom.",font = ('Lexend',17)).place(x = 255,y = 185)
     button1 = CTkButton(fr_single,text = 'Book',font = ('Lexend',14),height = 50,width = 80, command=lambda:price_book('Single'))
     button1.place(relx = 0.92,rely = 0.85,anchor = CENTER)
 
-    fr_double = CTkFrame(pricing,height = 275,width = 680,corner_radius=15)
+    fr_double = CTkFrame(pricing,height = 265,width = 600,corner_radius=15)
     fr_double.place(relx = 0.75,rely = 0.25, anchor = CENTER)
 
-    double_pic = CTkImage(Image.open('0assets/double.jpg'),size = (275,275))
+    double_pic = CTkImage(Image.open('0assets/double.jpg'),size = (237,464))
     double = CTkLabel(fr_double,text = '', image = double_pic)
     double._image = double_pic
-    double.place(x = 137.5,rely = 0.5,anchor = CENTER)
+    double.place(x = 117.5,rely = 0.5,anchor = CENTER)
 
-    CTkLabel(fr_double,text = "Double Room",font = ('Lexend',37,'bold')).place(x = 290,y = 45)
-    CTkLabel(fr_double,text = "$50 per night",font = ('Lexend',20)).place(x = 292,y = 100)
-    CTkLabel(fr_double,text = "Elegant double room with twin beds,",font = ('Lexend',17)).place(x = 292,y = 135)
-    CTkLabel(fr_double,text = "furnishings, en-suite bathroom, and serene",font = ('Lexend',17)).place(x = 292,y = 160)
-    CTkLabel(fr_double,text = "ambiance for a comfortable experience.",font = ('Lexend',17)).place(x = 292,y = 185)
+    CTkLabel(fr_double,text = "Double Room",font = ('Lexend',37,'bold')).place(x = 255,y = 45)
+    CTkLabel(fr_double,text = "$50 per night",font = ('Lexend',20)).place(x = 255,y = 100)
+    CTkLabel(fr_double,text = "Elegant double room with twin beds,",font = ('Lexend',17)).place(x = 255,y = 135)
+    CTkLabel(fr_double,text = "furnishings, en-suite bathroom, and serene",font = ('Lexend',17)).place(x = 255,y = 160)
+    CTkLabel(fr_double,text = "ambiance for a comfortable experience.",font = ('Lexend',17)).place(x = 255,y = 185)
     button2 = CTkButton(fr_double,text = 'Book',font = ('Lexend',14),height = 50,width = 80, command=lambda:price_book('Double'))
     button2.place(relx = 0.92,rely = 0.85,anchor = CENTER)
     
-    fr_triple = CTkFrame(pricing,height = 275,width = 680,corner_radius=15)
+    fr_triple = CTkFrame(pricing,height = 265,width = 600,corner_radius=15)
     fr_triple.place(relx = 0.25,rely = 0.75, anchor = CENTER)
 
-    triple_pic = CTkImage(Image.open('0assets/triple.jpg'),size = (275,275))
+    triple_pic = CTkImage(Image.open('0assets/triple.jpg'),size = (237,464))
     triple = CTkLabel(fr_triple,text = '', image = triple_pic)
     triple._image = triple_pic
-    triple.place(x = 137.5,rely = 0.5,anchor = CENTER)
+    triple.place(x = 117.5,rely = 0.5,anchor = CENTER)
 
-    CTkLabel(fr_triple,text = "Triple Room",font = ('Lexend',37,'bold')).place(x = 290,y = 45)
-    CTkLabel(fr_triple,text = "$60 per night",font = ('Lexend',20)).place(x = 292,y = 100)
-    CTkLabel(fr_triple,text = "Spacious triple room, three cozy beds,",font = ('Lexend',17)).place(x = 292,y = 135)
-    CTkLabel(fr_triple,text = "contemporary, design, ample storage, ideal",font = ('Lexend',17)).place(x = 292,y = 160)
-    CTkLabel(fr_triple,text = "for friends or small families.",font = ('Lexend',17)).place(x = 292,y = 185)
+    CTkLabel(fr_triple,text = "Triple Room",font = ('Lexend',37,'bold')).place(x = 255,y = 45)
+    CTkLabel(fr_triple,text = "$60 per night",font = ('Lexend',20)).place(x = 255,y = 100)
+    CTkLabel(fr_triple,text = "Spacious triple room, three cozy beds,",font = ('Lexend',17)).place(x = 255,y = 135)
+    CTkLabel(fr_triple,text = "contemporary, design, ample storage, ideal",font = ('Lexend',17)).place(x = 255,y = 160)
+    CTkLabel(fr_triple,text = "for friends or small families.",font = ('Lexend',17)).place(x = 255,y = 185)
     button3 = CTkButton(fr_triple,text = 'Book',font = ('Lexend',14),height = 50,width = 80, command=lambda:price_book('Triple'))
     button3.place(relx = 0.92,rely = 0.85,anchor = CENTER)
 
-    fr_quad = CTkFrame(pricing,height = 275,width = 680,corner_radius=15)
+    fr_quad = CTkFrame(pricing,height = 265,width = 600,corner_radius=15)
     fr_quad.place(relx = 0.75,rely = 0.75, anchor = CENTER)
 
-    quad_pic = CTkImage(Image.open('0assets/quad.jpg'),size = (275,275))
+    quad_pic = CTkImage(Image.open('0assets/quad.jpg'),size = (237,464))
     quad = CTkLabel(fr_quad,text = '', image = quad_pic)
     quad._image = quad_pic
-    quad.place(x = 137.5,rely = 0.5,anchor = CENTER)
+    quad.place(x = 117.5,rely = 0.5,anchor = CENTER)
 
-    CTkLabel(fr_quad,text = "Quad Room",font = ('Lexend',37,'bold')).place(x = 290,y = 45)
-    CTkLabel(fr_quad,text = "$70 per night",font = ('Lexend',20)).place(x = 292,y = 100)
-    CTkLabel(fr_quad,text = "Modern quad room designed for groups,",font = ('Lexend',17)).place(x = 292,y = 135)
-    CTkLabel(fr_quad,text = "offering four beds, stylish decor and homelike",font = ('Lexend',17)).place(x = 292,y = 160)
-    CTkLabel(fr_quad,text = "atmosphere for shared experiences.",font = ('Lexend',17)).place(x = 292,y = 185)
+    CTkLabel(fr_quad,text = "Quad Room",font = ('Lexend',37,'bold')).place(x = 255,y = 45)
+    CTkLabel(fr_quad,text = "$70 per night",font = ('Lexend',20)).place(x = 255,y = 100)
+    CTkLabel(fr_quad,text = "Modern quad room designed for groups,",font = ('Lexend',17)).place(x = 255,y = 135)
+    CTkLabel(fr_quad,text = "offering four beds, stylish decor and homelike",font = ('Lexend',17)).place(x = 255,y = 160)
+    CTkLabel(fr_quad,text = "atmosphere for shared experiences.",font = ('Lexend',17)).place(x = 255,y = 185)
     button4 = CTkButton(fr_quad,text = 'Book',font = ('Lexend',14),height = 50,width = 80, command=lambda:price_book('Quad'))
     button4.place(relx = 0.92,rely = 0.85,anchor = CENTER)
 
@@ -691,10 +689,6 @@ def mainapp():
                 CTkLabel(show_details_,text = "Addons",font = ('Lexend',17,'bold')).place(relx = 0.3,rely = 0.55, anchor = CENTER)
                 CTkLabel(show_details_,text = "Total",font = ('Lexend',17,'bold')).place(relx = 0.79,rely = 0.55, anchor = CENTER)
                 
-
-
-
-
                 addons_ = CTkFrame(show_details_,corner_radius=20,width = 300)
                 addons_.place(relx = 0.3,rely = 0.77, anchor = CENTER)
                 add0 = CTkLabel(addons_,text = '',font = ('Lexend',17))
@@ -880,7 +874,7 @@ def mainapp():
         next_misc_ = CTkButton(booking_,height = 100,width = 100,text = 'Next →', font = ('Lexend',17), command=lambda:select_misc() if radio_var.get() != '' else err_msg1.configure(text = '*Please select an Option!*'))
         next_misc_.place(relx = 0.85,rely = 0.5,anchor = CENTER)   
 
-    tabview.set('Contact')
+    tabview.set('Rooms & Pricings')
 
     root.mainloop()
 
