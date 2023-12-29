@@ -9,10 +9,8 @@
 #Amstrong – Check the original number is same as its sum of powers of each digit raised to number of digits)
 
 def factorial(n):
-    if n==1:
-        return 1
-    else:
-        return n*factorial(n-1)
+    if n==1: return 1
+    else: return n*factorial(n-1)
 
 def palindrome(n):
     r,s=0,0
@@ -21,10 +19,8 @@ def palindrome(n):
         r=n%10
         s=s*10+r
         n//=10
-    if m==s:
-        return 'The number is palendrome.'
-    else:
-        return 'The number is not palendrome.'
+    if m==s: return 'The number is palendrome.'
+    else: return 'The number is not palendrome.'
         
 def amstrong(n):
     r,s,m,count,x=0,0,n,0,n
@@ -35,10 +31,8 @@ def amstrong(n):
         r=m%10
         s=s+r**count
         m=m//10
-    if x==s:
-        return 'The number is amstrong.'
-    else:
-        return 'The number is not amstrong.'
+    if x==s:  return 'The number is amstrong.'
+    else: return 'The number is not amstrong.'
     
 print('\n--------Menu-Driven-Program--------\n')
 print('''1. Factorial of a number

@@ -442,7 +442,7 @@ def mainapp():
     button3 = CTkButton(fr_triple,text = 'Book',font = ('Lexend',14),height = 50,width = 80, command=lambda:price_book('Triple'))
     button3.place(relx = 0.92,rely = 0.85,anchor = CENTER)
 
-    fr_quad = CTkFrame(pricing,height = 265,width = 600,corner_radius=15)
+    fr_quad = CTkFrame(pricing,height = 265,width = 6009,corner_radius=15)
     fr_quad.place(relx = 0.75,rely = 0.75, anchor = CENTER)
 
     quad_pic = CTkImage(Image.open('0assets/quad.jpg'),size = (237,464))

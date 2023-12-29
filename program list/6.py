@@ -5,7 +5,6 @@ try:
         lines = f.readlines()
         new_lines=[]
         for i in lines:
-            if i[0] not in 'aA':
-                new_lines.append(i)
+            if i[0] not in 'aA':new_lines.append(i)
         with open('text1.txt','w') as f1:f1.writelines(new_lines)
 except:print('File Not Found')

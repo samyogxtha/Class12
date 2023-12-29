@@ -5,7 +5,6 @@ word = input('Enter Word: ')
 
 w_count=0
 for i in string.split():
-    if i == word:
-        w_count+=1
+    if i == word: w_count+=1
 if w_count==0:print('\nWord not Found')
 else:print(f'\nWord Found \nWord Count: {w_count}')

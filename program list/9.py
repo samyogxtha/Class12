@@ -5,8 +5,6 @@ n = int(input('Enter Number to check: '))
 
 count=0
 for i in k:
-    if i == n:
-        count+=1
-if count!=0:
-    print(f'\nCount of {n} in the tuple: {count}\n')
+    if i == n:count+=1
+if count!=0:print(f'\nCount of {n} in the tuple: {count}\n')
 else:print('\nSorry, the number you are searching is not in the tuple\n')
