@@ -1,22 +1,92 @@
-from tkinter import *
+import pickle
 
-def prints():
-    d = c.get()
-    #mobile=503645873
+while True:
+    print("\nMenu:")
+    print("1. Add a student")
+    print("2. Search for a student")
+    print("3. Display all students")
+    print("4. Modify the details of a student")
+    print("5. Delete a student")
+    print("6. Exit")
 
-    query = 'delete from employee where salary = {}'. format(d)
-    print(d)
-    print(d)
-    print(query)
+    choice = int(input("Enter your choice: "))
 
-Petrol = Tk()
-petrol = Label(Petrol, width=20, text="Petrol", font=30).grid(row=0, column=0)
-PEtrol = Label(Petrol, width=50, text="Enter how much Petrol you have bought in litres.", font=20).grid(row=1, column=0)
-c = Entry(Petrol, width=50, bg="grey", fg="white", borderwidth=4)
-c.grid(row=2, column=0)
-Seperator7 = Label(Petrol, text=" ", width=46, height=2).grid(row=3, column=0, columnspan=2)
+    if choice == 1:
+        roll_no = int(input("Enter roll number: "))
+        name = input("Enter student name: ")
+        grade = input("Enter grade: ")
+        division = input("Enter division: ")
 
-Button(Petrol,text='cfd',command=lambda:prints()).grid()
+        students=[roll_no, name, grade, division]
 
-Petrol.mainloop()
+        with open("students.dat", "wb") as f:
+            pickle.dump(students, f)
 
+    elif choice == 2:
+        roll_no = int(input("Enter roll number to search: "))
+
+        with open("students.dat", "rb") as f:
+            students = pickle.load(f)
+
+        for student in students:
+            if student.roll_no == roll_no:
+                print(student)
+                break
+        else:
+            print("Student not found")
+
+    elif choice == 3:
+        with open("students.dat", "rb") as f:
+            students = pickle.load(f)
+
+        for student in students:
+            print(student)
+
+    elif choice == 4:
+        roll_no = int(input("Enter roll number to modify: "))
+
+        with open("students.dat", "rb") as f:
+            students = pickle.load(f)
+
+        for student in students:
+            if student.roll_no == roll_no:
+                print("Student found: ", student)
+                print("Enter new details")
+
+                name = input("Enter student name: ")
+                grade = input("Enter grade: ")
+                division = input("Enter division: ")
+
+                student.name = name
+                student.grade = grade
+                student.division = division
+
+                with open("students.dat", "wb") as f:
+                    pickle.dump(students, f)
+
+                break
+        else:
+            print("Student not found")
+
+    elif choice == 5:
+        roll_no = int(input("Enter roll number to delete: "))
+
+        with open("students.dat", "rb") as f:
+            students = pickle.load(f)
+
+        for i, student in enumerate(students):
+            if student.roll_no == roll_no:
+                del students[i]
+
+                with open("students.dat", "wb") as f:
+                    pickle.dump(students, f)
+
+                break
+        else:
+            print("Student not found")
+
+    elif choice == 6:
+        break
+
+    else:
+        print("Invalid choice. Please try again.")
