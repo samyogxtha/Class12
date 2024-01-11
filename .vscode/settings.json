@@ -1,5 +1,5 @@
 {
-    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.typeCheckingMode": "off",
     "vscode_vibrancy.opacity": -1,
     "sqltools.connections": [
         {
@@ -14,5 +14,6 @@
             "database": "school",
             "username": "root"
         }
-    ]
+    ],
+    "python.analysis.autoImportCompletions": true
 }

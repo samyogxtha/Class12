@@ -1,44 +1,37 @@
-from tkinter import *
+def factoral(n):
+    if n==1:return 1
+    else:return n*factoral(n-1)
 
-from PIL import Image, ImageTk
+def primeno(n):
+    if n<=1:return False
+    for i in range(2,(n//2)+1):
+        if n%i == 0:return False
+    return True
 
-root = Tk()
-root.title("Title")
-root.geometry("600x600")
-root.configure(background="black")
+#print(primeno(-5))
 
+import pickle,tabulate,sys
 
+print('\n--------Menu-Driven-Program--------\n')
+print('''1. Enter Student Details 
+2. Search for a student using his roll number
+3. Display all students in the file
+4. Modify the details of a students
+5. Delete a student from the file
+0. Quit
+''')
 
-class Example(Frame):
-    def __init__(self, master, *pargs):
-        Frame.__init__(self, master, *pargs)
+while True:
+    choice = int(input('\n\tEnter choice: '))
+    print('\n')
 
-
-
-        self.image = Image.open("assets/loginbg.png")
-        self.img_copy= self.image.copy()
-
-
-        self.background_image = ImageTk.PhotoImage(self.image)
-
-        self.background = Label(self, image=self.background_image)
-        self.background.pack(fill=BOTH, expand=YES)
-        self.background.bind('<Configure>', self._resize_image)
-
-    def _resize_image(self,event):
-
-        new_width = event.width
-        new_height = event.height
-
-        self.image = self.img_copy.resize((new_width, new_height))
-
-        self.background_image = ImageTk.PhotoImage(self.image)
-        self.background.configure(image =  self.background_image)
-
-
-
-e = Example(root)
-e.pack(fill=BOTH, expand=YES)
-
-
-root.mainloop()
+    if choice == 1:
+        with open('file.bat','ab') as f:
+            
+            pickle.dump([int(input('roll:')),input('name:'),int(input('grade:'))],f)
+            print('nhbgvfcd')
+    elif choice==2:
+        with open ('file.bat') as f:
+            try:
+                while True:
+                    pickle.load(f)
