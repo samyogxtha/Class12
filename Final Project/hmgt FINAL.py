@@ -537,25 +537,25 @@ def mainapp():
         radiobutton_3.place(relx = 0.25,rely = 0.9,anchor = CENTER)
         radiobutton_4.place(relx = 0.75,rely = 0.9,anchor = CENTER)
 
-        pic1 = CTkImage(Image.open('assets/single.jpg'),size = (175,175))
+        pic1 = CTkImage(Image.open('assets/single copy.jpg'),size = ((175,175)))
         pic_1 = CTkLabel(select_type_,corner_radius=10,text = '', image = pic1)
         pic_1._image = pic1
         pic_1.place(relx = 0.25,rely = 0.3,anchor = CENTER)
         pic_1.bind("<Button-1>", lambda x:radiobutton_1.invoke())
 
-        pic2 = CTkImage(Image.open('assets/double.jpg'),size = (175,175))
+        pic2 = CTkImage(Image.open('assets/double copy.jpg'),size = ((175,175)))
         pic_2 = CTkLabel(select_type_,text = '', image = pic2)
         pic_2._image = pic2
         pic_2.place(relx = 0.75,rely = 0.3,anchor = CENTER)
         pic_2.bind("<Button-1>", lambda x:radiobutton_2.invoke())
 
-        pic3 = CTkImage(Image.open('assets/triple.jpg'),size = (175,175))
+        pic3 = CTkImage(Image.open('assets/triple copy.jpg'),size = ((175,175)))
         pic_3 = CTkLabel(select_type_,text = '', image = pic3)
         pic_3._image = pic3
         pic_3.place(relx = 0.25,rely = 0.7,anchor = CENTER)
         pic_3.bind("<Button-1>", lambda x:radiobutton_3.invoke())
 
-        pic4 = CTkImage(Image.open('assets/quad.jpg'),size = (175,175))
+        pic4 = CTkImage(Image.open('assets/quad copy.jpg'),size = ((175,175)))
         pic_4 = CTkLabel(select_type_,text = '', image = pic4)
         pic_4._image = pic4
         pic_4.place(relx = 0.75,rely = 0.7,anchor = CENTER)
@@ -564,19 +564,19 @@ def mainapp():
         for r in rooms_unavai:
             if r == 'Single':
                 radiobutton_1.configure(state=DISABLED)
-                pic1_ = CTkImage(Image.open('assets/singlebooked.jpg'),size = (175,175))
+                pic1_ = CTkImage(Image.open('assets/singlebooked copy.jpg'),size = ((175,175)))
                 pic_1.configure(image = pic1_)
             if r == 'Double':
                 radiobutton_2.configure(state=DISABLED)
-                pic2_ = CTkImage(Image.open('assets/doublebooked.jpg'),size = (175,175))
+                pic2_ = CTkImage(Image.open('assets/doublebooked copy.jpg'),size = ((175,175)))
                 pic_2.configure(image = pic2_)
             if r == 'Triple':
                 radiobutton_3.configure(state=DISABLED)
-                pic3_ = CTkImage(Image.open('assets/triplebooked.jpg'),size = (175,175))
+                pic3_ = CTkImage(Image.open('assets/triplebooked copy.jpg'),size = ((175,175)))
                 pic_3.configure(image = pic3_)
             if r == 'Quad':
                 radiobutton_4.configure(state=DISABLED)
-                pic4_ = CTkImage(Image.open('assets/quadbooked.jpg'),size = (175,175))
+                pic4_ = CTkImage(Image.open('assets/quadbooked copy.jpg'),size = ((175,175)))
                 pic_4.configure(image = pic4_)
 
         err_msg1 = CTkLabel(select_type_,text = '',text_color = 'red')
