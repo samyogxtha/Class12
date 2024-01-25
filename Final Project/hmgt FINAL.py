@@ -277,13 +277,13 @@ def mainapp():
     #------------------ABOUT-TAB------------------
     about = tabview.add("About")
     
-    pic = CTkScrollableFrame(about,height = 630,width = 1440,corner_radius=15)
+    pic = CTkScrollableFrame(about,height = 1136,width = 1920,corner_radius=15)
     pic.place(relheight = 1, relwidth = 1, x = 0,y = 0)
 
-    image_files = ['assets/img0.jpg', 'assets/img2.jpg', 'assets/img3.jpg','assets/img4.jpg','assets/img5.jpg','assets/img6.jpg']
-    images = [CTkImage(Image.open(file),size=(1280,758)) for file in image_files]
+    image_files = ['assets/img2.jpg', 'assets/img3.jpg','assets/img4.jpg','assets/img5.jpg','assets/img6.jpg']
+    images = [CTkImage(Image.open(file),size=(1920,1136)) for file in image_files]
     
-    canvas = CTkLabel(pic, text = '', width = 1280, height = 758,image=images[0])
+    canvas = CTkLabel(pic, text = '', width = 1920, height = 1136,image=images[0])
     canvas.pack()
     
     def next_image(index):

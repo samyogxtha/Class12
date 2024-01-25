@@ -17,7 +17,7 @@ def mainapp():
         frame_logout = CTkFrame(root,height = 720,width = 1280)
         frame_logout.place(relheight = 1, relwidth = 1, relx = 0.5,rely = 0.5,anchor = CENTER)
 
-        bottompic2 = CTkImage(Image.open('assets/loginbg.jpg'),size = (1920,1080))
+        bottompic2 = CTkImage(Image.open('assets/loginbg.png'),size = (1920,1080))
         bpic2 = CTkLabel(frame_logout,text = '', image = bottompic2)
         bpic2._image = bottompic2
         bpic2.place(relx = 0.5,rely = 0.5,anchor = CENTER)
@@ -48,8 +48,8 @@ def mainapp():
         for i in edata:
             emails.append(i[0])
 
-        main_pic = CTkImage(Image.open('assets/logo.jpg'),size = (200,200))
-        bottompic1 = CTkImage(Image.open('assets/loginbg.jpg'),size = (1920,1080))
+        main_pic = CTkImage(Image.open('assets/logo.png'),size = (200,200))
+        bottompic1 = CTkImage(Image.open('assets/loginbg.png'),size = (1920,1080))
 
         frame_login = CTkFrame(root,height = 720,width = 1280)
         frame_login.place(relheight = 1, relwidth = 1, relx = 0.5,rely = 0.5, anchor = CENTER)
@@ -222,7 +222,7 @@ def mainapp():
 
     def update_logbutton():
         if loggedin[0] is True:
-            profile_pic = CTkImage(Image.open('assets/logout.jpg'),size = (58,58))
+            profile_pic = CTkImage(Image.open('assets/logout.png'),size = (58,58))
             button_login.configure(text = '',command=lambda:logout(),image=profile_pic)
         elif loggedin[0] is False:
             button_login.configure(text = '',command=lambda:loggin(),image=profile_pic0)
@@ -843,7 +843,7 @@ def mainapp():
                     req = CTkFrame(root, width = 1280, height = 720)
                     req.place(relheight = 1, relwidth = 1, relx = 0.5,rely = 0.5, anchor = CENTER)
 
-                    bottompic2 = CTkImage(Image.open('assets/loginbg.jpg'),size = (1920,1080))
+                    bottompic2 = CTkImage(Image.open('assets/loginbg.png'),size = (1920,1080))
                     bpic2 = CTkLabel(req,text = '', image = bottompic2)
                     bpic2._image = bottompic2
                     bpic2.place(relx = 0.5,rely = 0.5,anchor = CENTER)
