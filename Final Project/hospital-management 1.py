@@ -578,7 +578,7 @@ Ut feugiat nunc nec eros ultrices aliquet.'''
 
         bgdocframe = CTkFrame(master=tab2,height=500,width=400)
         bgdocframe.place(relx=0.5,rely=0.5,anchor='center')
-        docframe = CTkScrollableFrame(master=bgdocframe,height=500,width=400)
+        docframe = CTkScrollableFrame(master=bgdocframe,height=500,width=400,bg_color='#333333')
         docframe.pack()
         def _back():
             frame_label.configure(text='choose specialization')
@@ -595,7 +595,7 @@ Ut feugiat nunc nec eros ultrices aliquet.'''
             frame_label.configure(text='what time would you like?')
             bgtimeframe = CTkFrame(master=tab2,height=500,width=400)
             bgtimeframe.place(relx=0.5,rely=0.5,anchor='center')
-            timeframe = CTkScrollableFrame(master=bgtimeframe,height=500,width=400)
+            timeframe = CTkScrollableFrame(master=bgtimeframe,height=500,width=400,bg_color='#333333')
             timeframe.place(relx=0.5,rely=0.5,anchor='center')
 
             def _back():
