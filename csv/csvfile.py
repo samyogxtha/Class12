@@ -17,6 +17,7 @@ while True:
         with open('yo.csv') as cs:
             print('\tEmployee List')
             content = list(csv.reader(cs,delimiter=','))
+            print(content)
             print(tabulate.tabulate(content,headers=['empno','emp Name','Salary'],tablefmt='mixed_grid'))
     elif choice == 2:
         with open('yo.csv','a',newline='') as cs:

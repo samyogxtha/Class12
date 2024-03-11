@@ -44,9 +44,7 @@ def mainapp():
         cur0 = sqlcon.cursor()
         cur0.execute('select email from customers')
         edata = cur0.fetchall()
-        emails = []
-        for i in edata:
-            emails.append(i[0])
+        emails = [i[0] for i in edata]
 
         main_pic = CTkImage(Image.open('assets/logo.png'),size = (200,200))
         bottompic1 = CTkImage(Image.open('assets/loginbg.png'),size = (1920,1080))

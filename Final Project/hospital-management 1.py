@@ -2,7 +2,6 @@ from customtkinter import *    #importing all libraries as part of python itself
 from PIL import Image
 import mysql.connector as msconn
 import re
-import pwinput
     
 set_appearance_mode('dark')#can be changed to light
 deactivate_automatic_dpi_awareness()
