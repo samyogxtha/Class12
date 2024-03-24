@@ -1,6 +1,5 @@
 {
     "python.analysis.typeCheckingMode": "off",
-    "vscode_vibrancy.opacity": -1,
     "sqltools.connections": [
         {
             "mysqlOptions": {
