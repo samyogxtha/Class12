@@ -1,0 +1,18 @@
+arr=[i for i in range(10,101,10)]
+
+
+
+def bsearch(arr,no):
+    min,max = 0,len(arr)-1
+    
+    while min<=max:
+        mid=(min+max)//2
+        if arr[mid] == no:
+            return mid
+        elif arr[mid]<no:
+            min = mid+1
+        else:
+            max=mid-1
+    return -1
+
+print(bsearch(arr,100))

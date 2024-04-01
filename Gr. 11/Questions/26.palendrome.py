@@ -5,7 +5,10 @@ while n>0:
     r=n%10
     s=s*10+r
     n//=10
+    print(r,s,n)
 if m==s:
-    print('The sum of number is palendrome.')
+    print(s)
 else:
-    print('The sum of number is not palendrome.')
+    print(s)
+
+

@@ -1,15 +1,12 @@
-def n():
-    print('\n\n')
-n()
-j = int(input('Enter any Number:'))
 
-n()
+no = int(input('Enter anlast Number:')) #365
 
-e = j//100
-f = j%100
-x = j//10
-y = j%10
-z = (y*10+x)*10+e
+
+
+first = no//100
+other2 = no%100
+second = other2//10
+last = no%10
+z = (last*10+second)*10+first
 
 print(z)
-n()

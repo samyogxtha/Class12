@@ -1,51 +1,12 @@
-import cv2
-import time
-import os
+travel = []
+def push_element(nlist):
+    for i in nlist:
+        if i==9:
+            travel.append(list(i[0:1]))
 
-def video_to_frames(input_loc, output_loc):
-    """Function to extract frames from input video file
-    and save them as separate frames in an output directory.
-    Args:
-        input_loc: Input video file.
-        output_loc: Output directory to save the frames.
-    Returns:
-        None
-    """
-    try:
-        os.mkdir(output_loc)
-    except OSError:
-        pass
-    # Log the time
-    time_start = time.time()
-    # Start capturing the feed
-    cap = cv2.VideoCapture(input_loc)
-    # Find the number of frames
-    video_length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) - 149
-    print ("Number of frames: ", video_length)
-    count = 0
-    print ("Converting video..\n")
-    # Start converting the video
-    while cap.isOpened():
-        # Extract the frame
-        ret, frame = cap.read()
-        if not ret:
-            continue
-        # Write the results back to output location.
-        cv2.imwrite(output_loc + "/10%#05d.jpg" % (count+1), frame)
-        count = count + 1
-        # If there are no more frames left
-        if (count > (video_length-1)):
-            # Log the time again
-            time_end = time.time()
-            # Release the feed
-            cap.release()
-            # Print stats
-            print ("Done extracting frames.\n%d frames extracted" % count)
-            print ("It took %d seconds forconversion." % (time_end-time_start))
-            break
+dl =[[1,2,3,4,5,6,7,8,9,10],[10,20,30,40,50,60,70,80,90,100]]
 
-if __name__=="__main__":
+print(list(dl[0][:3]))
 
-    input_loc = 'C:/Users/samyogi/Downloads/10.mp4'
-    output_loc = 'C:/Users/samyogi/Downloads/fra'
-    video_to_frames(input_loc, output_loc)
+push_element(dl)
+print(travel)
