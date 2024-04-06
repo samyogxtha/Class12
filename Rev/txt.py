@@ -1,6 +1,8 @@
-with open('story.txt') as file:
-    
-    for i in file.readlines():print(i,type(i))
+with open('text.txt','a+') as file:
+
+    file.write('Hello')
+    file.write('Python')
+    file.write('asdfghj')
         
 
 
